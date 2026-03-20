@@ -64,47 +64,69 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
       ),
       body: widget.counters.isEmpty
           ? const Center(child: Text('No counters yet. Tap + to add one.'))
-          : ListView.builder(
-              itemCount: widget.counters.counters.length,
-              itemBuilder: (context, index) {
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: widget.counters.counters.length,
+                    itemBuilder: (context, index) {
                 final counter = widget.counters.counters[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 8),
-                  child: ListTile(
-                    title: GestureDetector(
-                      onTap: () => _renameCounter(counter.id),
-                      child: Text(counter.name),
-                    ),
-                    subtitle: Text(
-                      '${counter.value}',
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.remove),
-                          tooltip: 'Decrement',
-                          onPressed: () =>
-                              setState(() => counter.decrement()),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.add),
-                          tooltip: 'Increment',
-                          onPressed: () =>
-                              setState(() => counter.increment()),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete_outline),
-                          tooltip: 'Delete counter',
-                          onPressed: () => _removeCounter(counter.id),
-                        ),
-                      ],
+                return Dismissible(
+                  key: ValueKey(counter.id),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    color: Colors.red,
+                    child: const Icon(Icons.delete_outline,
+                        color: Colors.white),
+                  ),
+                  onDismissed: (_) => _removeCounter(counter.id),
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 8),
+                    child: ListTile(
+                      title: GestureDetector(
+                        onTap: () => _renameCounter(counter.id),
+                        child: Text(counter.name),
+                      ),
+                      subtitle: Text(
+                        '${counter.value}',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove),
+                            tooltip: 'Decrement',
+                            onPressed: () =>
+                                setState(() => counter.decrement()),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            tooltip: 'Increment',
+                            onPressed: () =>
+                                setState(() => counter.increment()),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
               },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    'Swipe left to delete',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                  ),
+                ),
+              ],
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addCounter,

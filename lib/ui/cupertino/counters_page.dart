@@ -77,7 +77,10 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
         top: false,
         child: widget.counters.isEmpty
             ? const Center(child: Text('No counters yet. Tap + to add one.'))
-            : ListView.separated(
+            : Column(
+                children: [
+                  Expanded(
+                    child: ListView.separated(
                 itemCount: widget.counters.counters.length,
                 separatorBuilder: (_, __) => Container(
                   height: 0.5,
@@ -86,75 +89,87 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                 ),
                 itemBuilder: (context, index) {
                   final counter = widget.counters.counters[index];
-                  return ColoredBox(
-                    color: CupertinoColors.systemBackground
-                        .resolveFrom(context),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () => _renameCounter(counter.id),
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    counter.name,
-                                    style:
-                                        const TextStyle(fontSize: 17),
-                                  ),
-                                  Text(
-                                    '${counter.value}',
-                                    style: const TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w300,
+                  return Dismissible(
+                    key: ValueKey(counter.id),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      color: CupertinoColors.destructiveRed,
+                      child: const Icon(CupertinoIcons.delete,
+                          color: CupertinoColors.white),
+                    ),
+                    onDismissed: (_) => _removeCounter(counter.id),
+                    child: ColoredBox(
+                      color: CupertinoColors.systemBackground
+                          .resolveFrom(context),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () => _renameCounter(counter.id),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      counter.name,
+                                      style:
+                                          const TextStyle(fontSize: 17),
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      '${counter.value}',
+                                      style: const TextStyle(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Tooltip(
-                            message: 'Decrement',
-                            child: CupertinoButton(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8),
-                              onPressed: () =>
-                                  setState(() => counter.decrement()),
-                              child: const Icon(CupertinoIcons.minus),
-                            ),
-                          ),
-                          Tooltip(
-                            message: 'Increment',
-                            child: CupertinoButton(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8),
-                              onPressed: () =>
-                                  setState(() => counter.increment()),
-                              child: const Icon(CupertinoIcons.plus),
-                            ),
-                          ),
-                          Tooltip(
-                            message: 'Delete counter',
-                            child: CupertinoButton(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8),
-                              onPressed: () =>
-                                  _removeCounter(counter.id),
-                              child: const Icon(
-                                CupertinoIcons.delete,
-                                color: CupertinoColors.destructiveRed,
+                            Tooltip(
+                              message: 'Decrement',
+                              child: CupertinoButton(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8),
+                                onPressed: () =>
+                                    setState(() => counter.decrement()),
+                                child: const Icon(CupertinoIcons.minus),
                               ),
                             ),
-                          ),
-                        ],
+                            Tooltip(
+                              message: 'Increment',
+                              child: CupertinoButton(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8),
+                                onPressed: () =>
+                                    setState(() => counter.increment()),
+                                child: const Icon(CupertinoIcons.plus),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
                 },
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      'Swipe left to delete',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: CupertinoColors.secondaryLabel,
+                      ),
+                    ),
+                  ),
+                ],
               ),
       ),
     );

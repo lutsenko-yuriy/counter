@@ -41,14 +41,20 @@ void main() {
     expect(find.text('Counter 2'), findsOneWidget);
   });
 
-  testWidgets('Delete counter removes it', (tester) async {
+  testWidgets('Swipe left removes counter', (tester) async {
     await tester.pumpWidget(const CountersApp());
 
-    await tester.tap(find.byTooltip('Delete counter'));
-    await tester.pump();
+    await tester.drag(find.text('Counter 1'), const Offset(-500, 0));
+    await tester.pumpAndSettle();
 
     expect(find.text('Counter 1'), findsNothing);
     expect(find.text('No counters yet. Tap + to add one.'), findsOneWidget);
+  });
+
+  testWidgets('Swipe hint is shown when counters exist', (tester) async {
+    await tester.pumpWidget(const CountersApp());
+
+    expect(find.text('Swipe left to delete'), findsOneWidget);
   });
 
   testWidgets('Rename counter via dialog', (tester) async {
