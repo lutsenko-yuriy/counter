@@ -3,7 +3,7 @@
   "appTitle": "Multi Counter",
   "pageTitle": "Counters",
   "noCounters": "No counters yet. Tap + to add one.",
-  "swipeToDelete": "Swipe left to delete",
+  "swipeToDelete": "Swipe a counter left to delete it",
   "addCounter": "Add Counter",
   "renameCounter": "Rename Counter",
   "nameLabel": "Name",

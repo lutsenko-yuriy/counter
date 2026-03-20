@@ -18,7 +18,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noCounters => 'لا توجد عدادات. اضغط + لإضافة واحد.';
 
   @override
-  String get swipeToDelete => 'اسحب العداد لليسار للحذف';
+  String get swipeToDelete => 'اسحب العداد يميناً للحذف';
 
   @override
   String get addCounter => 'إضافة عداد';

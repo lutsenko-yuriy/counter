@@ -18,7 +18,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noCounters => 'Aucun compteur. Appuyez sur + pour en ajouter un.';
 
   @override
-  String get swipeToDelete => 'Glisser à gauche pour supprimer';
+  String get swipeToDelete => 'Glisser un compteur à gauche pour le supprimer';
 
   @override
   String get addCounter => 'Ajouter un compteur';

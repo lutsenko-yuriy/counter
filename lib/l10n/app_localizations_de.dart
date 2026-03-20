@@ -19,7 +19,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Noch keine Zähler. Tippe auf + um einen hinzuzufügen.';
 
   @override
-  String get swipeToDelete => 'Nach links wischen zum Löschen';
+  String get swipeToDelete => 'Zähler nach links wischen zum Löschen';
 
   @override
   String get addCounter => 'Zähler hinzufügen';

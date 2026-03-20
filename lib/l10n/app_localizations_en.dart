@@ -18,7 +18,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noCounters => 'No counters yet. Tap + to add one.';
 
   @override
-  String get swipeToDelete => 'Swipe left to delete';
+  String get swipeToDelete => 'Swipe a counter left to delete it';
 
   @override
   String get addCounter => 'Add Counter';

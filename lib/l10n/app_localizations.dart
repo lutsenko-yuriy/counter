@@ -129,7 +129,7 @@ abstract class AppLocalizations {
   /// No description provided for @swipeToDelete.
   ///
   /// In en, this message translates to:
-  /// **'Swipe left to delete'**
+  /// **'Swipe a counter left to delete it'**
   String get swipeToDelete;
 
   /// No description provided for @addCounter.

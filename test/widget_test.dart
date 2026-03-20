@@ -65,7 +65,7 @@ void main() {
     await tester.pumpWidget(const CountersApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('Swipe left to delete'), findsOneWidget);
+    expect(find.text('Swipe a counter left to delete it'), findsOneWidget);
   });
 
   testWidgets('Rename counter via dialog', (tester) async {

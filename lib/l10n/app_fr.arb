@@ -3,7 +3,7 @@
   "appTitle": "Multi Compteur",
   "pageTitle": "Compteurs",
   "noCounters": "Aucun compteur. Appuyez sur + pour en ajouter un.",
-  "swipeToDelete": "Glisser à gauche pour supprimer",
+  "swipeToDelete": "Glisser un compteur à gauche pour le supprimer",
   "addCounter": "Ajouter un compteur",
   "renameCounter": "Renommer le compteur",
   "nameLabel": "Nom",

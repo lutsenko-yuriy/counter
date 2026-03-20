@@ -3,7 +3,7 @@
   "appTitle": "Multi-Zähler",
   "pageTitle": "Zähler",
   "noCounters": "Noch keine Zähler. Tippe auf + um einen hinzuzufügen.",
-  "swipeToDelete": "Nach links wischen zum Löschen",
+  "swipeToDelete": "Zähler nach links wischen zum Löschen",
   "addCounter": "Zähler hinzufügen",
   "renameCounter": "Zähler umbenennen",
   "nameLabel": "Name",
