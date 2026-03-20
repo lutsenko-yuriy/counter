@@ -16,7 +16,11 @@ Flutter counter app targeting all platforms (iOS, Android, macOS, Linux, Windows
 
 ## Architecture
 
-Single-file app (`lib/main.dart`) with all UI in one stateful widget. Counter state lives in `_MyHomePageState`. The FAB layout adapts to orientation (row in landscape, column in portrait) using `OrientationBuilder`. Counter has increment (+) and decrement (-) buttons; decrement floors at 0.
+- `lib/models/counter.dart` — `Counter` model with integer `id`, auto-generated name (`Counter <id>`), and `increment`/`decrement`/`rename` methods; decrement floors at 0.
+- `lib/models/counter_factory.dart` — `CounterFactory` creates `Counter` instances with auto-incrementing ids.
+- `lib/models/counter_list.dart` — `CounterList` holds counters; takes a `CounterFactory` via constructor injection; supports id-based lookup (`operator []`) and removal.
+- `lib/models/models.dart` — barrel export for the models package.
+- `lib/main.dart` — `CountersPage` (stateful widget) is the sole UI component; receives a `CounterList` via constructor. `CounterFactory` and `CounterList` are wired together in `MyApp`.
 
 ## Linting
 

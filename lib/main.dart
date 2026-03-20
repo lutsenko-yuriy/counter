@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'counter_list_model.dart';
+import 'models/models.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,37 +17,40 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Counters'),
+      home: CountersPage(
+        title: 'Counters',
+        counters: CounterList(CounterFactory()),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class CountersPage extends StatefulWidget {
+  const CountersPage({super.key, required this.title, required this.counters});
 
   final String title;
+  final CounterList counters;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<CountersPage> createState() => _CountersPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final _model = CounterListModel();
-
+class _CountersPageState extends State<CountersPage> {
   void _addCounter() {
     setState(() {
-      _model.add();
+      widget.counters.add();
     });
   }
 
-  void _removeCounter(int index) {
+  void _removeCounter(int id) {
     setState(() {
-      _model.removeAt(index);
+      widget.counters.remove(id);
     });
   }
 
-  void _renameCounter(int index) {
-    final controller = TextEditingController(text: _model[index].name);
+  void _renameCounter(int id) {
+    final counter = widget.counters[id];
+    final controller = TextEditingController(text: counter.name);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -57,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
           autofocus: true,
           decoration: const InputDecoration(labelText: 'Name'),
           onSubmitted: (_) {
-            _applyRename(index, controller.text);
+            setState(() => counter.rename(controller.text));
             Navigator.of(context).pop();
           },
         ),
@@ -68,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           TextButton(
             onPressed: () {
-              _applyRename(index, controller.text);
+              setState(() => counter.rename(controller.text));
               Navigator.of(context).pop();
             },
             child: const Text('Save'),
@@ -78,12 +81,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _applyRename(int index, String newName) {
-    setState(() {
-      _model.rename(index, newName);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,18 +88,18 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: _model.isEmpty
+      body: widget.counters.isEmpty
           ? const Center(child: Text('No counters yet. Tap + to add one.'))
           : ListView.builder(
-              itemCount: _model.length,
+              itemCount: widget.counters.counters.length,
               itemBuilder: (context, index) {
-                final counter = _model[index];
+                final counter = widget.counters.counters[index];
                 return Card(
                   margin: const EdgeInsets.symmetric(
                       horizontal: 16, vertical: 8),
                   child: ListTile(
                     title: GestureDetector(
-                      onTap: () => _renameCounter(index),
+                      onTap: () => _renameCounter(counter.id),
                       child: Text(counter.name),
                     ),
                     subtitle: Text(
@@ -133,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         IconButton(
                           icon: const Icon(Icons.delete_outline),
                           tooltip: 'Delete counter',
-                          onPressed: () => _removeCounter(index),
+                          onPressed: () => _removeCounter(counter.id),
                         ),
                       ],
                     ),
