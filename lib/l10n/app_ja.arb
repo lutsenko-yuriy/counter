@@ -1,0 +1,14 @@
+{
+  "@@locale": "ja",
+  "appTitle": "マルチカウンター",
+  "pageTitle": "カウンター",
+  "noCounters": "カウンターがありません。＋ で追加してください。",
+  "swipeToDelete": "カウンターを左にスワイプして削除",
+  "addCounter": "カウンターを追加",
+  "renameCounter": "カウンターの名前を変更",
+  "nameLabel": "名前",
+  "cancel": "キャンセル",
+  "save": "保存",
+  "decrement": "減らす",
+  "increment": "増やす"
+}

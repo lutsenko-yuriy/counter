@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:counter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../state/counter_list_notifier.dart';
+import '../../state/locale_notifier.dart';
+
+const _supportedLocales = [
+  (Locale('en'), 'English'),
+  (Locale('de'), 'Deutsch'),
+  (Locale('fr'), 'Français'),
+  (Locale('ru'), 'Русский'),
+  (Locale('ar'), 'العربية'),
+  (Locale('zh'), '中文'),
+  (Locale('ja'), '日本語'),
+];
 
 class CountersPageMaterial extends StatefulWidget {
-  const CountersPageMaterial({super.key, required this.title});
-
-  final String title;
+  const CountersPageMaterial({super.key});
 
   @override
   State<CountersPageMaterial> createState() => _CountersPageMaterialState();
@@ -14,16 +24,17 @@ class CountersPageMaterial extends StatefulWidget {
 
 class _CountersPageMaterialState extends State<CountersPageMaterial> {
   void _renameCounter(int id, String currentName) {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController(text: currentName);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Rename Counter'),
+        title: Text(l10n.renameCounter),
         content: TextField(
           key: const Key('rename-field'),
           controller: controller,
           autofocus: true,
-          decoration: const InputDecoration(labelText: 'Name'),
+          decoration: InputDecoration(labelText: l10n.nameLabel),
           onSubmitted: (_) {
             context.read<CounterListNotifier>().rename(id, controller.text);
             Navigator.of(context).pop();
@@ -32,22 +43,51 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () {
               context.read<CounterListNotifier>().rename(id, controller.text);
               Navigator.of(context).pop();
             },
-            child: const Text('Save'),
+            child: Text(l10n.save),
           ),
         ],
       ),
     );
   }
 
+  void _pickLanguage() {
+    final current = context.read<LocaleNotifier>().locale;
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        children: _supportedLocales.map((entry) {
+          final (locale, name) = entry;
+          return SimpleDialogOption(
+            onPressed: () {
+              context.read<LocaleNotifier>().setLocale(locale);
+              Navigator.of(context).pop();
+            },
+            child: Row(
+              children: [
+                if (locale == current)
+                  const Icon(Icons.check, size: 18)
+                else
+                  const SizedBox(width: 18),
+                const SizedBox(width: 8),
+                Text(name),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final notifier = context.watch<CounterListNotifier>();
 
     if (notifier.isLoading) {
@@ -59,10 +99,17 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(l10n.pageTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.language),
+            tooltip: 'Language',
+            onPressed: _pickLanguage,
+          ),
+        ],
       ),
       body: counters.isEmpty
-          ? const Center(child: Text('No counters yet. Tap + to add one.'))
+          ? Center(child: Text(l10n.noCounters))
           : Column(
               children: [
                 Expanded(
@@ -81,15 +128,14 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                           child: const Icon(Icons.delete_outline,
                               color: Colors.white),
                         ),
-                        onDismissed: (_) =>
-                            notifier.remove(counter.id),
+                        onDismissed: (_) => notifier.remove(counter.id),
                         child: Card(
                           margin: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
                           child: ListTile(
                             title: GestureDetector(
-                              onTap: () => _renameCounter(
-                                  counter.id, counter.name),
+                              onTap: () =>
+                                  _renameCounter(counter.id, counter.name),
                               child: Text(counter.name),
                             ),
                             subtitle: Text(
@@ -103,13 +149,13 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.remove),
-                                  tooltip: 'Decrement',
+                                  tooltip: l10n.decrement,
                                   onPressed: () =>
                                       notifier.decrement(counter.id),
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.add),
-                                  tooltip: 'Increment',
+                                  tooltip: l10n.increment,
                                   onPressed: () =>
                                       notifier.increment(counter.id),
                                 ),
@@ -124,7 +170,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    'Swipe left to delete',
+                    l10n.swipeToDelete,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.outline,
                         ),
@@ -134,7 +180,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: notifier.add,
-        tooltip: 'Add Counter',
+        tooltip: l10n.addCounter,
         child: const Icon(Icons.add),
       ),
     );

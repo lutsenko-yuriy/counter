@@ -1,0 +1,14 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Multi Compteur",
+  "pageTitle": "Compteurs",
+  "noCounters": "Aucun compteur. Appuyez sur + pour en ajouter un.",
+  "swipeToDelete": "Glisser à gauche pour supprimer",
+  "addCounter": "Ajouter un compteur",
+  "renameCounter": "Renommer le compteur",
+  "nameLabel": "Nom",
+  "cancel": "Annuler",
+  "save": "Enregistrer",
+  "decrement": "Décrémenter",
+  "increment": "Incrémenter"
+}

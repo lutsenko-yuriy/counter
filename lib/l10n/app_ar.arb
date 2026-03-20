@@ -1,0 +1,14 @@
+{
+  "@@locale": "ar",
+  "appTitle": "عداد متعدد",
+  "pageTitle": "العدادات",
+  "noCounters": "لا توجد عدادات. اضغط + لإضافة واحد.",
+  "swipeToDelete": "اسحب العداد لليسار للحذف",
+  "addCounter": "إضافة عداد",
+  "renameCounter": "إعادة تسمية العداد",
+  "nameLabel": "الاسم",
+  "cancel": "إلغاء",
+  "save": "حفظ",
+  "decrement": "تقليل",
+  "increment": "زيادة"
+}

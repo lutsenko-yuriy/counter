@@ -1,0 +1,14 @@
+{
+  "@@locale": "de",
+  "appTitle": "Multi-Zähler",
+  "pageTitle": "Zähler",
+  "noCounters": "Noch keine Zähler. Tippe auf + um einen hinzuzufügen.",
+  "swipeToDelete": "Nach links wischen zum Löschen",
+  "addCounter": "Zähler hinzufügen",
+  "renameCounter": "Zähler umbenennen",
+  "nameLabel": "Name",
+  "cancel": "Abbrechen",
+  "save": "Speichern",
+  "decrement": "Verringern",
+  "increment": "Erhöhen"
+}

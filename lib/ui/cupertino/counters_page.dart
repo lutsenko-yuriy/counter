@@ -1,13 +1,24 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show Tooltip, CircularProgressIndicator;
+import 'package:flutter/material.dart'
+    show CircularProgressIndicator, Tooltip;
+import 'package:counter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../state/counter_list_notifier.dart';
+import '../../state/locale_notifier.dart';
+
+const _supportedLocales = [
+  (Locale('en'), 'English'),
+  (Locale('de'), 'Deutsch'),
+  (Locale('fr'), 'Français'),
+  (Locale('ru'), 'Русский'),
+  (Locale('ar'), 'العربية'),
+  (Locale('zh'), '中文'),
+  (Locale('ja'), '日本語'),
+];
 
 class CountersPageCupertino extends StatefulWidget {
-  const CountersPageCupertino({super.key, required this.title});
-
-  final String title;
+  const CountersPageCupertino({super.key});
 
   @override
   State<CountersPageCupertino> createState() => _CountersPageCupertinoState();
@@ -15,11 +26,12 @@ class CountersPageCupertino extends StatefulWidget {
 
 class _CountersPageCupertinoState extends State<CountersPageCupertino> {
   void _renameCounter(int id, String currentName) {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController(text: currentName);
     showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: const Text('Rename Counter'),
+        title: Text(l10n.renameCounter),
         content: Padding(
           padding: const EdgeInsets.only(top: 8),
           child: CupertinoTextField(
@@ -35,7 +47,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
         actions: [
           CupertinoDialogAction(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           CupertinoDialogAction(
             isDefaultAction: true,
@@ -43,15 +55,41 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
               context.read<CounterListNotifier>().rename(id, controller.text);
               Navigator.of(context).pop();
             },
-            child: const Text('Save'),
+            child: Text(l10n.save),
           ),
         ],
       ),
     );
   }
 
+  void _pickLanguage() {
+    final current = context.read<LocaleNotifier>().locale;
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: _supportedLocales.map((entry) {
+          final (locale, name) = entry;
+          return CupertinoActionSheetAction(
+            isDefaultAction: locale == current,
+            onPressed: () {
+              context.read<LocaleNotifier>().setLocale(locale);
+              Navigator.of(context).pop();
+            },
+            child: Text(name),
+          );
+        }).toList(),
+        cancelButton: CupertinoActionSheetAction(
+          isDestructiveAction: true,
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(AppLocalizations.of(context)!.cancel),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final notifier = context.watch<CounterListNotifier>();
 
     if (notifier.isLoading) {
@@ -65,9 +103,17 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(widget.title),
+        middle: Text(l10n.pageTitle),
+        leading: Tooltip(
+          message: 'Language',
+          child: CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: _pickLanguage,
+            child: const Icon(CupertinoIcons.globe),
+          ),
+        ),
         trailing: Tooltip(
-          message: 'Add Counter',
+          message: l10n.addCounter,
           child: CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: notifier.add,
@@ -78,7 +124,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
       child: SafeArea(
         top: false,
         child: counters.isEmpty
-            ? const Center(child: Text('No counters yet. Tap + to add one.'))
+            ? Center(child: Text(l10n.noCounters))
             : Column(
                 children: [
                   Expanded(
@@ -136,7 +182,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                                     ),
                                   ),
                                   Tooltip(
-                                    message: 'Decrement',
+                                    message: l10n.decrement,
                                     child: CupertinoButton(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8),
@@ -147,7 +193,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                                     ),
                                   ),
                                   Tooltip(
-                                    message: 'Increment',
+                                    message: l10n.increment,
                                     child: CupertinoButton(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8),
@@ -164,11 +210,11 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                       },
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Text(
-                      'Swipe left to delete',
-                      style: TextStyle(
+                      l10n.swipeToDelete,
+                      style: const TextStyle(
                         fontSize: 13,
                         color: CupertinoColors.secondaryLabel,
                       ),
