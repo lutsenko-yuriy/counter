@@ -1,16 +1,47 @@
-# counter
+# Counter
 
-A new Flutter project.
+A multi-platform Flutter counter app with support for multiple named counters, persistence, and localisation.
+
+## Features
+
+- Create, rename, and delete multiple counters
+- Swipe-to-delete with platform-appropriate direction (RTL-aware)
+- Persistent storage via SharedPreferences
+- Localised in 7 languages: English, German, French, Russian, Arabic, Chinese, and Japanese
+- In-app language switching
+- Platform-adaptive UI: Cupertino on iOS/macOS, Material on Android/Web/Windows/Linux
+
+## Supported Platforms
+
+iOS, Android, macOS, Linux, Windows, Web
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+To target a specific platform:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+flutter run -d macos
+flutter run -d chrome
+flutter run -d ios
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Development
+
+```bash
+flutter analyze        # Lint the codebase
+flutter test           # Run all tests
+flutter gen-l10n       # Regenerate localisation files after editing ARB files
+```
+
+## Project Structure
+
+- `lib/models/` — Counter, CounterList, and CounterFactory (pure data models)
+- `lib/state/` — ChangeNotifiers for counter list and locale
+- `lib/storage/` — JSON serialisation and SharedPreferences persistence
+- `lib/ui/` — Platform-adaptive UI (Cupertino and Material variants)
+- `lib/l10n/` — ARB localisation files
