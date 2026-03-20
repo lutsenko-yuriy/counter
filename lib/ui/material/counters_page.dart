@@ -1,29 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../models/models.dart';
+import '../../state/counter_list_notifier.dart';
 
 class CountersPageMaterial extends StatefulWidget {
-  const CountersPageMaterial({
-    super.key,
-    required this.title,
-    required this.counters,
-  });
+  const CountersPageMaterial({super.key, required this.title});
 
   final String title;
-  final CounterList counters;
 
   @override
   State<CountersPageMaterial> createState() => _CountersPageMaterialState();
 }
 
 class _CountersPageMaterialState extends State<CountersPageMaterial> {
-  void _addCounter() => setState(() => widget.counters.add());
-
-  void _removeCounter(int id) => setState(() => widget.counters.remove(id));
-
-  void _renameCounter(int id) {
-    final counter = widget.counters[id];
-    final controller = TextEditingController(text: counter.name);
+  void _renameCounter(int id, String currentName) {
+    final controller = TextEditingController(text: currentName);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -34,7 +25,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
           autofocus: true,
           decoration: const InputDecoration(labelText: 'Name'),
           onSubmitted: (_) {
-            setState(() => counter.rename(controller.text));
+            context.read<CounterListNotifier>().rename(id, controller.text);
             Navigator.of(context).pop();
           },
         ),
@@ -45,7 +36,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
           ),
           TextButton(
             onPressed: () {
-              setState(() => counter.rename(controller.text));
+              context.read<CounterListNotifier>().rename(id, controller.text);
               Navigator.of(context).pop();
             },
             child: const Text('Save'),
@@ -57,64 +48,77 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
 
   @override
   Widget build(BuildContext context) {
+    final notifier = context.watch<CounterListNotifier>();
+
+    if (notifier.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    final counters = notifier.counters!;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: widget.counters.isEmpty
+      body: counters.isEmpty
           ? const Center(child: Text('No counters yet. Tap + to add one.'))
           : Column(
               children: [
                 Expanded(
                   child: ListView.builder(
-                    itemCount: widget.counters.counters.length,
+                    itemCount: counters.counters.length,
                     itemBuilder: (context, index) {
-                final counter = widget.counters.counters[index];
-                return Dismissible(
-                  key: ValueKey(counter.id),
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    color: Colors.red,
-                    child: const Icon(Icons.delete_outline,
-                        color: Colors.white),
-                  ),
-                  onDismissed: (_) => _removeCounter(counter.id),
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 8),
-                    child: ListTile(
-                      title: GestureDetector(
-                        onTap: () => _renameCounter(counter.id),
-                        child: Text(counter.name),
-                      ),
-                      subtitle: Text(
-                        '${counter.value}',
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove),
-                            tooltip: 'Decrement',
-                            onPressed: () =>
-                                setState(() => counter.decrement()),
+                      final counter = counters.counters[index];
+                      return Dismissible(
+                        key: ValueKey(counter.id),
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 24),
+                          color: Colors.red,
+                          child: const Icon(Icons.delete_outline,
+                              color: Colors.white),
+                        ),
+                        onDismissed: (_) =>
+                            notifier.remove(counter.id),
+                        child: Card(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          child: ListTile(
+                            title: GestureDetector(
+                              onTap: () => _renameCounter(
+                                  counter.id, counter.name),
+                              child: Text(counter.name),
+                            ),
+                            subtitle: Text(
+                              '${counter.value}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium,
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove),
+                                  tooltip: 'Decrement',
+                                  onPressed: () =>
+                                      notifier.decrement(counter.id),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.add),
+                                  tooltip: 'Increment',
+                                  onPressed: () =>
+                                      notifier.increment(counter.id),
+                                ),
+                              ],
+                            ),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.add),
-                            tooltip: 'Increment',
-                            onPressed: () =>
-                                setState(() => counter.increment()),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Padding(
@@ -129,7 +133,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
               ],
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addCounter,
+        onPressed: notifier.add,
         tooltip: 'Add Counter',
         child: const Icon(Icons.add),
       ),

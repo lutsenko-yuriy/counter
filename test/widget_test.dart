@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:counter/main.dart';
 
 void main() {
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
   testWidgets('App starts with one counter at zero', (tester) async {
     await tester.pumpWidget(const CountersApp());
+    await tester.pumpAndSettle();
 
     expect(find.text('Counter 1'), findsOneWidget);
     expect(find.text('0'), findsOneWidget);
@@ -13,6 +19,7 @@ void main() {
 
   testWidgets('Counter increments and decrements', (tester) async {
     await tester.pumpWidget(const CountersApp());
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('Increment'));
     await tester.pump();
@@ -25,6 +32,7 @@ void main() {
 
   testWidgets('Decrement does not go below zero', (tester) async {
     await tester.pumpWidget(const CountersApp());
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('Decrement'));
     await tester.pump();
@@ -33,6 +41,7 @@ void main() {
 
   testWidgets('Add counter creates a new counter', (tester) async {
     await tester.pumpWidget(const CountersApp());
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('Add Counter'));
     await tester.pump();
@@ -43,6 +52,7 @@ void main() {
 
   testWidgets('Swipe left removes counter', (tester) async {
     await tester.pumpWidget(const CountersApp());
+    await tester.pumpAndSettle();
 
     await tester.drag(find.text('Counter 1'), const Offset(-500, 0));
     await tester.pumpAndSettle();
@@ -53,12 +63,14 @@ void main() {
 
   testWidgets('Swipe hint is shown when counters exist', (tester) async {
     await tester.pumpWidget(const CountersApp());
+    await tester.pumpAndSettle();
 
     expect(find.text('Swipe left to delete'), findsOneWidget);
   });
 
   testWidgets('Rename counter via dialog', (tester) async {
     await tester.pumpWidget(const CountersApp());
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('Counter 1'));
     await tester.pumpAndSettle();

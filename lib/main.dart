@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'models/models.dart';
+import 'state/counter_list_notifier.dart';
+import 'storage/counter_storage.dart';
 import 'ui/counters_page.dart';
 
 void main() {
@@ -18,20 +20,21 @@ class CountersApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final counters = CounterList(CounterFactory());
-    if (_isApple) {
-      return CupertinoApp(
-        title: 'Multi Counter',
-        home: CountersPage(title: 'Counters', counters: counters),
-      );
-    }
-    return MaterialApp(
-      title: 'Multi Counter',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: CountersPage(title: 'Counters', counters: counters),
+    return ChangeNotifierProvider(
+      create: (_) => CounterListNotifier(CounterStorage()),
+      child: _isApple
+          ? const CupertinoApp(
+              title: 'Multi Counter',
+              home: CountersPage(title: 'Counters'),
+            )
+          : MaterialApp(
+              title: 'Multi Counter',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+              ),
+              home: const CountersPage(title: 'Counters'),
+            ),
     );
   }
 }
