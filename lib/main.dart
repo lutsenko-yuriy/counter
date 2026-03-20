@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'counter_list_model.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -20,13 +22,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class CounterData {
-  String name;
-  int value;
-
-  CounterData({required this.name, this.value = 0});
-}
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -37,24 +32,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<CounterData> _counters = [CounterData(name: 'Counter 1')];
-  int _nextNumber = 2;
+  final _model = CounterListModel();
 
   void _addCounter() {
     setState(() {
-      _counters.add(CounterData(name: 'Counter $_nextNumber'));
-      _nextNumber++;
+      _model.add();
     });
   }
 
   void _removeCounter(int index) {
     setState(() {
-      _counters.removeAt(index);
+      _model.removeAt(index);
     });
   }
 
   void _renameCounter(int index) {
-    final controller = TextEditingController(text: _counters[index].name);
+    final controller = TextEditingController(text: _model[index].name);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -86,12 +79,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _applyRename(int index, String newName) {
-    final trimmed = newName.trim();
-    if (trimmed.isNotEmpty) {
-      setState(() {
-        _counters[index].name = trimmed;
-      });
-    }
+    setState(() {
+      _model.rename(index, newName);
+    });
   }
 
   @override
@@ -101,12 +91,12 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: _counters.isEmpty
+      body: _model.isEmpty
           ? const Center(child: Text('No counters yet. Tap + to add one.'))
           : ListView.builder(
-              itemCount: _counters.length,
+              itemCount: _model.length,
               itemBuilder: (context, index) {
-                final counter = _counters[index];
+                final counter = _model[index];
                 return Card(
                   margin: const EdgeInsets.symmetric(
                       horizontal: 16, vertical: 8),
@@ -127,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           tooltip: 'Decrement',
                           onPressed: () {
                             setState(() {
-                              if (counter.value > 0) counter.value--;
+                              counter.decrement();
                             });
                           },
                         ),
@@ -136,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           tooltip: 'Increment',
                           onPressed: () {
                             setState(() {
-                              counter.value++;
+                              counter.increment();
                             });
                           },
                         ),
