@@ -10,5 +10,6 @@
   "cancel": "取消",
   "save": "保存",
   "decrement": "减少",
-  "increment": "增加"
+  "increment": "增加",
+  "tapToAddCounter": "点击添加新计数器"
 }

@@ -40,4 +40,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get increment => 'Увеличить';
+
+  @override
+  String get tapToAddCounter => 'Нажмите, чтобы добавить новый счётчик';
 }

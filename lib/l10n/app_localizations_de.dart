@@ -41,4 +41,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get increment => 'Erhöhen';
+
+  @override
+  String get tapToAddCounter => 'Tippen, um einen neuen Zähler hinzuzufügen';
 }

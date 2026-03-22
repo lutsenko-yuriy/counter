@@ -40,4 +40,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get increment => '增加';
+
+  @override
+  String get tapToAddCounter => '点击添加新计数器';
 }

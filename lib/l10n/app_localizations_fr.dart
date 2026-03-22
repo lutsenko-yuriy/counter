@@ -40,4 +40,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get increment => 'Incrémenter';
+
+  @override
+  String get tapToAddCounter => 'Appuyez pour ajouter un nouveau compteur';
 }
