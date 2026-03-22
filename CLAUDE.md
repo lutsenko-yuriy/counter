@@ -66,4 +66,5 @@ Follow TDD: write or update tests **before** implementing the feature or fix. Re
 6. Commit all changes with a descriptive message.
 7. Push to the remote.
 8. Compact the context after each commit to keep the conversation lean.
-9. Clear the context after the PR with the changes is merged.
+9. After creating a PR, cancel any existing `/babysit-prs` loops and start a fresh one: `/loop 10m /babysit-prs`.
+10. Clear the context after the PR with the changes is merged.
