@@ -65,3 +65,5 @@ Follow TDD: write or update tests **before** implementing the feature or fix. Re
 5. Update this `CLAUDE.md` file if the architecture, UI, or conventions changed.
 6. Commit all changes with a descriptive message.
 7. Push to the remote.
+8. Compact the context after each commit to keep the conversation lean.
+9. Clear the context after the PR with the changes is merged.
