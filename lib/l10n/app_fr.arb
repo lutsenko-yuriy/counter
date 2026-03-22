@@ -10,5 +10,6 @@
   "cancel": "Annuler",
   "save": "Enregistrer",
   "decrement": "Décrémenter",
-  "increment": "Incrémenter"
+  "increment": "Incrémenter",
+  "tapToAddCounter": "Appuyez pour ajouter un nouveau compteur"
 }

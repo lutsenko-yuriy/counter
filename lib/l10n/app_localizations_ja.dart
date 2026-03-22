@@ -40,4 +40,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get increment => '増やす';
+
+  @override
+  String get tapToAddCounter => 'タップして新しいカウンターを追加';
 }

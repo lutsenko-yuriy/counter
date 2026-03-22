@@ -173,6 +173,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Increment'**
   String get increment;
+
+  /// No description provided for @tapToAddCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to add a new counter'**
+  String get tapToAddCounter;
 }
 
 class _AppLocalizationsDelegate

@@ -32,16 +32,25 @@ Flutter counter app targeting all platforms (iOS, Android, macOS, Linux, Windows
 
 **UI** (`lib/ui/`):
 - `counters_page.dart` — platform dispatcher; selects `CountersPageCupertino` on iOS/macOS, `CountersPageMaterial` on all other platforms.
-- `cupertino/counters_page.dart` — Cupertino UI (`CupertinoPageScaffold`, `CupertinoNavigationBar`, `CupertinoButton`, `CupertinoAlertDialog`) for iOS and macOS. Counters are deleted by swiping toward the trailing edge (`Dismissible` with `endToStart`); on RTL locales (Arabic) this means swiping right.
-- `material/counters_page.dart` — Material UI (`Scaffold`, `Card`, `ListTile`, `FloatingActionButton`, `AlertDialog`) for Android, Web, Windows, and Linux. Same swipe-to-delete behaviour.
+- `cupertino/counters_page.dart` — Cupertino UI (`CupertinoPageScaffold`, `CupertinoNavigationBar`, `CupertinoButton`, `CupertinoAlertDialog`) for iOS and macOS. Language picker is in the nav bar trailing position. Counters are deleted by swiping toward the trailing edge (`Dismissible` with `endToStart`); on RTL locales (Arabic) this means swiping right.
+- `material/counters_page.dart` — Material UI (`Scaffold`, `Card`, `ListTile`, `AlertDialog`) for Android, Web, Windows, and Linux. Language picker is in the app bar actions. Same swipe-to-delete behaviour.
+- Both platforms: new counters are added via an "add counter" item at the bottom of the list (no FAB or nav bar button). The swipe-to-delete hint only appears when counters exist.
 
 **Entry point** (`lib/main.dart`):
 - `CountersApp` provides `CounterListNotifier` and `LocaleNotifier` via `MultiProvider`; uses `CupertinoApp` on iOS/macOS and `MaterialApp` otherwise; wires localisation delegates and supported locales.
 
 ## Localisation
 
-ARB files live in `lib/l10n/`. Supported locales: English (`en`), German (`de`), French (`fr`), Russian (`ru`), Arabic (`ar`), Chinese (`zh`), Japanese (`ja`). Arabic uses RTL layout automatically via `GlobalWidgetsLocalizations.delegate`. The language can be changed at runtime via the globe icon in the navigation bar. Run `flutter gen-l10n` after editing any ARB file.
+ARB files live in `lib/l10n/`. Supported locales: English (`en`), German (`de`), French (`fr`), Russian (`ru`), Arabic (`ar`), Chinese (`zh`), Japanese (`ja`). Arabic uses RTL layout automatically via `GlobalWidgetsLocalizations.delegate`. The language can be changed at runtime via the globe icon in the top-right corner of the navigation bar. Run `flutter gen-l10n` after editing any ARB file.
 
 ## Linting
 
 Uses `package:flutter_lints` (configured in `analysis_options.yaml`).
+
+## Workflow
+
+After completing each task:
+1. Run `flutter test` and `flutter analyze` — fix any failures before proceeding.
+2. Update this `CLAUDE.md` file if the architecture, UI, or conventions changed.
+3. Commit all changes with a descriptive message.
+4. Push to the remote.

@@ -108,80 +108,102 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
           ),
         ],
       ),
-      body: counters.isEmpty
-          ? Center(child: Text(l10n.noCounters))
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: counters.counters.length,
-                    itemBuilder: (context, index) {
-                      final counter = counters.counters[index];
-                      return Dismissible(
-                        key: ValueKey(counter.id),
-                        direction: DismissDirection.endToStart,
-                        background: Container(
-                          alignment: Alignment.centerRight,
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 24),
-                          color: Colors.red,
-                          child: const Icon(Icons.delete_outline,
-                              color: Colors.white),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: counters.counters.length + 1,
+              itemBuilder: (context, index) {
+                if (index == counters.counters.length) {
+                  return Card(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 8),
+                    child: InkWell(
+                      onTap: notifier.add,
+                      borderRadius: BorderRadius.circular(12),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add,
+                                color: Theme.of(context).colorScheme.primary),
+                            const SizedBox(width: 8),
+                            Text(
+                              l10n.tapToAddCounter,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ],
                         ),
-                        onDismissed: (_) => notifier.remove(counter.id),
-                        child: Card(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          child: ListTile(
-                            title: GestureDetector(
-                              onTap: () =>
-                                  _renameCounter(counter.id, counter.name),
-                              child: Text(counter.name),
-                            ),
-                            subtitle: Text(
-                              '${counter.value}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium,
-                            ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.remove),
-                                  tooltip: l10n.decrement,
-                                  onPressed: () =>
-                                      notifier.decrement(counter.id),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.add),
-                                  tooltip: l10n.increment,
-                                  onPressed: () =>
-                                      notifier.increment(counter.id),
-                                ),
-                              ],
-                            ),
+                      ),
+                    ),
+                  );
+                }
+                final counter = counters.counters[index];
+                return Dismissible(
+                  key: ValueKey(counter.id),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 24),
+                    color: Colors.red,
+                    child: const Icon(Icons.delete_outline,
+                        color: Colors.white),
+                  ),
+                  onDismissed: (_) => notifier.remove(counter.id),
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 8),
+                    child: ListTile(
+                      title: GestureDetector(
+                        onTap: () =>
+                            _renameCounter(counter.id, counter.name),
+                        child: Text(counter.name),
+                      ),
+                      subtitle: Text(
+                        '${counter.value}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium,
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove),
+                            tooltip: l10n.decrement,
+                            onPressed: () =>
+                                notifier.decrement(counter.id),
                           ),
-                        ),
-                      );
-                    },
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            tooltip: l10n.increment,
+                            onPressed: () =>
+                                notifier.increment(counter.id),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
-                    l10n.swipeToDelete,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                  ),
-                ),
-              ],
+                );
+              },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: notifier.add,
-        tooltip: l10n.addCounter,
-        child: const Icon(Icons.add),
+          ),
+          if (counters.counters.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                l10n.swipeToDelete,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+              ),
+            ),
+        ],
       ),
     );
   }

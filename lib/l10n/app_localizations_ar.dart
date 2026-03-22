@@ -40,4 +40,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get increment => 'زيادة';
+
+  @override
+  String get tapToAddCounter => 'اضغط لإضافة عداد جديد';
 }

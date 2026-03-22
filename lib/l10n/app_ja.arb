@@ -10,5 +10,6 @@
   "cancel": "キャンセル",
   "save": "保存",
   "decrement": "減らす",
-  "increment": "増やす"
+  "increment": "増やす",
+  "tapToAddCounter": "タップして新しいカウンターを追加"
 }

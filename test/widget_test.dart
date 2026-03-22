@@ -43,7 +43,7 @@ void main() {
     await tester.pumpWidget(const CountersApp());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byTooltip('Add Counter'));
+    await tester.tap(find.text('Tap to add a new counter'));
     await tester.pump();
 
     expect(find.text('Counter 1'), findsOneWidget);
@@ -58,7 +58,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Counter 1'), findsNothing);
-    expect(find.text('No counters yet. Tap + to add one.'), findsOneWidget);
+    expect(find.text('Tap to add a new counter'), findsOneWidget);
   });
 
   testWidgets('Swipe hint is shown when counters exist', (tester) async {

@@ -10,5 +10,6 @@
   "cancel": "إلغاء",
   "save": "حفظ",
   "decrement": "تقليل",
-  "increment": "زيادة"
+  "increment": "زيادة",
+  "tapToAddCounter": "اضغط لإضافة عداد جديد"
 }

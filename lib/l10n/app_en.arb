@@ -10,5 +10,6 @@
   "cancel": "Cancel",
   "save": "Save",
   "decrement": "Decrement",
-  "increment": "Increment"
+  "increment": "Increment",
+  "tapToAddCounter": "Tap to add a new counter"
 }
