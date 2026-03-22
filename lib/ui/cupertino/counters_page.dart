@@ -122,7 +122,6 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                 itemCount: counters.counters.length + 1,
                 separatorBuilder: (_, __) => Container(
                   height: 0.5,
-                  margin: const EdgeInsets.only(left: 16),
                   color: CupertinoColors.separator,
                 ),
                 itemBuilder: (context, index) {
@@ -135,14 +134,14 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          child: Column(
                             children: [
                               const Icon(CupertinoIcons.plus,
                                   color: CupertinoColors.activeBlue),
-                              const SizedBox(width: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 l10n.tapToAddCounter,
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   fontSize: 17,
                                   color: CupertinoColors.activeBlue,
@@ -171,8 +170,8 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                       color: CupertinoColors.systemBackground
                           .resolveFrom(context),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
+                        padding: const EdgeInsets.fromLTRB(
+                            16, 12, 8, 12),
                         child: Row(
                           children: [
                             Expanded(

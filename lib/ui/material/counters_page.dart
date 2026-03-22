@@ -122,15 +122,16 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                       onTap: notifier.add,
                       borderRadius: BorderRadius.circular(12),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 20),
+                        child: Column(
                           children: [
                             Icon(Icons.add,
                                 color: Theme.of(context).colorScheme.primary),
-                            const SizedBox(width: 8),
+                            const SizedBox(height: 8),
                             Text(
                               l10n.tapToAddCounter,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Theme.of(context).colorScheme.primary,
@@ -159,6 +160,8 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                     margin: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 8),
                     child: ListTile(
+                      contentPadding: const EdgeInsets.fromLTRB(
+                          16, 0, 8, 0),
                       title: GestureDetector(
                         onTap: () =>
                             _renameCounter(counter.id, counter.name),
