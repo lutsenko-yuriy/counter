@@ -11,7 +11,7 @@ Flutter counter app targeting all platforms (iOS, Android, macOS, Linux, Windows
 - **Run app:** `flutter run` (add `-d macos`, `-d chrome`, etc. for specific platforms)
 - **Analyze:** `flutter analyze`
 - **Run all tests:** `flutter test`
-- **Run single test:** `flutter test test/widget_test.dart`
+- **Run single test:** `flutter test test/counter_list_test.dart`
 - **Get dependencies:** `flutter pub get`
 - **Regenerate localizations:** `flutter gen-l10n`
 
@@ -47,10 +47,21 @@ ARB files live in `lib/l10n/`. Supported locales: English (`en`), German (`de`),
 
 Uses `package:flutter_lints` (configured in `analysis_options.yaml`).
 
+## Tests
+
+Tests live in `test/` and are split by concern:
+- `counter_manipulation_test.dart` — increment, decrement, rename
+- `counter_list_test.dart` — initial state, add counter, remove counter, swipe hint
+- `language_switching_test.dart` — locale switching and UI text updates
+
 ## Workflow
 
-After completing each task:
-1. Run `flutter test` and `flutter analyze` — fix any failures before proceeding.
-2. Update this `CLAUDE.md` file if the architecture, UI, or conventions changed.
-3. Commit all changes with a descriptive message.
-4. Push to the remote.
+Follow TDD: write or update tests **before** implementing the feature or fix. Red → Green → Refactor.
+
+1. Write failing tests that describe the expected behaviour.
+2. Implement the minimum code to make the tests pass.
+3. Refactor if needed.
+4. Run `flutter test` and `flutter analyze` — fix any failures before proceeding.
+5. Update this `CLAUDE.md` file if the architecture, UI, or conventions changed.
+6. Commit all changes with a descriptive message.
+7. Push to the remote.
