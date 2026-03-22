@@ -203,8 +203,9 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                               child: CupertinoButton(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8),
-                                onPressed: () =>
-                                    notifier.decrement(counter.id),
+                                onPressed: counter.value > 0
+                                    ? () => notifier.decrement(counter.id)
+                                    : null,
                                 child:
                                     const Icon(CupertinoIcons.minus),
                               ),
@@ -230,7 +231,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
             ),
             if (counters.counters.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
                 child: Text(
                   l10n.swipeToDelete,
                   style: const TextStyle(

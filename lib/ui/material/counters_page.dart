@@ -179,8 +179,9 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                           IconButton(
                             icon: const Icon(Icons.remove),
                             tooltip: l10n.decrement,
-                            onPressed: () =>
-                                notifier.decrement(counter.id),
+                            onPressed: counter.value > 0
+                                ? () => notifier.decrement(counter.id)
+                                : null,
                           ),
                           IconButton(
                             icon: const Icon(Icons.add),
@@ -198,7 +199,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
           ),
           if (counters.counters.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
               child: Text(
                 l10n.swipeToDelete,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
