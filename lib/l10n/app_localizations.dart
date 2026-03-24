@@ -179,6 +179,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to add a new counter'**
   String get tapToAddCounter;
+
+  /// No description provided for @untitled.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled'**
+  String get untitled;
+
+  /// No description provided for @saveToFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to File'**
+  String get saveToFile;
+
+  /// No description provided for @openFromFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open from File'**
+  String get openFromFile;
+
+  /// No description provided for @recentFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Files'**
+  String get recentFiles;
+
+  /// No description provided for @noRecentFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent files'**
+  String get noRecentFiles;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @savedAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {time} ago'**
+  String savedAgo(String time);
+
+  /// No description provided for @justNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get justNow;
+
+  /// No description provided for @secondsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}s'**
+  String secondsAgo(int count);
+
+  /// No description provided for @minutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}m'**
+  String minutesAgo(int count);
+
+  /// No description provided for @clearRecents.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Recents'**
+  String get clearRecents;
 }
 
 class _AppLocalizationsDelegate

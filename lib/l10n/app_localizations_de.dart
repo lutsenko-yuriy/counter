@@ -44,4 +44,43 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tapToAddCounter => 'Tippen, um einen neuen Zähler hinzuzufügen';
+
+  @override
+  String get untitled => 'Unbenannt';
+
+  @override
+  String get saveToFile => 'In Datei speichern';
+
+  @override
+  String get openFromFile => 'Aus Datei öffnen';
+
+  @override
+  String get recentFiles => 'Zuletzt geöffnet';
+
+  @override
+  String get noRecentFiles => 'Keine zuletzt geöffneten Dateien';
+
+  @override
+  String get language => 'Sprache';
+
+  @override
+  String savedAgo(String time) {
+    return 'Gespeichert vor $time';
+  }
+
+  @override
+  String get justNow => 'gerade eben';
+
+  @override
+  String secondsAgo(int count) {
+    return '${count}s';
+  }
+
+  @override
+  String minutesAgo(int count) {
+    return '${count}m';
+  }
+
+  @override
+  String get clearRecents => 'Verlauf löschen';
 }

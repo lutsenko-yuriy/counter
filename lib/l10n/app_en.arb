@@ -11,5 +11,37 @@
   "save": "Save",
   "decrement": "Decrement",
   "increment": "Increment",
-  "tapToAddCounter": "Tap to add a new counter"
+  "tapToAddCounter": "Tap to add a new counter",
+  "untitled": "Untitled",
+  "saveToFile": "Save to File",
+  "openFromFile": "Open from File",
+  "recentFiles": "Recent Files",
+  "noRecentFiles": "No recent files",
+  "language": "Language",
+  "savedAgo": "Saved {time} ago",
+  "@savedAgo": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "justNow": "just now",
+  "secondsAgo": "{count}s",
+  "@secondsAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesAgo": "{count}m",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "clearRecents": "Clear Recents"
 }

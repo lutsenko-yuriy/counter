@@ -11,5 +11,16 @@
   "save": "Сохранить",
   "decrement": "Уменьшить",
   "increment": "Увеличить",
-  "tapToAddCounter": "Нажмите, чтобы добавить новый счётчик"
+  "tapToAddCounter": "Нажмите, чтобы добавить новый счётчик",
+  "untitled": "Без названия",
+  "saveToFile": "Сохранить в файл",
+  "openFromFile": "Открыть из файла",
+  "recentFiles": "Недавние файлы",
+  "noRecentFiles": "Нет недавних файлов",
+  "language": "Язык",
+  "savedAgo": "Сохранено {time} назад",
+  "justNow": "только что",
+  "secondsAgo": "{count}с",
+  "minutesAgo": "{count}м",
+  "clearRecents": "Очистить историю"
 }

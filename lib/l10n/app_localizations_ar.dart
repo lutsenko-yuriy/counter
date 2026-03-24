@@ -43,4 +43,43 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tapToAddCounter => 'اضغط لإضافة عداد جديد';
+
+  @override
+  String get untitled => 'بدون عنوان';
+
+  @override
+  String get saveToFile => 'حفظ في ملف';
+
+  @override
+  String get openFromFile => 'فتح من ملف';
+
+  @override
+  String get recentFiles => 'الملفات الأخيرة';
+
+  @override
+  String get noRecentFiles => 'لا توجد ملفات حديثة';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String savedAgo(String time) {
+    return 'تم الحفظ منذ $time';
+  }
+
+  @override
+  String get justNow => 'الآن';
+
+  @override
+  String secondsAgo(int count) {
+    return '$countث';
+  }
+
+  @override
+  String minutesAgo(int count) {
+    return '$countد';
+  }
+
+  @override
+  String get clearRecents => 'مسح السجل';
 }

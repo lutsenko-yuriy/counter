@@ -11,5 +11,16 @@
   "save": "保存",
   "decrement": "减少",
   "increment": "增加",
-  "tapToAddCounter": "点击添加新计数器"
+  "tapToAddCounter": "点击添加新计数器",
+  "untitled": "未命名",
+  "saveToFile": "保存到文件",
+  "openFromFile": "从文件打开",
+  "recentFiles": "最近文件",
+  "noRecentFiles": "没有最近的文件",
+  "language": "语言",
+  "savedAgo": "{time}前已保存",
+  "justNow": "刚刚",
+  "secondsAgo": "{count}秒",
+  "minutesAgo": "{count}分钟",
+  "clearRecents": "清除记录"
 }

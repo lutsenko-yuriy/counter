@@ -43,4 +43,43 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tapToAddCounter => '点击添加新计数器';
+
+  @override
+  String get untitled => '未命名';
+
+  @override
+  String get saveToFile => '保存到文件';
+
+  @override
+  String get openFromFile => '从文件打开';
+
+  @override
+  String get recentFiles => '最近文件';
+
+  @override
+  String get noRecentFiles => '没有最近的文件';
+
+  @override
+  String get language => '语言';
+
+  @override
+  String savedAgo(String time) {
+    return '$time前已保存';
+  }
+
+  @override
+  String get justNow => '刚刚';
+
+  @override
+  String secondsAgo(int count) {
+    return '$count秒';
+  }
+
+  @override
+  String minutesAgo(int count) {
+    return '$count分钟';
+  }
+
+  @override
+  String get clearRecents => '清除记录';
 }

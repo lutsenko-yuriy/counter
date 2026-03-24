@@ -11,5 +11,16 @@
   "save": "Enregistrer",
   "decrement": "Décrémenter",
   "increment": "Incrémenter",
-  "tapToAddCounter": "Appuyez pour ajouter un nouveau compteur"
+  "tapToAddCounter": "Appuyez pour ajouter un nouveau compteur",
+  "untitled": "Sans titre",
+  "saveToFile": "Enregistrer dans un fichier",
+  "openFromFile": "Ouvrir un fichier",
+  "recentFiles": "Fichiers récents",
+  "noRecentFiles": "Aucun fichier récent",
+  "language": "Langue",
+  "savedAgo": "Enregistré il y a {time}",
+  "justNow": "à l'instant",
+  "secondsAgo": "{count}s",
+  "minutesAgo": "{count}m",
+  "clearRecents": "Effacer les récents"
 }

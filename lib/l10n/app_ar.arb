@@ -11,5 +11,16 @@
   "save": "حفظ",
   "decrement": "تقليل",
   "increment": "زيادة",
-  "tapToAddCounter": "اضغط لإضافة عداد جديد"
+  "tapToAddCounter": "اضغط لإضافة عداد جديد",
+  "untitled": "بدون عنوان",
+  "saveToFile": "حفظ في ملف",
+  "openFromFile": "فتح من ملف",
+  "recentFiles": "الملفات الأخيرة",
+  "noRecentFiles": "لا توجد ملفات حديثة",
+  "language": "اللغة",
+  "savedAgo": "تم الحفظ منذ {time}",
+  "justNow": "الآن",
+  "secondsAgo": "{count}ث",
+  "minutesAgo": "{count}د",
+  "clearRecents": "مسح السجل"
 }

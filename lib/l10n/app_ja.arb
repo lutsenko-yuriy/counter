@@ -11,5 +11,16 @@
   "save": "保存",
   "decrement": "減らす",
   "increment": "増やす",
-  "tapToAddCounter": "タップして新しいカウンターを追加"
+  "tapToAddCounter": "タップして新しいカウンターを追加",
+  "untitled": "無題",
+  "saveToFile": "ファイルに保存",
+  "openFromFile": "ファイルから開く",
+  "recentFiles": "最近のファイル",
+  "noRecentFiles": "最近のファイルはありません",
+  "language": "言語",
+  "savedAgo": "{time}前に保存",
+  "justNow": "たった今",
+  "secondsAgo": "{count}秒",
+  "minutesAgo": "{count}分",
+  "clearRecents": "履歴をクリア"
 }

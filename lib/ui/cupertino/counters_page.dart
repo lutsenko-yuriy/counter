@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart'
     show CircularProgressIndicator, Tooltip;
 import 'package:counter/l10n/app_localizations.dart';
@@ -6,6 +7,9 @@ import 'package:provider/provider.dart';
 
 import '../../state/counter_list_notifier.dart';
 import '../../state/locale_notifier.dart';
+import '../../state/recent_files_notifier.dart';
+import '../../storage/counter_file_storage.dart';
+import '../saved_ago_text.dart';
 
 const _supportedLocales = [
   (Locale('en'), 'English'),
@@ -25,6 +29,8 @@ class CountersPageCupertino extends StatefulWidget {
 }
 
 class _CountersPageCupertinoState extends State<CountersPageCupertino> {
+  final _fileStorage = CounterFileStorage();
+
   void _renameCounter(int id, String currentName) {
     final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController(text: currentName);
@@ -87,6 +93,141 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
     );
   }
 
+  void _showFileMenu() {
+    final l10n = AppLocalizations.of(context)!;
+    final recentNotifier = context.read<RecentFilesNotifier>();
+    final recentFiles = recentNotifier.files;
+
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _saveToFile();
+            },
+            child: Text(l10n.saveToFile),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _openFromFile();
+            },
+            child: Text(l10n.openFromFile),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _pickLanguage();
+            },
+            child: Text(l10n.language),
+          ),
+          if (!kIsWeb && recentFiles.isNotEmpty) ...[
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showRecentFiles();
+              },
+              child: Text(l10n.recentFiles),
+            ),
+          ],
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDestructiveAction: true,
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+      ),
+    );
+  }
+
+  void _showRecentFiles() {
+    final l10n = AppLocalizations.of(context)!;
+    final recentNotifier = context.read<RecentFilesNotifier>();
+    final recentFiles = recentNotifier.files;
+
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: Text(l10n.recentFiles),
+        actions: [
+          ...recentFiles.map((file) => CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _openRecentFile(file.path, file.name);
+                },
+                child: Text(file.name),
+              )),
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              recentNotifier.clearRecent();
+              Navigator.of(context).pop();
+            },
+            child: Text(l10n.clearRecents),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDestructiveAction: true,
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _saveToFile() async {
+    final notifier = context.read<CounterListNotifier>();
+    if (notifier.counters == null) return;
+
+    final result = await _fileStorage.pickAndSave(notifier.counters!);
+    if (result == null || !mounted) return;
+
+    notifier.setCurrentFile(result.name, result.path);
+    notifier.markSaved();
+
+    if (result.path != null) {
+      context.read<RecentFilesNotifier>().addRecent(result.path!, result.name);
+    }
+  }
+
+  Future<void> _openFromFile() async {
+    final result = await _fileStorage.pickAndLoad();
+    if (result == null || !mounted) return;
+
+    final notifier = context.read<CounterListNotifier>();
+    notifier.replaceCounters(result.counters);
+    notifier.setCurrentFile(result.name, result.path);
+    notifier.markSaved();
+
+    if (result.path != null) {
+      context.read<RecentFilesNotifier>().addRecent(result.path!, result.name);
+    }
+  }
+
+  Future<void> _openRecentFile(String path, String name) async {
+    try {
+      final result = await _fileStorage.pickAndLoad();
+      if (result == null || !mounted) return;
+
+      final notifier = context.read<CounterListNotifier>();
+      notifier.replaceCounters(result.counters);
+      notifier.setCurrentFile(result.name, result.path);
+      notifier.markSaved();
+
+      if (result.path != null) {
+        context
+            .read<RecentFilesNotifier>()
+            .addRecent(result.path!, result.name);
+      }
+    } catch (_) {
+      if (mounted) {
+        context.read<RecentFilesNotifier>().removeRecent(path);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -100,16 +241,29 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
     }
 
     final counters = notifier.counters!;
+    final fileName = notifier.currentFileName ?? l10n.untitled;
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(l10n.pageTitle),
+        middle: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(fileName, style: const TextStyle(fontSize: 17)),
+            SavedAgoText(
+              lastSavedAt: notifier.lastSavedAt,
+              style: const TextStyle(
+                fontSize: 11,
+                color: CupertinoColors.secondaryLabel,
+              ),
+            ),
+          ],
+        ),
         trailing: Tooltip(
-          message: 'Language',
+          message: 'Menu',
           child: CupertinoButton(
             padding: EdgeInsets.zero,
-            onPressed: _pickLanguage,
-            child: const Icon(CupertinoIcons.globe),
+            onPressed: _showFileMenu,
+            child: const Icon(CupertinoIcons.ellipsis_circle),
           ),
         ),
       ),

@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 
 import 'state/counter_list_notifier.dart';
 import 'state/locale_notifier.dart';
+import 'state/recent_files_notifier.dart';
 import 'storage/counter_storage.dart';
+import 'storage/recent_files_storage.dart';
 import 'ui/counters_page.dart';
 
 void main() {
@@ -44,6 +46,7 @@ class CountersApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => CounterListNotifier(CounterStorage())),
         ChangeNotifierProvider(create: (_) => LocaleNotifier()),
+        ChangeNotifierProvider(create: (_) => RecentFilesNotifier(RecentFilesStorage())),
       ],
       child: _isApple ? const _CupertinoRoot() : const _MaterialRoot(),
     );
