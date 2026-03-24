@@ -80,7 +80,16 @@ Tests live in `test/` and are split by concern:
 
 Follow TDD: write or update tests **before** implementing the feature or fix. Red → Green → Refactor.
 
-**For large changes** (spanning multiple files, introducing new domain entities, new dependencies, or architectural shifts): present an implementation plan to the user **before writing any code**. The plan should cover new packages, new models/classes, changes to existing classes, UI changes, test strategy, and implementation order broken into phases. Wait for the user to review and approve (or adjust) the plan before proceeding.
+**For large changes** (spanning multiple files, introducing new domain entities, new dependencies, or architectural shifts): present an implementation plan to the user **before writing any code**. The plan should cover:
+
+1. New packages / dependencies
+2. New models and classes
+3. Changes to existing classes
+4. UI changes (for each platform)
+5. Test strategy
+6. Implementation order broken into phases
+
+After that, wait for the user to review and approve (or adjust) the plan before proceeding.
 
 1. For large changes, present the implementation plan and wait for approval.
 2. Write failing tests that describe the expected behaviour.
