@@ -17,6 +17,7 @@ class CounterListNotifier extends ChangeNotifier {
   String? _currentFileName;
   String? _currentFilePath;
   DateTime? _lastSavedAt;
+  bool _isSaving = false;
 
   // Auto-save debounce
   Timer? _autoSaveTimer;
@@ -30,17 +31,32 @@ class CounterListNotifier extends ChangeNotifier {
   CounterList? get counters => _counters;
   bool get isLoading => _counters == null;
 
-  /// The name of the currently open file, or `null` if untitled.
+  /// The raw file name, or `null` if no file is open.
   String? get currentFileName => _currentFileName;
 
-  /// The path of the currently open file, or `null` if untitled/web.
+  /// The file name without extension, for display in the title bar.
+  String? get displayFileName {
+    if (_currentFileName == null) return null;
+    final name = _currentFileName!;
+    final dot = name.lastIndexOf('.');
+    return dot > 0 ? name.substring(0, dot) : name;
+  }
+
+  /// The path of the currently open file, or `null` if no file/web.
   String? get currentFilePath => _currentFilePath;
 
   /// When the file was last saved, or `null` if never saved.
   DateTime? get lastSavedAt => _lastSavedAt;
 
+  /// Whether a debounced save is in progress.
+  bool get isSaving => _isSaving;
+
+  /// Whether no file is currently open (empty/welcome state).
+  bool get hasNoFile => _currentFileName == null;
+
   Future<void> _load() async {
-    _counters = await _storage.load() ?? CounterList(CounterFactory());
+    _counters =
+        await _storage.load() ?? CounterList.empty(CounterFactory());
     notifyListeners();
   }
 
@@ -54,15 +70,19 @@ class CounterListNotifier extends ChangeNotifier {
     _autoSaveTimer?.cancel();
     if (_currentFilePath == null) return;
 
+    _isSaving = true;
+    notifyListeners();
+
     _autoSaveTimer = Timer(_autoSaveDelay, () async {
       if (_currentFilePath != null && _counters != null) {
         final success =
             await _fileStorage.saveToPath(_currentFilePath!, _counters!);
         if (success) {
           _lastSavedAt = DateTime.now();
-          notifyListeners();
         }
       }
+      _isSaving = false;
+      notifyListeners();
     });
   }
 
@@ -85,6 +105,7 @@ class CounterListNotifier extends ChangeNotifier {
     _currentFileName = null;
     _currentFilePath = null;
     _lastSavedAt = null;
+    _isSaving = false;
     _autoSaveTimer?.cancel();
     notifyListeners();
   }
@@ -92,6 +113,7 @@ class CounterListNotifier extends ChangeNotifier {
   /// Records that the file was just saved.
   void markSaved() {
     _lastSavedAt = DateTime.now();
+    _isSaving = false;
     notifyListeners();
   }
 

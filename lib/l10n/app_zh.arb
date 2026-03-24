@@ -13,14 +13,16 @@
   "increment": "增加",
   "tapToAddCounter": "点击添加新计数器",
   "untitled": "未命名",
-  "saveToFile": "保存到文件",
+  "createNewFile": "新建文件",
+  "saveAs": "另存为",
   "openFromFile": "从文件打开",
   "recentFiles": "最近文件",
   "noRecentFiles": "没有最近的文件",
   "language": "语言",
-  "savedAgo": "{time}前已保存",
-  "justNow": "刚刚",
-  "secondsAgo": "{count}秒",
-  "minutesAgo": "{count}分钟",
-  "clearRecents": "清除记录"
+  "saving": "保存中...",
+  "savedLessThanMinute": "不到一分钟前已保存",
+  "savedMinutesAgo": "{count}分钟前已保存",
+  "clearRecents": "清除记录",
+  "emptyStateTitle": "欢迎使用多计数器",
+  "emptyStateMessage": "新建一个计数器文件或打开已有文件开始使用。"
 }

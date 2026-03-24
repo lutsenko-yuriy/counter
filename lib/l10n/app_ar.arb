@@ -13,14 +13,16 @@
   "increment": "زيادة",
   "tapToAddCounter": "اضغط لإضافة عداد جديد",
   "untitled": "بدون عنوان",
-  "saveToFile": "حفظ في ملف",
+  "createNewFile": "إنشاء ملف جديد",
+  "saveAs": "حفظ باسم",
   "openFromFile": "فتح من ملف",
   "recentFiles": "الملفات الأخيرة",
   "noRecentFiles": "لا توجد ملفات حديثة",
   "language": "اللغة",
-  "savedAgo": "تم الحفظ منذ {time}",
-  "justNow": "الآن",
-  "secondsAgo": "{count}ث",
-  "minutesAgo": "{count}د",
-  "clearRecents": "مسح السجل"
+  "saving": "جارٍ الحفظ...",
+  "savedLessThanMinute": "تم الحفظ منذ أقل من دقيقة",
+  "savedMinutesAgo": "تم الحفظ منذ {count} دقائق",
+  "clearRecents": "مسح السجل",
+  "emptyStateTitle": "مرحباً في عداد متعدد",
+  "emptyStateMessage": "أنشئ ملف عدادات جديد أو افتح ملفاً موجوداً للبدء."
 }

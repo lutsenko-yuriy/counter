@@ -48,7 +48,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get untitled => '未命名';
 
   @override
-  String get saveToFile => '保存到文件';
+  String get createNewFile => '新建文件';
+
+  @override
+  String get saveAs => '另存为';
 
   @override
   String get openFromFile => '从文件打开';
@@ -63,23 +66,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get language => '语言';
 
   @override
-  String savedAgo(String time) {
-    return '$time前已保存';
-  }
+  String get saving => '保存中...';
 
   @override
-  String get justNow => '刚刚';
+  String get savedLessThanMinute => '不到一分钟前已保存';
 
   @override
-  String secondsAgo(int count) {
-    return '$count秒';
-  }
-
-  @override
-  String minutesAgo(int count) {
-    return '$count分钟';
+  String savedMinutesAgo(int count) {
+    return '$count分钟前已保存';
   }
 
   @override
   String get clearRecents => '清除记录';
+
+  @override
+  String get emptyStateTitle => '欢迎使用多计数器';
+
+  @override
+  String get emptyStateMessage => '新建一个计数器文件或打开已有文件开始使用。';
 }

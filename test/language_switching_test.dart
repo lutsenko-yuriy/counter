@@ -13,8 +13,8 @@ void main() {
     await tester.pumpWidget(const CountersApp());
     await tester.pumpAndSettle();
 
-    // Title is now the file name — "Untitled" by default
-    expect(find.text('Untitled'), findsOneWidget);
+    // Title shows app name when no file is open
+    expect(find.text('Multi Counter'), findsWidgets);
 
     // Open the drawer to access language picker
     final scaffoldState = tester.firstState<ScaffoldState>(
@@ -30,9 +30,8 @@ void main() {
     await tester.tap(find.text('Deutsch'));
     await tester.pumpAndSettle();
 
-    // Title stays "Untitled" (translated to German)
-    expect(find.text('Unbenannt'), findsOneWidget);
-    expect(find.text('Zähler nach links wischen zum Löschen'), findsOneWidget);
+    // Title updates to German app name
+    expect(find.text('Multi-Zähler'), findsWidgets);
   });
 
   testWidgets('Switching to French updates UI text', (tester) async {
@@ -52,7 +51,7 @@ void main() {
     await tester.tap(find.text('Français'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Sans titre'), findsOneWidget);
+    expect(find.text('Multi Compteur'), findsWidgets);
   });
 
   testWidgets('Switching back to English restores original text',
@@ -71,7 +70,7 @@ void main() {
     await tester.tap(find.text('Deutsch'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Unbenannt'), findsOneWidget);
+    expect(find.text('Multi-Zähler'), findsWidgets);
 
     // Switch back to English
     scaffoldState = tester.firstState<ScaffoldState>(
@@ -84,6 +83,6 @@ void main() {
     await tester.tap(find.text('English'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Untitled'), findsOneWidget);
+    expect(find.text('Multi Counter'), findsWidgets);
   });
 }

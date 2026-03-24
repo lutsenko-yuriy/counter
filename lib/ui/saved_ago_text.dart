@@ -3,14 +3,24 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:counter/l10n/app_localizations.dart';
 
-/// Displays a "Saved X ago" label that auto-updates every second.
+/// Displays a save-status label in the title bar.
 ///
-/// Shows nothing if [lastSavedAt] is null.
+/// States:
+/// - [isSaving] is true → "Saving..."
+/// - [lastSavedAt] < 1 minute ago → "Saved less than a minute ago"
+/// - [lastSavedAt] 1–10 minutes ago → "Saved X minutes ago"
+/// - [lastSavedAt] > 10 minutes ago or null → hidden
 class SavedAgoText extends StatefulWidget {
   final DateTime? lastSavedAt;
+  final bool isSaving;
   final TextStyle? style;
 
-  const SavedAgoText({super.key, required this.lastSavedAt, this.style});
+  const SavedAgoText({
+    super.key,
+    required this.lastSavedAt,
+    this.isSaving = false,
+    this.style,
+  });
 
   @override
   State<SavedAgoText> createState() => _SavedAgoTextState();
@@ -28,15 +38,16 @@ class _SavedAgoTextState extends State<SavedAgoText> {
   @override
   void didUpdateWidget(SavedAgoText oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.lastSavedAt != oldWidget.lastSavedAt) {
+    if (widget.lastSavedAt != oldWidget.lastSavedAt ||
+        widget.isSaving != oldWidget.isSaving) {
       _startTimer();
     }
   }
 
   void _startTimer() {
     _timer?.cancel();
-    if (widget.lastSavedAt != null) {
-      _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+    if (widget.lastSavedAt != null || widget.isSaving) {
+      _timer = Timer.periodic(const Duration(seconds: 10), (_) {
         if (mounted) setState(() {});
       });
     }
@@ -50,22 +61,33 @@ class _SavedAgoTextState extends State<SavedAgoText> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isSaving) {
+      final l10n = AppLocalizations.of(context)!;
+      return Text(
+        l10n.saving,
+        style: widget.style,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
     if (widget.lastSavedAt == null) return const SizedBox.shrink();
 
-    final l10n = AppLocalizations.of(context)!;
     final diff = DateTime.now().difference(widget.lastSavedAt!);
-    final String timeText;
 
-    if (diff.inSeconds < 5) {
-      timeText = l10n.justNow;
-    } else if (diff.inMinutes < 1) {
-      timeText = l10n.savedAgo(l10n.secondsAgo(diff.inSeconds));
+    // Hide after 10 minutes
+    if (diff.inMinutes > 10) return const SizedBox.shrink();
+
+    final l10n = AppLocalizations.of(context)!;
+    final String text;
+
+    if (diff.inMinutes < 1) {
+      text = l10n.savedLessThanMinute;
     } else {
-      timeText = l10n.savedAgo(l10n.minutesAgo(diff.inMinutes));
+      text = l10n.savedMinutesAgo(diff.inMinutes);
     }
 
     return Text(
-      timeText,
+      text,
       style: widget.style,
       overflow: TextOverflow.ellipsis,
     );

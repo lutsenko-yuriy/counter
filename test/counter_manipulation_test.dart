@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,9 +7,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:counter/main.dart';
 
 void main() {
-  setUp(() {
-    SharedPreferences.setMockInitialValues({});
-  });
+  /// Pre-seeds SharedPreferences with a counter list and file info
+  /// so the app starts in "file open" mode (not empty state).
+  void setUpWithCounter() {
+    SharedPreferences.setMockInitialValues({
+      'counters': jsonEncode({
+        'counters': [
+          {'id': 1, 'name': 'Counter 1', 'value': 0}
+        ],
+      }),
+    });
+  }
+
+  setUp(setUpWithCounter);
 
   testWidgets('Counter increments and decrements', (tester) async {
     await tester.pumpWidget(const CountersApp());

@@ -48,7 +48,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get untitled => 'بدون عنوان';
 
   @override
-  String get saveToFile => 'حفظ في ملف';
+  String get createNewFile => 'إنشاء ملف جديد';
+
+  @override
+  String get saveAs => 'حفظ باسم';
 
   @override
   String get openFromFile => 'فتح من ملف';
@@ -63,23 +66,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get language => 'اللغة';
 
   @override
-  String savedAgo(String time) {
-    return 'تم الحفظ منذ $time';
-  }
+  String get saving => 'جارٍ الحفظ...';
 
   @override
-  String get justNow => 'الآن';
+  String get savedLessThanMinute => 'تم الحفظ منذ أقل من دقيقة';
 
   @override
-  String secondsAgo(int count) {
-    return '$countث';
-  }
-
-  @override
-  String minutesAgo(int count) {
-    return '$countد';
+  String savedMinutesAgo(int count) {
+    return 'تم الحفظ منذ $count دقائق';
   }
 
   @override
   String get clearRecents => 'مسح السجل';
+
+  @override
+  String get emptyStateTitle => 'مرحباً في عداد متعدد';
+
+  @override
+  String get emptyStateMessage =>
+      'أنشئ ملف عدادات جديد أو افتح ملفاً موجوداً للبدء.';
 }

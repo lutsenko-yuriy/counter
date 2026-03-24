@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:counter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/models.dart';
 import '../../state/counter_list_notifier.dart';
 import '../../state/locale_notifier.dart';
 import '../../state/recent_files_notifier.dart';
@@ -91,7 +92,24 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
     );
   }
 
-  Future<void> _saveToFile() async {
+  /// Creates a brand new file with an empty counter list.
+  Future<void> _createNewFile() async {
+    final newList = CounterList(CounterFactory());
+    final result = await _fileStorage.pickAndSave(newList);
+    if (result == null || !mounted) return;
+
+    final notifier = context.read<CounterListNotifier>();
+    notifier.replaceCounters(newList);
+    notifier.setCurrentFile(result.name, result.path);
+    notifier.markSaved();
+
+    if (result.path != null) {
+      context.read<RecentFilesNotifier>().addRecent(result.path!, result.name);
+    }
+  }
+
+  /// Saves the current list to a new file (Save As).
+  Future<void> _saveAs() async {
     final notifier = context.read<CounterListNotifier>();
     if (notifier.counters == null) return;
 
@@ -142,24 +160,267 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
   Future<String?> _loadFileFromPath(String path) async {
     if (kIsWeb) return null;
     try {
-      // Use conditional import for dart:io File reading
-      final file = await _readNativeFile(path);
-      return file;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  Future<String?> _readNativeFile(String path) async {
-    // This will only be called on native platforms
-    try {
-      // We use file_picker to re-read files
-      // But for recent files, we read directly via the counter_file_storage
       final result = await _fileStorage.pickAndLoad();
       return result != null ? _fileStorage.serialize(result.counters) : null;
     } catch (_) {
       return null;
     }
+  }
+
+  Widget _buildDrawer(AppLocalizations l10n, RecentFilesNotifier recentNotifier,
+      bool hasFile) {
+    return Drawer(
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+              child: Text(
+                l10n.appTitle,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.note_add),
+              title: Text(l10n.createNewFile),
+              onTap: () {
+                Navigator.of(context).pop();
+                _createNewFile();
+              },
+            ),
+            if (hasFile)
+              ListTile(
+                leading: const Icon(Icons.save_as),
+                title: Text(l10n.saveAs),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _saveAs();
+                },
+              ),
+            ListTile(
+              leading: const Icon(Icons.folder_open),
+              title: Text(l10n.openFromFile),
+              onTap: () {
+                Navigator.of(context).pop();
+                _openFromFile();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.language),
+              title: Text(l10n.language),
+              onTap: () {
+                Navigator.of(context).pop();
+                _pickLanguage();
+              },
+            ),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.recentFiles,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  if (recentNotifier.files.isNotEmpty)
+                    TextButton(
+                      onPressed: () {
+                        recentNotifier.clearRecent();
+                      },
+                      child: Text(l10n.clearRecents),
+                    ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: recentNotifier.files.isEmpty
+                  ? Center(
+                      child: Text(
+                        l10n.noRecentFiles,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: recentNotifier.files.length,
+                      itemBuilder: (context, index) {
+                        final file = recentNotifier.files[index];
+                        return ListTile(
+                          leading: const Icon(Icons.description),
+                          title: Text(
+                            file.name,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            file.path,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            _openRecentFile(file.path, file.name);
+                          },
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(AppLocalizations l10n) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.note_add_outlined,
+              size: 64,
+              color: Theme.of(context).colorScheme.outline,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.emptyStateTitle,
+              style: Theme.of(context).textTheme.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.emptyStateMessage,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            FilledButton.icon(
+              onPressed: _createNewFile,
+              icon: const Icon(Icons.note_add),
+              label: Text(l10n.createNewFile),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              onPressed: _openFromFile,
+              icon: const Icon(Icons.folder_open),
+              label: Text(l10n.openFromFile),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCountersList(
+      AppLocalizations l10n, CounterListNotifier notifier) {
+    final counters = notifier.counters!;
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: counters.counters.length + 1,
+            itemBuilder: (context, index) {
+              if (index == counters.counters.length) {
+                return Card(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: InkWell(
+                    onTap: notifier.add,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 20),
+                      child: Column(
+                        children: [
+                          Icon(Icons.add,
+                              color: Theme.of(context).colorScheme.primary),
+                          const SizedBox(height: 8),
+                          Text(
+                            l10n.tapToAddCounter,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+              final counter = counters.counters[index];
+              return Dismissible(
+                key: ValueKey(counter.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  color: Colors.red,
+                  child:
+                      const Icon(Icons.delete_outline, color: Colors.white),
+                ),
+                onDismissed: (_) => notifier.remove(counter.id),
+                child: Card(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 8),
+                  child: ListTile(
+                    contentPadding:
+                        const EdgeInsets.fromLTRB(16, 0, 8, 0),
+                    title: GestureDetector(
+                      onTap: () =>
+                          _renameCounter(counter.id, counter.name),
+                      child: Text(counter.name),
+                    ),
+                    subtitle: Text(
+                      '${counter.value}',
+                      style:
+                          Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.remove),
+                          tooltip: l10n.decrement,
+                          onPressed: counter.value > 0
+                              ? () => notifier.decrement(counter.id)
+                              : null,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          tooltip: l10n.increment,
+                          onPressed: () =>
+                              notifier.increment(counter.id),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        if (counters.counters.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+            child: Text(
+              l10n.swipeToDelete,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+            ),
+          ),
+      ],
+    );
   }
 
   @override
@@ -172,8 +433,10 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    final counters = notifier.counters!;
-    final fileName = notifier.currentFileName ?? l10n.untitled;
+    final hasFile = !notifier.hasNoFile;
+    final hasCounters = !notifier.counters!.isEmpty;
+    final showCounters = hasFile || hasCounters;
+    final titleText = notifier.displayFileName ?? l10n.appTitle;
 
     return Scaffold(
       appBar: AppBar(
@@ -181,215 +444,25 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(fileName, style: const TextStyle(fontSize: 18)),
-            SavedAgoText(
-              lastSavedAt: notifier.lastSavedAt,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onPrimaryContainer
-                        .withAlpha(178),
-                  ),
-            ),
+            Text(titleText, style: const TextStyle(fontSize: 18)),
+            if (hasFile)
+              SavedAgoText(
+                lastSavedAt: notifier.lastSavedAt,
+                isSaving: notifier.isSaving,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimaryContainer
+                          .withAlpha(178),
+                    ),
+              ),
           ],
         ),
       ),
-      drawer: Drawer(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-                child: Text(
-                  l10n.appTitle,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.save),
-                title: Text(l10n.saveToFile),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _saveToFile();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.folder_open),
-                title: Text(l10n.openFromFile),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _openFromFile();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.language),
-                title: Text(l10n.language),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickLanguage();
-                },
-              ),
-              const Divider(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        l10n.recentFiles,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    ),
-                    if (recentNotifier.files.isNotEmpty)
-                      TextButton(
-                        onPressed: () {
-                          recentNotifier.clearRecent();
-                        },
-                        child: Text(l10n.clearRecents),
-                      ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: recentNotifier.files.isEmpty
-                    ? Center(
-                        child: Text(
-                          l10n.noRecentFiles,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount: recentNotifier.files.length,
-                        itemBuilder: (context, index) {
-                          final file = recentNotifier.files[index];
-                          return ListTile(
-                            leading: const Icon(Icons.description),
-                            title: Text(
-                              file.name,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle: Text(
-                              file.path,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              _openRecentFile(file.path, file.name);
-                            },
-                          );
-                        },
-                      ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: counters.counters.length + 1,
-              itemBuilder: (context, index) {
-                if (index == counters.counters.length) {
-                  return Card(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 8),
-                    child: InkWell(
-                      onTap: notifier.add,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 20),
-                        child: Column(
-                          children: [
-                            Icon(Icons.add,
-                                color: Theme.of(context).colorScheme.primary),
-                            const SizedBox(height: 8),
-                            Text(
-                              l10n.tapToAddCounter,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }
-                final counter = counters.counters[index];
-                return Dismissible(
-                  key: ValueKey(counter.id),
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    alignment: Alignment.centerRight,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24),
-                    color: Colors.red,
-                    child: const Icon(Icons.delete_outline,
-                        color: Colors.white),
-                  ),
-                  onDismissed: (_) => notifier.remove(counter.id),
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 8),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.fromLTRB(
-                          16, 0, 8, 0),
-                      title: GestureDetector(
-                        onTap: () =>
-                            _renameCounter(counter.id, counter.name),
-                        child: Text(counter.name),
-                      ),
-                      subtitle: Text(
-                        '${counter.value}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium,
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove),
-                            tooltip: l10n.decrement,
-                            onPressed: counter.value > 0
-                                ? () => notifier.decrement(counter.id)
-                                : null,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.add),
-                            tooltip: l10n.increment,
-                            onPressed: () =>
-                                notifier.increment(counter.id),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          if (counters.counters.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
-              child: Text(
-                l10n.swipeToDelete,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-              ),
-            ),
-        ],
-      ),
+      drawer: _buildDrawer(l10n, recentNotifier, showCounters),
+      body: showCounters
+          ? _buildCountersList(l10n, notifier)
+          : _buildEmptyState(l10n),
     );
   }
 }

@@ -48,7 +48,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get untitled => '無題';
 
   @override
-  String get saveToFile => 'ファイルに保存';
+  String get createNewFile => '新規ファイル作成';
+
+  @override
+  String get saveAs => '名前を付けて保存';
 
   @override
   String get openFromFile => 'ファイルから開く';
@@ -63,23 +66,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get language => '言語';
 
   @override
-  String savedAgo(String time) {
-    return '$time前に保存';
-  }
+  String get saving => '保存中...';
 
   @override
-  String get justNow => 'たった今';
+  String get savedLessThanMinute => '1分以内に保存済み';
 
   @override
-  String secondsAgo(int count) {
-    return '$count秒';
-  }
-
-  @override
-  String minutesAgo(int count) {
-    return '$count分';
+  String savedMinutesAgo(int count) {
+    return '$count分前に保存';
   }
 
   @override
   String get clearRecents => '履歴をクリア';
+
+  @override
+  String get emptyStateTitle => 'マルチカウンターへようこそ';
+
+  @override
+  String get emptyStateMessage => '新しいカウンターファイルを作成するか、既存のファイルを開いて始めましょう。';
 }

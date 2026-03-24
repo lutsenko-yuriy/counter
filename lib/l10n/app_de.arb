@@ -13,14 +13,16 @@
   "increment": "Erhöhen",
   "tapToAddCounter": "Tippen, um einen neuen Zähler hinzuzufügen",
   "untitled": "Unbenannt",
-  "saveToFile": "In Datei speichern",
+  "createNewFile": "Neue Datei erstellen",
+  "saveAs": "Speichern unter",
   "openFromFile": "Aus Datei öffnen",
   "recentFiles": "Zuletzt geöffnet",
   "noRecentFiles": "Keine zuletzt geöffneten Dateien",
   "language": "Sprache",
-  "savedAgo": "Gespeichert vor {time}",
-  "justNow": "gerade eben",
-  "secondsAgo": "{count}s",
-  "minutesAgo": "{count}m",
-  "clearRecents": "Verlauf löschen"
+  "saving": "Speichern...",
+  "savedLessThanMinute": "Vor weniger als einer Minute gespeichert",
+  "savedMinutesAgo": "Vor {count} Minuten gespeichert",
+  "clearRecents": "Verlauf löschen",
+  "emptyStateTitle": "Willkommen bei Multi-Zähler",
+  "emptyStateMessage": "Erstelle eine neue Zähler-Datei oder öffne eine vorhandene."
 }

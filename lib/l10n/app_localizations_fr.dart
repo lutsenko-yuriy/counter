@@ -48,7 +48,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get untitled => 'Sans titre';
 
   @override
-  String get saveToFile => 'Enregistrer dans un fichier';
+  String get createNewFile => 'Créer un nouveau fichier';
+
+  @override
+  String get saveAs => 'Enregistrer sous';
 
   @override
   String get openFromFile => 'Ouvrir un fichier';
@@ -63,23 +66,23 @@ class AppLocalizationsFr extends AppLocalizations {
   String get language => 'Langue';
 
   @override
-  String savedAgo(String time) {
-    return 'Enregistré il y a $time';
-  }
+  String get saving => 'Enregistrement...';
 
   @override
-  String get justNow => 'à l\'instant';
+  String get savedLessThanMinute => 'Enregistré il y a moins d\'une minute';
 
   @override
-  String secondsAgo(int count) {
-    return '${count}s';
-  }
-
-  @override
-  String minutesAgo(int count) {
-    return '${count}m';
+  String savedMinutesAgo(int count) {
+    return 'Enregistré il y a $count minutes';
   }
 
   @override
   String get clearRecents => 'Effacer les récents';
+
+  @override
+  String get emptyStateTitle => 'Bienvenue dans Multi Compteur';
+
+  @override
+  String get emptyStateMessage =>
+      'Créez un nouveau fichier de compteurs ou ouvrez-en un existant.';
 }

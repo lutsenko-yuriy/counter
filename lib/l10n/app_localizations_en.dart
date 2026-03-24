@@ -48,7 +48,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get untitled => 'Untitled';
 
   @override
-  String get saveToFile => 'Save to File';
+  String get createNewFile => 'Create New File';
+
+  @override
+  String get saveAs => 'Save As';
 
   @override
   String get openFromFile => 'Open from File';
@@ -63,23 +66,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get language => 'Language';
 
   @override
-  String savedAgo(String time) {
-    return 'Saved $time ago';
-  }
+  String get saving => 'Saving...';
 
   @override
-  String get justNow => 'just now';
+  String get savedLessThanMinute => 'Saved less than a minute ago';
 
   @override
-  String secondsAgo(int count) {
-    return '${count}s';
-  }
-
-  @override
-  String minutesAgo(int count) {
-    return '${count}m';
+  String savedMinutesAgo(int count) {
+    return 'Saved $count minutes ago';
   }
 
   @override
   String get clearRecents => 'Clear Recents';
+
+  @override
+  String get emptyStateTitle => 'Welcome to Multi Counter';
+
+  @override
+  String get emptyStateMessage =>
+      'Create a new counters file or open an existing one to get started.';
 }

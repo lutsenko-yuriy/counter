@@ -49,7 +49,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get untitled => 'Unbenannt';
 
   @override
-  String get saveToFile => 'In Datei speichern';
+  String get createNewFile => 'Neue Datei erstellen';
+
+  @override
+  String get saveAs => 'Speichern unter';
 
   @override
   String get openFromFile => 'Aus Datei öffnen';
@@ -64,23 +67,23 @@ class AppLocalizationsDe extends AppLocalizations {
   String get language => 'Sprache';
 
   @override
-  String savedAgo(String time) {
-    return 'Gespeichert vor $time';
-  }
+  String get saving => 'Speichern...';
 
   @override
-  String get justNow => 'gerade eben';
+  String get savedLessThanMinute => 'Vor weniger als einer Minute gespeichert';
 
   @override
-  String secondsAgo(int count) {
-    return '${count}s';
-  }
-
-  @override
-  String minutesAgo(int count) {
-    return '${count}m';
+  String savedMinutesAgo(int count) {
+    return 'Vor $count Minuten gespeichert';
   }
 
   @override
   String get clearRecents => 'Verlauf löschen';
+
+  @override
+  String get emptyStateTitle => 'Willkommen bei Multi-Zähler';
+
+  @override
+  String get emptyStateMessage =>
+      'Erstelle eine neue Zähler-Datei oder öffne eine vorhandene.';
 }

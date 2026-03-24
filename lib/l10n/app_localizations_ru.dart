@@ -48,7 +48,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get untitled => 'Без названия';
 
   @override
-  String get saveToFile => 'Сохранить в файл';
+  String get createNewFile => 'Создать новый файл';
+
+  @override
+  String get saveAs => 'Сохранить как';
 
   @override
   String get openFromFile => 'Открыть из файла';
@@ -63,23 +66,23 @@ class AppLocalizationsRu extends AppLocalizations {
   String get language => 'Язык';
 
   @override
-  String savedAgo(String time) {
-    return 'Сохранено $time назад';
-  }
+  String get saving => 'Сохранение...';
 
   @override
-  String get justNow => 'только что';
+  String get savedLessThanMinute => 'Сохранено менее минуты назад';
 
   @override
-  String secondsAgo(int count) {
-    return '$countс';
-  }
-
-  @override
-  String minutesAgo(int count) {
-    return '$countм';
+  String savedMinutesAgo(int count) {
+    return 'Сохранено $count мин. назад';
   }
 
   @override
   String get clearRecents => 'Очистить историю';
+
+  @override
+  String get emptyStateTitle => 'Добро пожаловать в Мульти-счётчик';
+
+  @override
+  String get emptyStateMessage =>
+      'Создайте новый файл счётчиков или откройте существующий.';
 }

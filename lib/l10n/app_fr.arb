@@ -13,14 +13,16 @@
   "increment": "Incrémenter",
   "tapToAddCounter": "Appuyez pour ajouter un nouveau compteur",
   "untitled": "Sans titre",
-  "saveToFile": "Enregistrer dans un fichier",
+  "createNewFile": "Créer un nouveau fichier",
+  "saveAs": "Enregistrer sous",
   "openFromFile": "Ouvrir un fichier",
   "recentFiles": "Fichiers récents",
   "noRecentFiles": "Aucun fichier récent",
   "language": "Langue",
-  "savedAgo": "Enregistré il y a {time}",
-  "justNow": "à l'instant",
-  "secondsAgo": "{count}s",
-  "minutesAgo": "{count}m",
-  "clearRecents": "Effacer les récents"
+  "saving": "Enregistrement...",
+  "savedLessThanMinute": "Enregistré il y a moins d'une minute",
+  "savedMinutesAgo": "Enregistré il y a {count} minutes",
+  "clearRecents": "Effacer les récents",
+  "emptyStateTitle": "Bienvenue dans Multi Compteur",
+  "emptyStateMessage": "Créez un nouveau fichier de compteurs ou ouvrez-en un existant."
 }

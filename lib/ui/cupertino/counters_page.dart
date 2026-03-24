@@ -5,6 +5,7 @@ import 'package:flutter/material.dart'
 import 'package:counter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/models.dart';
 import '../../state/counter_list_notifier.dart';
 import '../../state/locale_notifier.dart';
 import '../../state/recent_files_notifier.dart';
@@ -95,8 +96,10 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
 
   void _showFileMenu() {
     final l10n = AppLocalizations.of(context)!;
+    final notifier = context.read<CounterListNotifier>();
     final recentNotifier = context.read<RecentFilesNotifier>();
     final recentFiles = recentNotifier.files;
+    final hasFile = !notifier.hasNoFile;
 
     showCupertinoModalPopup(
       context: context,
@@ -105,10 +108,18 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
           CupertinoActionSheetAction(
             onPressed: () {
               Navigator.of(context).pop();
-              _saveToFile();
+              _createNewFile();
             },
-            child: Text(l10n.saveToFile),
+            child: Text(l10n.createNewFile),
           ),
+          if (hasFile)
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _saveAs();
+              },
+              child: Text(l10n.saveAs),
+            ),
           CupertinoActionSheetAction(
             onPressed: () {
               Navigator.of(context).pop();
@@ -177,7 +188,22 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
     );
   }
 
-  Future<void> _saveToFile() async {
+  Future<void> _createNewFile() async {
+    final newList = CounterList(CounterFactory());
+    final result = await _fileStorage.pickAndSave(newList);
+    if (result == null || !mounted) return;
+
+    final notifier = context.read<CounterListNotifier>();
+    notifier.replaceCounters(newList);
+    notifier.setCurrentFile(result.name, result.path);
+    notifier.markSaved();
+
+    if (result.path != null) {
+      context.read<RecentFilesNotifier>().addRecent(result.path!, result.name);
+    }
+  }
+
+  Future<void> _saveAs() async {
     final notifier = context.read<CounterListNotifier>();
     if (notifier.counters == null) return;
 
@@ -228,6 +254,179 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
     }
   }
 
+  Widget _buildEmptyState(AppLocalizations l10n) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              CupertinoIcons.doc_text,
+              size: 64,
+              color: CupertinoColors.secondaryLabel,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.emptyStateTitle,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.emptyStateMessage,
+              style: const TextStyle(
+                fontSize: 15,
+                color: CupertinoColors.secondaryLabel,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            CupertinoButton.filled(
+              onPressed: _createNewFile,
+              child: Text(l10n.createNewFile),
+            ),
+            const SizedBox(height: 12),
+            CupertinoButton(
+              onPressed: _openFromFile,
+              child: Text(l10n.openFromFile),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCountersList(
+      AppLocalizations l10n, CounterListNotifier notifier) {
+    final counters = notifier.counters!;
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.separated(
+            itemCount: counters.counters.length + 1,
+            separatorBuilder: (_, __) => Container(
+              height: 0.5,
+              color: CupertinoColors.separator,
+            ),
+            itemBuilder: (context, index) {
+              if (index == counters.counters.length) {
+                return GestureDetector(
+                  onTap: notifier.add,
+                  child: ColoredBox(
+                    color: CupertinoColors.systemBackground
+                        .resolveFrom(context),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 20),
+                      child: Column(
+                        children: [
+                          const Icon(CupertinoIcons.plus,
+                              color: CupertinoColors.activeBlue),
+                          const SizedBox(height: 8),
+                          Text(
+                            l10n.tapToAddCounter,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              color: CupertinoColors.activeBlue,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+              final counter = counters.counters[index];
+              return Dismissible(
+                key: ValueKey(counter.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  color: CupertinoColors.destructiveRed,
+                  child: const Icon(CupertinoIcons.delete,
+                      color: CupertinoColors.white),
+                ),
+                onDismissed: (_) => notifier.remove(counter.id),
+                child: ColoredBox(
+                  color: CupertinoColors.systemBackground
+                      .resolveFrom(context),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => _renameCounter(
+                                counter.id, counter.name),
+                            child: Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  counter.name,
+                                  style: const TextStyle(fontSize: 17),
+                                ),
+                                Text(
+                                  '${counter.value}',
+                                  style: const TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Tooltip(
+                          message: l10n.decrement,
+                          child: CupertinoButton(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8),
+                            onPressed: counter.value > 0
+                                ? () => notifier.decrement(counter.id)
+                                : null,
+                            child: const Icon(CupertinoIcons.minus),
+                          ),
+                        ),
+                        Tooltip(
+                          message: l10n.increment,
+                          child: CupertinoButton(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8),
+                            onPressed: () =>
+                                notifier.increment(counter.id),
+                            child: const Icon(CupertinoIcons.plus),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        if (counters.counters.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
+            child: Text(
+              l10n.swipeToDelete,
+              style: const TextStyle(
+                fontSize: 13,
+                color: CupertinoColors.secondaryLabel,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -240,22 +439,26 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
       );
     }
 
-    final counters = notifier.counters!;
-    final fileName = notifier.currentFileName ?? l10n.untitled;
+    final hasFile = !notifier.hasNoFile;
+    final hasCounters = !notifier.counters!.isEmpty;
+    final showCounters = hasFile || hasCounters;
+    final titleText = notifier.displayFileName ?? l10n.appTitle;
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(fileName, style: const TextStyle(fontSize: 17)),
-            SavedAgoText(
-              lastSavedAt: notifier.lastSavedAt,
-              style: const TextStyle(
-                fontSize: 11,
-                color: CupertinoColors.secondaryLabel,
+            Text(titleText, style: const TextStyle(fontSize: 17)),
+            if (hasFile)
+              SavedAgoText(
+                lastSavedAt: notifier.lastSavedAt,
+                isSaving: notifier.isSaving,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: CupertinoColors.secondaryLabel,
+                ),
               ),
-            ),
           ],
         ),
         trailing: Tooltip(
@@ -269,133 +472,9 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
       ),
       child: SafeArea(
         top: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.separated(
-                itemCount: counters.counters.length + 1,
-                separatorBuilder: (_, __) => Container(
-                  height: 0.5,
-                  color: CupertinoColors.separator,
-                ),
-                itemBuilder: (context, index) {
-                  if (index == counters.counters.length) {
-                    return GestureDetector(
-                      onTap: notifier.add,
-                      child: ColoredBox(
-                        color: CupertinoColors.systemBackground
-                            .resolveFrom(context),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 20),
-                          child: Column(
-                            children: [
-                              const Icon(CupertinoIcons.plus,
-                                  color: CupertinoColors.activeBlue),
-                              const SizedBox(height: 8),
-                              Text(
-                                l10n.tapToAddCounter,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  color: CupertinoColors.activeBlue,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                  final counter = counters.counters[index];
-                  return Dismissible(
-                    key: ValueKey(counter.id),
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      alignment: Alignment.centerRight,
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 24),
-                      color: CupertinoColors.destructiveRed,
-                      child: const Icon(CupertinoIcons.delete,
-                          color: CupertinoColors.white),
-                    ),
-                    onDismissed: (_) => notifier.remove(counter.id),
-                    child: ColoredBox(
-                      color: CupertinoColors.systemBackground
-                          .resolveFrom(context),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                            16, 12, 8, 12),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () => _renameCounter(
-                                    counter.id, counter.name),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      counter.name,
-                                      style:
-                                          const TextStyle(fontSize: 17),
-                                    ),
-                                    Text(
-                                      '${counter.value}',
-                                      style: const TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Tooltip(
-                              message: l10n.decrement,
-                              child: CupertinoButton(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8),
-                                onPressed: counter.value > 0
-                                    ? () => notifier.decrement(counter.id)
-                                    : null,
-                                child:
-                                    const Icon(CupertinoIcons.minus),
-                              ),
-                            ),
-                            Tooltip(
-                              message: l10n.increment,
-                              child: CupertinoButton(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8),
-                                onPressed: () =>
-                                    notifier.increment(counter.id),
-                                child:
-                                    const Icon(CupertinoIcons.plus),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            if (counters.counters.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
-                child: Text(
-                  l10n.swipeToDelete,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: CupertinoColors.secondaryLabel,
-                  ),
-                ),
-              ),
-          ],
-        ),
+        child: showCounters
+            ? _buildCountersList(l10n, notifier)
+            : _buildEmptyState(l10n),
       ),
     );
   }

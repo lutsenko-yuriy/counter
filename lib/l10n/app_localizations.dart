@@ -186,11 +186,17 @@ abstract class AppLocalizations {
   /// **'Untitled'**
   String get untitled;
 
-  /// No description provided for @saveToFile.
+  /// No description provided for @createNewFile.
   ///
   /// In en, this message translates to:
-  /// **'Save to File'**
-  String get saveToFile;
+  /// **'Create New File'**
+  String get createNewFile;
+
+  /// No description provided for @saveAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Save As'**
+  String get saveAs;
 
   /// No description provided for @openFromFile.
   ///
@@ -216,35 +222,41 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get language;
 
-  /// No description provided for @savedAgo.
+  /// No description provided for @saving.
   ///
   /// In en, this message translates to:
-  /// **'Saved {time} ago'**
-  String savedAgo(String time);
+  /// **'Saving...'**
+  String get saving;
 
-  /// No description provided for @justNow.
+  /// No description provided for @savedLessThanMinute.
   ///
   /// In en, this message translates to:
-  /// **'just now'**
-  String get justNow;
+  /// **'Saved less than a minute ago'**
+  String get savedLessThanMinute;
 
-  /// No description provided for @secondsAgo.
+  /// No description provided for @savedMinutesAgo.
   ///
   /// In en, this message translates to:
-  /// **'{count}s'**
-  String secondsAgo(int count);
-
-  /// No description provided for @minutesAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{count}m'**
-  String minutesAgo(int count);
+  /// **'Saved {count} minutes ago'**
+  String savedMinutesAgo(int count);
 
   /// No description provided for @clearRecents.
   ///
   /// In en, this message translates to:
   /// **'Clear Recents'**
   String get clearRecents;
+
+  /// No description provided for @emptyStateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Multi Counter'**
+  String get emptyStateTitle;
+
+  /// No description provided for @emptyStateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new counters file or open an existing one to get started.'**
+  String get emptyStateMessage;
 }
 
 class _AppLocalizationsDelegate
