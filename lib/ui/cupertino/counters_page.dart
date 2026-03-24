@@ -13,13 +13,13 @@ import '../../storage/counter_file_storage.dart';
 import '../saved_ago_text.dart';
 
 const _supportedLocales = [
-  (Locale('en'), 'English'),
-  (Locale('de'), 'Deutsch'),
-  (Locale('fr'), 'Français'),
-  (Locale('ru'), 'Русский'),
-  (Locale('ar'), 'العربية'),
-  (Locale('zh'), '中文'),
-  (Locale('ja'), '日本語'),
+  (Locale('en'), '🇬🇧', 'English'),
+  (Locale('de'), '🇩🇪', 'Deutsch'),
+  (Locale('fr'), '🇫🇷', 'Français'),
+  (Locale('ru'), '🇷🇺', 'Русский'),
+  (Locale('ar'), '🇸🇦', 'العربية'),
+  (Locale('zh'), '🇨🇳', '中文'),
+  (Locale('ja'), '🇯🇵', '日本語'),
 ];
 
 class CountersPageCupertino extends StatefulWidget {
@@ -75,14 +75,14 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
       context: context,
       builder: (context) => CupertinoActionSheet(
         actions: _supportedLocales.map((entry) {
-          final (locale, name) = entry;
+          final (locale, flag, name) = entry;
           return CupertinoActionSheetAction(
             isDefaultAction: locale == current,
             onPressed: () {
               context.read<LocaleNotifier>().setLocale(locale);
               Navigator.of(context).pop();
             },
-            child: Text(name),
+            child: Text('$flag  $name'),
           );
         }).toList(),
         cancelButton: CupertinoActionSheetAction(
@@ -368,9 +368,22 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                               crossAxisAlignment:
                                   CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  counter.name,
-                                  style: const TextStyle(fontSize: 17),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        counter.name,
+                                        style: const TextStyle(fontSize: 17),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    const Icon(
+                                      CupertinoIcons.pencil,
+                                      size: 14,
+                                      color: CupertinoColors.secondaryLabel,
+                                    ),
+                                  ],
                                 ),
                                 Text(
                                   '${counter.value}',

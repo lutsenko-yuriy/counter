@@ -27,7 +27,7 @@ void main() {
     await tester.tap(find.text('Language'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Deutsch'));
+    await tester.tap(find.textContaining('Deutsch'));
     await tester.pumpAndSettle();
 
     // Title updates to German app name
@@ -48,7 +48,7 @@ void main() {
     await tester.tap(find.text('Language'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Français'));
+    await tester.tap(find.textContaining('Français'));
     await tester.pumpAndSettle();
 
     expect(find.text('Multi Compteur'), findsWidgets);
@@ -67,7 +67,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Language'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Deutsch'));
+    await tester.tap(find.textContaining('Deutsch'));
     await tester.pumpAndSettle();
 
     expect(find.text('Multi-Zähler'), findsWidgets);
@@ -80,7 +80,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Sprache'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('English'));
+    await tester.tap(find.textContaining('English'));
     await tester.pumpAndSettle();
 
     expect(find.text('Multi Counter'), findsWidgets);

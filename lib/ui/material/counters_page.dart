@@ -11,13 +11,13 @@ import '../../storage/counter_file_storage.dart';
 import '../saved_ago_text.dart';
 
 const _supportedLocales = [
-  (Locale('en'), 'English'),
-  (Locale('de'), 'Deutsch'),
-  (Locale('fr'), 'Français'),
-  (Locale('ru'), 'Русский'),
-  (Locale('ar'), 'العربية'),
-  (Locale('zh'), '中文'),
-  (Locale('ja'), '日本語'),
+  (Locale('en'), '🇬🇧', 'English'),
+  (Locale('de'), '🇩🇪', 'Deutsch'),
+  (Locale('fr'), '🇫🇷', 'Français'),
+  (Locale('ru'), '🇷🇺', 'Русский'),
+  (Locale('ar'), '🇸🇦', 'العربية'),
+  (Locale('zh'), '🇨🇳', '中文'),
+  (Locale('ja'), '🇯🇵', '日本語'),
 ];
 
 class CountersPageMaterial extends StatefulWidget {
@@ -70,7 +70,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
       context: context,
       builder: (context) => SimpleDialog(
         children: _supportedLocales.map((entry) {
-          final (locale, name) = entry;
+          final (locale, flag, name) = entry;
           return SimpleDialogOption(
             onPressed: () {
               context.read<LocaleNotifier>().setLocale(locale);
@@ -82,6 +82,8 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                   const Icon(Icons.check, size: 18)
                 else
                   const SizedBox(width: 18),
+                const SizedBox(width: 8),
+                Text(flag, style: const TextStyle(fontSize: 20)),
                 const SizedBox(width: 8),
                 Text(name),
               ],
@@ -378,7 +380,16 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                     title: GestureDetector(
                       onTap: () =>
                           _renameCounter(counter.id, counter.name),
-                      child: Text(counter.name),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(child: Text(counter.name)),
+                          const SizedBox(width: 4),
+                          Icon(Icons.edit,
+                              size: 14,
+                              color: Theme.of(context).colorScheme.outline),
+                        ],
+                      ),
                     ),
                     subtitle: Text(
                       '${counter.value}',
