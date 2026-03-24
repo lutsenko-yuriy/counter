@@ -13,13 +13,13 @@ import '../../storage/counter_file_storage.dart';
 import '../saved_ago_text.dart';
 
 const _supportedLocales = [
-  (Locale('en'), 'EN', 'English'),
-  (Locale('de'), 'DE', 'Deutsch'),
-  (Locale('fr'), 'FR', 'Français'),
-  (Locale('ru'), 'RU', 'Русский'),
-  (Locale('ar'), 'AR', 'العربية'),
-  (Locale('zh'), 'ZH', '中文'),
-  (Locale('ja'), 'JA', '日本語'),
+  (Locale('en'), 'English'),
+  (Locale('de'), 'Deutsch'),
+  (Locale('fr'), 'Français'),
+  (Locale('ru'), 'Русский'),
+  (Locale('ar'), 'العربية'),
+  (Locale('zh'), '中文'),
+  (Locale('ja'), '日本語'),
 ];
 
 class CountersPageCupertino extends StatefulWidget {
@@ -75,14 +75,14 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
       context: context,
       builder: (context) => CupertinoActionSheet(
         actions: _supportedLocales.map((entry) {
-          final (locale, flag, name) = entry;
+          final (locale, name) = entry;
           return CupertinoActionSheetAction(
             isDefaultAction: locale == current,
             onPressed: () {
               context.read<LocaleNotifier>().setLocale(locale);
               Navigator.of(context).pop();
             },
-            child: Text('$flag  $name', style: const TextStyle(fontSize: 17)),
+            child: Text(name),
           );
         }).toList(),
         cancelButton: CupertinoActionSheetAction(

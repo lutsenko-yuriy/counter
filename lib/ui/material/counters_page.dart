@@ -11,13 +11,13 @@ import '../../storage/counter_file_storage.dart';
 import '../saved_ago_text.dart';
 
 const _supportedLocales = [
-  (Locale('en'), 'EN', 'English'),
-  (Locale('de'), 'DE', 'Deutsch'),
-  (Locale('fr'), 'FR', 'Français'),
-  (Locale('ru'), 'RU', 'Русский'),
-  (Locale('ar'), 'AR', 'العربية'),
-  (Locale('zh'), 'ZH', '中文'),
-  (Locale('ja'), 'JA', '日本語'),
+  (Locale('en'), '🇬🇧', 'English'),
+  (Locale('de'), '🇩🇪', 'Deutsch'),
+  (Locale('fr'), '🇫🇷', 'Français'),
+  (Locale('ru'), '🇷🇺', 'Русский'),
+  (Locale('ar'), '🇸🇦', 'العربية'),
+  (Locale('zh'), '🇨🇳', '中文'),
+  (Locale('ja'), '🇯🇵', '日本語'),
 ];
 
 class CountersPageMaterial extends StatefulWidget {
@@ -83,18 +83,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                 else
                   const SizedBox(width: 18),
                 const SizedBox(width: 8),
-                SizedBox(
-                  width: 32,
-                  child: Text(
-                    flag,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                Text(flag, style: const TextStyle(fontSize: 20)),
                 const SizedBox(width: 8),
                 Text(name),
               ],
