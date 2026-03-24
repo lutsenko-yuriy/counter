@@ -25,15 +25,15 @@ Flutter counter app targeting all platforms (iOS, Android, macOS, Linux, Windows
 - `models.dart` — barrel export.
 
 **State** (`lib/state/`):
-- `counter_list_notifier.dart` — `ChangeNotifier` owning all counter mutations (`add`, `remove`, `increment`, `decrement`, `rename`, `replaceCounters`); loads persisted state on startup and auto-saves to SharedPreferences after every mutation. Tracks the current open file (`currentFileName`, `currentFilePath`), `lastSavedAt` timestamp, and auto-saves to the current file with a 1-second debounce after each mutation.
+- `counter_list_notifier.dart` — `ChangeNotifier` owning all counter mutations (`add`, `remove`, `increment`, `decrement`, `rename`, `replaceCounters`). Receives initial state (counters + file info) at construction — no async loading or SharedPreferences dependency. Tracks the current open file (`currentFileName`, `currentFilePath`), `lastSavedAt` timestamp, and auto-saves to the current file with a 1-second debounce after each mutation.
 - `locale_notifier.dart` — `ChangeNotifier` holding the active `Locale`; updated by the in-app language picker.
 - `recent_files_notifier.dart` — `ChangeNotifier` managing the recently opened files list; caps at 10 entries; persists via `RecentFilesStorage`.
 
 **Storage** (`lib/storage/`):
-- `counter_json.dart` — shared JSON serialization helpers (`counterListToJson`, `counterListFromJson`); used by both `CounterStorage` and `CounterFileStorage`.
-- `counter_storage.dart` — serializes/deserializes `CounterList` to JSON in `SharedPreferences` using the shared helpers.
-- `counter_file_storage.dart` — handles reading/writing counter data to/from JSON files via `file_picker`; supports `pickAndLoad`, `pickAndSave`, and `saveToPath` (for auto-save). Uses conditional imports (`file_writer_native.dart`/`file_writer_web.dart`) for cross-platform file writing.
-- `file_writer_native.dart` / `file_writer_web.dart` / `file_writer_stub.dart` — conditional-import triad for platform-specific file writing (`dart:io` on native, no-op on web where `file_picker` handles downloads via bytes).
+- `counter_json.dart` — shared JSON serialization helpers (`counterListToJson`, `counterListFromJson`); used by `CounterFileStorage`.
+- `counter_storage.dart` — legacy; no longer used by the notifier. May be removed.
+- `counter_file_storage.dart` — handles reading/writing counter data to/from JSON files via `file_picker`; supports `pickAndLoad`, `pickAndSave`, `loadFromPath` (for startup restore), and `saveToPath` (for auto-save). Uses conditional imports (`file_writer_native.dart`/`file_writer_web.dart`) for cross-platform file I/O.
+- `file_writer_native.dart` / `file_writer_web.dart` / `file_writer_stub.dart` — conditional-import triad for platform-specific file reading and writing (`dart:io` on native, no-op/unsupported on web).
 - `recent_files_storage.dart` — persists the recent files list as JSON in `SharedPreferences`.
 
 **UI** (`lib/ui/`):
@@ -44,19 +44,21 @@ Flutter counter app targeting all platforms (iOS, Android, macOS, Linux, Windows
 - Both platforms: new counters are added via an "add counter" item at the bottom of the list (no FAB or nav bar button). The swipe-to-delete hint only appears when counters exist.
 
 **Entry point** (`lib/main.dart`):
-- `CountersApp` provides `CounterListNotifier`, `LocaleNotifier`, and `RecentFilesNotifier` via `MultiProvider`; uses `CupertinoApp` on iOS/macOS and `MaterialApp` otherwise; wires localisation delegates and supported locales.
+- `main()` is async: on native, loads the recent files list and tries to restore counters from the most recent file. Iterates through recent files in order; removes stale entries (file not found) and passes their paths to the UI for error display. On web or when no recent files exist, starts with empty state.
+- `CountersApp` accepts optional `initialCounters`, `initialFileName`, `initialFilePath`, and `staleFilePaths`; provides `CounterListNotifier`, `LocaleNotifier`, and `RecentFilesNotifier` via `MultiProvider`; uses `CupertinoApp` on iOS/macOS and `MaterialApp` otherwise; wires localisation delegates and supported locales.
 
 ## File Save/Restore
 
 The app supports a document-style workflow:
+- **Startup restore**: on native platforms, the app tries to load the most recently opened file. If it no longer exists, it is removed from recents and the next file is tried. If all files are stale (or none exist), the app shows the empty welcome state. Stale file errors are shown to the user (SnackBar on Material, CupertinoAlertDialog on Cupertino).
 - **Save to File**: exports the current counter list as a formatted JSON file via the system file picker.
 - **Open from File**: imports counters from a previously saved JSON file, replacing the current list.
 - **Auto-save**: after any counter mutation, a 1-second debounce timer auto-saves to the currently open file (native platforms only).
 - **Recent Files**: tracks up to 10 recently opened/saved files; persisted in SharedPreferences. Disabled on web (no persistent file paths).
-- **Dynamic title**: the app bar/nav bar shows the current file name instead of "Counters"; shows the localized "Untitled" when no file is open.
+- **Dynamic title**: the app bar/nav bar shows the current file name instead of "Counters"; shows the localized app title when no file is open.
 - **Saved-ago indicator**: a subtitle beneath the title shows "Saved Xs ago" / "Saved Xm ago" / "just now", updating every second.
 
-The JSON file format matches the SharedPreferences format: `{"counters": [{"id": 1, "name": "...", "value": 0}, ...]}`.
+The JSON file format: `{"counters": [{"id": 1, "name": "...", "value": 0}, ...]}`.
 
 ## Localisation
 
