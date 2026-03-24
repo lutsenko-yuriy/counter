@@ -73,6 +73,13 @@ class CounterFileStorage {
     return (name: name, path: kIsWeb ? null : result);
   }
 
+  /// Loads counters from a known file path.
+  /// Only works on native platforms; throws on web.
+  Future<CounterList> loadFromPath(String path) async {
+    final json = await file_writer.readFileString(path);
+    return deserialize(json);
+  }
+
   /// Saves counters to a known file path (for auto-save).
   /// Only works on native platforms; returns false on web.
   Future<bool> saveToPath(String path, CounterList counters) async {

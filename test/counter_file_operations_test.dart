@@ -1,22 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:counter/models/models.dart';
 import 'package:counter/state/counter_list_notifier.dart';
-import 'package:counter/storage/counter_storage.dart';
 
 void main() {
-  setUp(() {
-    SharedPreferences.setMockInitialValues({});
-  });
-
   group('replaceCounters', () {
-    test('replaces the current counter list and notifies', () async {
-      final notifier = CounterListNotifier(CounterStorage());
-      await Future<void>.delayed(Duration.zero);
+    test('replaces the current counter list and notifies', () {
+      final notifier = CounterListNotifier();
 
       // Starts empty (no file open)
-      expect(notifier.counters!.isEmpty, true);
+      expect(notifier.counters.isEmpty, true);
 
       final factory = CounterFactory(initialNextId: 10);
       final newList = CounterList.restore(factory, [
@@ -30,26 +23,24 @@ void main() {
       notifier.replaceCounters(newList);
 
       expect(notified, true);
-      expect(notifier.counters!.counters.length, 2);
-      expect(notifier.counters![5].name, 'Imported');
-      expect(notifier.counters![5].value, 42);
-      expect(notifier.counters![8].name, 'Another');
+      expect(notifier.counters.counters.length, 2);
+      expect(notifier.counters[5].name, 'Imported');
+      expect(notifier.counters[5].value, 42);
+      expect(notifier.counters[8].name, 'Another');
     });
   });
 
   group('current file tracking', () {
-    test('starts with no current file', () async {
-      final notifier = CounterListNotifier(CounterStorage());
-      await Future<void>.delayed(Duration.zero);
+    test('starts with no current file', () {
+      final notifier = CounterListNotifier();
 
       expect(notifier.currentFileName, isNull);
       expect(notifier.currentFilePath, isNull);
       expect(notifier.hasNoFile, true);
     });
 
-    test('setCurrentFile updates name and path', () async {
-      final notifier = CounterListNotifier(CounterStorage());
-      await Future<void>.delayed(Duration.zero);
+    test('setCurrentFile updates name and path', () {
+      final notifier = CounterListNotifier();
 
       var notified = false;
       notifier.addListener(() => notified = true);
@@ -62,9 +53,8 @@ void main() {
       expect(notifier.hasNoFile, false);
     });
 
-    test('displayFileName strips extension', () async {
-      final notifier = CounterListNotifier(CounterStorage());
-      await Future<void>.delayed(Duration.zero);
+    test('displayFileName strips extension', () {
+      final notifier = CounterListNotifier();
 
       expect(notifier.displayFileName, isNull);
 
@@ -78,9 +68,8 @@ void main() {
       expect(notifier.displayFileName, 'noext');
     });
 
-    test('clearCurrentFile resets file info', () async {
-      final notifier = CounterListNotifier(CounterStorage());
-      await Future<void>.delayed(Duration.zero);
+    test('clearCurrentFile resets file info', () {
+      final notifier = CounterListNotifier();
 
       notifier.setCurrentFile('test.json', '/tmp/test.json');
       notifier.clearCurrentFile();
@@ -92,23 +81,18 @@ void main() {
   });
 
   group('saving state', () {
-    test('isSaving is false initially', () async {
-      final notifier = CounterListNotifier(CounterStorage());
-      await Future<void>.delayed(Duration.zero);
-
+    test('isSaving is false initially', () {
+      final notifier = CounterListNotifier();
       expect(notifier.isSaving, false);
     });
 
-    test('lastSavedAt is null initially', () async {
-      final notifier = CounterListNotifier(CounterStorage());
-      await Future<void>.delayed(Duration.zero);
-
+    test('lastSavedAt is null initially', () {
+      final notifier = CounterListNotifier();
       expect(notifier.lastSavedAt, isNull);
     });
 
-    test('markSaved updates the timestamp and clears isSaving', () async {
-      final notifier = CounterListNotifier(CounterStorage());
-      await Future<void>.delayed(Duration.zero);
+    test('markSaved updates the timestamp and clears isSaving', () {
+      final notifier = CounterListNotifier();
 
       final before = DateTime.now();
       notifier.markSaved();
@@ -128,13 +112,35 @@ void main() {
   });
 
   group('empty initial state', () {
-    test('starts with empty counter list when no persisted data', () async {
-      final notifier = CounterListNotifier(CounterStorage());
-      await Future<void>.delayed(Duration.zero);
+    test('starts with empty counter list when no initial data', () {
+      final notifier = CounterListNotifier();
 
-      expect(notifier.counters!.isEmpty, true);
-      expect(notifier.counters!.counters.length, 0);
+      expect(notifier.counters.isEmpty, true);
+      expect(notifier.counters.counters.length, 0);
       expect(notifier.hasNoFile, true);
+    });
+  });
+
+  group('initial state from file', () {
+    test('accepts initial counters and file info', () {
+      final factory = CounterFactory(initialNextId: 3);
+      final counters = CounterList.restore(factory, [
+        Counter(id: 1, value: 5)..rename('Test'),
+      ]);
+
+      final notifier = CounterListNotifier(
+        initialCounters: counters,
+        initialFileName: 'test.json',
+        initialFilePath: '/tmp/test.json',
+      );
+
+      expect(notifier.counters.counters.length, 1);
+      expect(notifier.counters[1].name, 'Test');
+      expect(notifier.counters[1].value, 5);
+      expect(notifier.currentFileName, 'test.json');
+      expect(notifier.currentFilePath, '/tmp/test.json');
+      expect(notifier.hasNoFile, false);
+      expect(notifier.displayFileName, 'test');
     });
   });
 }

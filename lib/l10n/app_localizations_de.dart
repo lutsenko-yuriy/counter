@@ -86,4 +86,9 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get emptyStateMessage =>
       'Erstelle eine neue Zähler-Datei oder öffne eine vorhandene.';
+
+  @override
+  String fileNotFound(String name) {
+    return 'Datei nicht gefunden: $name. Sie wurde aus den zuletzt geöffneten Dateien entfernt.';
+  }
 }

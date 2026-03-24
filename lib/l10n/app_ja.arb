@@ -24,5 +24,6 @@
   "savedMinutesAgo": "{count}分前に保存",
   "clearRecents": "履歴をクリア",
   "emptyStateTitle": "マルチカウンターへようこそ",
-  "emptyStateMessage": "新しいカウンターファイルを作成するか、既存のファイルを開いて始めましょう。"
+  "emptyStateMessage": "新しいカウンターファイルを作成するか、既存のファイルを開いて始めましょう。",
+  "fileNotFound": "ファイルが見つかりません：{name}。最近のファイルから削除されました。"
 }

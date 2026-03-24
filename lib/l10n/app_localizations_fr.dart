@@ -85,4 +85,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get emptyStateMessage =>
       'Créez un nouveau fichier de compteurs ou ouvrez-en un existant.';
+
+  @override
+  String fileNotFound(String name) {
+    return 'Fichier introuvable : $name. Il a été supprimé des fichiers récents.';
+  }
 }

@@ -85,4 +85,9 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get emptyStateMessage =>
       'أنشئ ملف عدادات جديد أو افتح ملفاً موجوداً للبدء.';
+
+  @override
+  String fileNotFound(String name) {
+    return 'الملف غير موجود: $name. تمت إزالته من الملفات الأخيرة.';
+  }
 }

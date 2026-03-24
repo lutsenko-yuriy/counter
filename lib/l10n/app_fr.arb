@@ -24,5 +24,6 @@
   "savedMinutesAgo": "Enregistré il y a {count} minutes",
   "clearRecents": "Effacer les récents",
   "emptyStateTitle": "Bienvenue dans Multi Compteur",
-  "emptyStateMessage": "Créez un nouveau fichier de compteurs ou ouvrez-en un existant."
+  "emptyStateMessage": "Créez un nouveau fichier de compteurs ou ouvrez-en un existant.",
+  "fileNotFound": "Fichier introuvable : {name}. Il a été supprimé des fichiers récents."
 }

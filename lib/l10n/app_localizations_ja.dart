@@ -84,4 +84,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get emptyStateMessage => '新しいカウンターファイルを作成するか、既存のファイルを開いて始めましょう。';
+
+  @override
+  String fileNotFound(String name) {
+    return 'ファイルが見つかりません：$name。最近のファイルから削除されました。';
+  }
 }

@@ -4,14 +4,14 @@ import 'package:flutter/foundation.dart';
 
 import '../models/models.dart';
 import '../storage/counter_file_storage.dart';
-import '../storage/counter_storage.dart';
 
-/// Owns all counter mutations, persistence to SharedPreferences,
-/// and file-based auto-save with a 1-second debounce.
+/// Owns all counter mutations and file-based auto-save with a 1-second debounce.
+///
+/// Initial state is provided at construction time (loaded from the most recent
+/// file during app startup in `main()`). No SharedPreferences dependency.
 class CounterListNotifier extends ChangeNotifier {
-  final CounterStorage _storage;
   final CounterFileStorage _fileStorage;
-  CounterList? _counters;
+  CounterList _counters;
 
   // Current file tracking
   String? _currentFileName;
@@ -23,13 +23,17 @@ class CounterListNotifier extends ChangeNotifier {
   Timer? _autoSaveTimer;
   static const _autoSaveDelay = Duration(seconds: 1);
 
-  CounterListNotifier(this._storage, {CounterFileStorage? fileStorage})
-      : _fileStorage = fileStorage ?? CounterFileStorage() {
-    _load();
-  }
+  CounterListNotifier({
+    CounterFileStorage? fileStorage,
+    CounterList? initialCounters,
+    String? initialFileName,
+    String? initialFilePath,
+  })  : _fileStorage = fileStorage ?? CounterFileStorage(),
+        _counters = initialCounters ?? CounterList.empty(CounterFactory()),
+        _currentFileName = initialFileName,
+        _currentFilePath = initialFilePath;
 
-  CounterList? get counters => _counters;
-  bool get isLoading => _counters == null;
+  CounterList get counters => _counters;
 
   /// The raw file name, or `null` if no file is open.
   String? get currentFileName => _currentFileName;
@@ -54,17 +58,6 @@ class CounterListNotifier extends ChangeNotifier {
   /// Whether no file is currently open (empty/welcome state).
   bool get hasNoFile => _currentFileName == null;
 
-  Future<void> _load() async {
-    _counters =
-        await _storage.load() ?? CounterList.empty(CounterFactory());
-    notifyListeners();
-  }
-
-  Future<void> _save() async {
-    await _storage.save(_counters!);
-    _scheduleAutoSave();
-  }
-
   /// Schedules a debounced auto-save to the current file (if one is open).
   void _scheduleAutoSave() {
     _autoSaveTimer?.cancel();
@@ -74,9 +67,9 @@ class CounterListNotifier extends ChangeNotifier {
     notifyListeners();
 
     _autoSaveTimer = Timer(_autoSaveDelay, () async {
-      if (_currentFilePath != null && _counters != null) {
+      if (_currentFilePath != null) {
         final success =
-            await _fileStorage.saveToPath(_currentFilePath!, _counters!);
+            await _fileStorage.saveToPath(_currentFilePath!, _counters);
         if (success) {
           _lastSavedAt = DateTime.now();
         }
@@ -89,7 +82,6 @@ class CounterListNotifier extends ChangeNotifier {
   /// Replaces the current counter list (used for file import).
   void replaceCounters(CounterList newCounters) {
     _counters = newCounters;
-    _storage.save(newCounters);
     notifyListeners();
   }
 
@@ -118,32 +110,32 @@ class CounterListNotifier extends ChangeNotifier {
   }
 
   void add() {
-    _counters!.add();
-    _save();
+    _counters.add();
+    _scheduleAutoSave();
     notifyListeners();
   }
 
   void remove(int id) {
-    _counters!.remove(id);
-    _save();
+    _counters.remove(id);
+    _scheduleAutoSave();
     notifyListeners();
   }
 
   void increment(int id) {
-    _counters![id].increment();
-    _save();
+    _counters[id].increment();
+    _scheduleAutoSave();
     notifyListeners();
   }
 
   void decrement(int id) {
-    _counters![id].decrement();
-    _save();
+    _counters[id].decrement();
+    _scheduleAutoSave();
     notifyListeners();
   }
 
   void rename(int id, String newName) {
-    _counters![id].rename(newName);
-    _save();
+    _counters[id].rename(newName);
+    _scheduleAutoSave();
     notifyListeners();
   }
 

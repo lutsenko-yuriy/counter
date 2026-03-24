@@ -85,4 +85,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get emptyStateMessage =>
       'Create a new counters file or open an existing one to get started.';
+
+  @override
+  String fileNotFound(String name) {
+    return 'File not found: $name. It has been removed from recent files.';
+  }
 }

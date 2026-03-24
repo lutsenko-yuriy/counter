@@ -31,5 +31,13 @@
   },
   "clearRecents": "Clear Recents",
   "emptyStateTitle": "Welcome to Multi Counter",
-  "emptyStateMessage": "Create a new counters file or open an existing one to get started."
+  "emptyStateMessage": "Create a new counters file or open an existing one to get started.",
+  "fileNotFound": "File not found: {name}. It has been removed from recent files.",
+  "@fileNotFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -21,7 +21,9 @@ const _supportedLocales = [
 ];
 
 class CountersPageMaterial extends StatefulWidget {
-  const CountersPageMaterial({super.key});
+  const CountersPageMaterial({super.key, this.staleFilePaths = const []});
+
+  final List<String> staleFilePaths;
 
   @override
   State<CountersPageMaterial> createState() => _CountersPageMaterialState();
@@ -29,6 +31,26 @@ class CountersPageMaterial extends StatefulWidget {
 
 class _CountersPageMaterialState extends State<CountersPageMaterial> {
   final _fileStorage = CounterFileStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.staleFilePaths.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showStaleFileErrors();
+      });
+    }
+  }
+
+  void _showStaleFileErrors() {
+    final l10n = AppLocalizations.of(context)!;
+    for (final path in widget.staleFilePaths) {
+      final name = path.split('/').last.split('\\').last;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.fileNotFound(name))),
+      );
+    }
+  }
 
   void _renameCounter(int id, String currentName) {
     final l10n = AppLocalizations.of(context)!;
@@ -113,9 +135,8 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
   /// Saves the current list to a new file (Save As).
   Future<void> _saveAs() async {
     final notifier = context.read<CounterListNotifier>();
-    if (notifier.counters == null) return;
 
-    final result = await _fileStorage.pickAndSave(notifier.counters!);
+    final result = await _fileStorage.pickAndSave(notifier.counters);
     if (result == null || !mounted) return;
 
     notifier.setCurrentFile(result.name, result.path);
@@ -323,7 +344,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
 
   Widget _buildCountersList(
       AppLocalizations l10n, CounterListNotifier notifier) {
-    final counters = notifier.counters!;
+    final counters = notifier.counters;
     return Column(
       children: [
         Expanded(
@@ -440,12 +461,8 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
     final notifier = context.watch<CounterListNotifier>();
     final recentNotifier = context.watch<RecentFilesNotifier>();
 
-    if (notifier.isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
     final hasFile = !notifier.hasNoFile;
-    final hasCounters = !notifier.counters!.isEmpty;
+    final hasCounters = !notifier.counters.isEmpty;
     final showCounters = hasFile || hasCounters;
     final titleText = notifier.displayFileName ?? l10n.appTitle;
 

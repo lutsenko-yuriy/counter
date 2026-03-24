@@ -24,5 +24,6 @@
   "savedMinutesAgo": "Vor {count} Minuten gespeichert",
   "clearRecents": "Verlauf löschen",
   "emptyStateTitle": "Willkommen bei Multi-Zähler",
-  "emptyStateMessage": "Erstelle eine neue Zähler-Datei oder öffne eine vorhandene."
+  "emptyStateMessage": "Erstelle eine neue Zähler-Datei oder öffne eine vorhandene.",
+  "fileNotFound": "Datei nicht gefunden: {name}. Sie wurde aus den zuletzt geöffneten Dateien entfernt."
 }

@@ -24,5 +24,6 @@
   "savedMinutesAgo": "{count}分钟前已保存",
   "clearRecents": "清除记录",
   "emptyStateTitle": "欢迎使用多计数器",
-  "emptyStateMessage": "新建一个计数器文件或打开已有文件开始使用。"
+  "emptyStateMessage": "新建一个计数器文件或打开已有文件开始使用。",
+  "fileNotFound": "文件未找到：{name}。已从最近文件中移除。"
 }

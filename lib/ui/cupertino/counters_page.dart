@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart'
-    show CircularProgressIndicator, Tooltip;
+import 'package:flutter/material.dart' show Tooltip;
 import 'package:counter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +22,9 @@ const _supportedLocales = [
 ];
 
 class CountersPageCupertino extends StatefulWidget {
-  const CountersPageCupertino({super.key});
+  const CountersPageCupertino({super.key, this.staleFilePaths = const []});
+
+  final List<String> staleFilePaths;
 
   @override
   State<CountersPageCupertino> createState() => _CountersPageCupertinoState();
@@ -31,6 +32,36 @@ class CountersPageCupertino extends StatefulWidget {
 
 class _CountersPageCupertinoState extends State<CountersPageCupertino> {
   final _fileStorage = CounterFileStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.staleFilePaths.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showStaleFileErrors();
+      });
+    }
+  }
+
+  void _showStaleFileErrors() {
+    final l10n = AppLocalizations.of(context)!;
+    for (final path in widget.staleFilePaths) {
+      final name = path.split('/').last.split('\\').last;
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: Text(l10n.fileNotFound(name)),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(l10n.cancel),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   void _renameCounter(int id, String currentName) {
     final l10n = AppLocalizations.of(context)!;
@@ -205,9 +236,8 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
 
   Future<void> _saveAs() async {
     final notifier = context.read<CounterListNotifier>();
-    if (notifier.counters == null) return;
 
-    final result = await _fileStorage.pickAndSave(notifier.counters!);
+    final result = await _fileStorage.pickAndSave(notifier.counters);
     if (result == null || !mounted) return;
 
     notifier.setCurrentFile(result.name, result.path);
@@ -302,7 +332,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
 
   Widget _buildCountersList(
       AppLocalizations l10n, CounterListNotifier notifier) {
-    final counters = notifier.counters!;
+    final counters = notifier.counters;
     return Column(
       children: [
         Expanded(
@@ -445,15 +475,8 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
     final l10n = AppLocalizations.of(context)!;
     final notifier = context.watch<CounterListNotifier>();
 
-    if (notifier.isLoading) {
-      return const CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(),
-        child: Center(child: CircularProgressIndicator.adaptive()),
-      );
-    }
-
     final hasFile = !notifier.hasNoFile;
-    final hasCounters = !notifier.counters!.isEmpty;
+    final hasCounters = !notifier.counters.isEmpty;
     final showCounters = hasFile || hasCounters;
     final titleText = notifier.displayFileName ?? l10n.appTitle;
 

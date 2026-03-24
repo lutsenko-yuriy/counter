@@ -1,28 +1,29 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:counter/models/models.dart';
 import 'package:counter/main.dart';
 
 void main() {
-  /// Pre-seeds SharedPreferences with a counter list and file info
-  /// so the app starts in "file open" mode (not empty state).
-  void setUpWithCounter() {
-    SharedPreferences.setMockInitialValues({
-      'counters': jsonEncode({
-        'counters': [
-          {'id': 1, 'name': 'Counter 1', 'value': 0}
-        ],
-      }),
-    });
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
+  CountersApp buildAppWithCounter() {
+    final factory = CounterFactory(initialNextId: 2);
+    final counters = CounterList.restore(factory, [
+      Counter(id: 1, value: 0),
+    ]);
+    return CountersApp(
+      initialCounters: counters,
+      initialFileName: 'test.json',
+      initialFilePath: '/tmp/test.json',
+    );
   }
 
-  setUp(setUpWithCounter);
-
   testWidgets('Counter increments and decrements', (tester) async {
-    await tester.pumpWidget(const CountersApp());
+    await tester.pumpWidget(buildAppWithCounter());
     await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('Increment'));
@@ -35,7 +36,7 @@ void main() {
   });
 
   testWidgets('Decrement does not go below zero', (tester) async {
-    await tester.pumpWidget(const CountersApp());
+    await tester.pumpWidget(buildAppWithCounter());
     await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('Decrement'));
@@ -44,7 +45,7 @@ void main() {
   });
 
   testWidgets('Rename counter via dialog', (tester) async {
-    await tester.pumpWidget(const CountersApp());
+    await tester.pumpWidget(buildAppWithCounter());
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Counter 1'));

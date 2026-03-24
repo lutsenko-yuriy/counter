@@ -84,4 +84,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get emptyStateMessage => '新建一个计数器文件或打开已有文件开始使用。';
+
+  @override
+  String fileNotFound(String name) {
+    return '文件未找到：$name。已从最近文件中移除。';
+  }
 }

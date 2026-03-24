@@ -257,6 +257,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create a new counters file or open an existing one to get started.'**
   String get emptyStateMessage;
+
+  /// No description provided for @fileNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'File not found: {name}. It has been removed from recent files.'**
+  String fileNotFound(String name);
 }
 
 class _AppLocalizationsDelegate

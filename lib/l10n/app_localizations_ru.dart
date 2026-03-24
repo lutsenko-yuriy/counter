@@ -85,4 +85,9 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get emptyStateMessage =>
       'Создайте новый файл счётчиков или откройте существующий.';
+
+  @override
+  String fileNotFound(String name) {
+    return 'Файл не найден: $name. Он удалён из списка недавних файлов.';
+  }
 }
