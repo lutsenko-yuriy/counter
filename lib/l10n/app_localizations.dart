@@ -179,6 +179,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to add a new counter'**
   String get tapToAddCounter;
+
+  /// No description provided for @untitled.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled'**
+  String get untitled;
+
+  /// No description provided for @createNewFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New File'**
+  String get createNewFile;
+
+  /// No description provided for @saveAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Save As'**
+  String get saveAs;
+
+  /// No description provided for @openFromFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open from File'**
+  String get openFromFile;
+
+  /// No description provided for @recentFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Files'**
+  String get recentFiles;
+
+  /// No description provided for @noRecentFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent files'**
+  String get noRecentFiles;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @saving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get saving;
+
+  /// No description provided for @savedLessThanMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved less than a minute ago'**
+  String get savedLessThanMinute;
+
+  /// No description provided for @savedMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {count} minutes ago'**
+  String savedMinutesAgo(int count);
+
+  /// No description provided for @clearRecents.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Recents'**
+  String get clearRecents;
+
+  /// No description provided for @emptyStateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Multi Counter'**
+  String get emptyStateTitle;
+
+  /// No description provided for @emptyStateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new counters file or open an existing one to get started.'**
+  String get emptyStateMessage;
+
+  /// No description provided for @fileNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'File not found: {name}. It has been removed from recent files.'**
+  String fileNotFound(String name);
 }
 
 class _AppLocalizationsDelegate

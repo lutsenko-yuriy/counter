@@ -43,4 +43,51 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tapToAddCounter => 'Appuyez pour ajouter un nouveau compteur';
+
+  @override
+  String get untitled => 'Sans titre';
+
+  @override
+  String get createNewFile => 'Créer un nouveau fichier';
+
+  @override
+  String get saveAs => 'Enregistrer sous';
+
+  @override
+  String get openFromFile => 'Ouvrir un fichier';
+
+  @override
+  String get recentFiles => 'Fichiers récents';
+
+  @override
+  String get noRecentFiles => 'Aucun fichier récent';
+
+  @override
+  String get language => 'Langue';
+
+  @override
+  String get saving => 'Enregistrement...';
+
+  @override
+  String get savedLessThanMinute => 'Enregistré il y a moins d\'une minute';
+
+  @override
+  String savedMinutesAgo(int count) {
+    return 'Enregistré il y a $count minutes';
+  }
+
+  @override
+  String get clearRecents => 'Effacer les récents';
+
+  @override
+  String get emptyStateTitle => 'Bienvenue dans Multi Compteur';
+
+  @override
+  String get emptyStateMessage =>
+      'Créez un nouveau fichier de compteurs ou ouvrez-en un existant.';
+
+  @override
+  String fileNotFound(String name) {
+    return 'Fichier introuvable : $name. Il a été supprimé des fichiers récents.';
+  }
 }

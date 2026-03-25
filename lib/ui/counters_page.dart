@@ -5,7 +5,9 @@ import 'cupertino/counters_page.dart';
 import 'material/counters_page.dart';
 
 class CountersPage extends StatelessWidget {
-  const CountersPage({super.key});
+  const CountersPage({super.key, this.staleFilePaths = const []});
+
+  final List<String> staleFilePaths;
 
   static bool get _isApple =>
       defaultTargetPlatform == TargetPlatform.iOS ||
@@ -14,7 +16,7 @@ class CountersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _isApple
-        ? const CountersPageCupertino()
-        : const CountersPageMaterial();
+        ? CountersPageCupertino(staleFilePaths: staleFilePaths)
+        : CountersPageMaterial(staleFilePaths: staleFilePaths);
   }
 }

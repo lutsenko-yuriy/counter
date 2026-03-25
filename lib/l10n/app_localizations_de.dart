@@ -44,4 +44,51 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tapToAddCounter => 'Tippen, um einen neuen Zähler hinzuzufügen';
+
+  @override
+  String get untitled => 'Unbenannt';
+
+  @override
+  String get createNewFile => 'Neue Datei erstellen';
+
+  @override
+  String get saveAs => 'Speichern unter';
+
+  @override
+  String get openFromFile => 'Aus Datei öffnen';
+
+  @override
+  String get recentFiles => 'Zuletzt geöffnet';
+
+  @override
+  String get noRecentFiles => 'Keine zuletzt geöffneten Dateien';
+
+  @override
+  String get language => 'Sprache';
+
+  @override
+  String get saving => 'Speichern...';
+
+  @override
+  String get savedLessThanMinute => 'Vor weniger als einer Minute gespeichert';
+
+  @override
+  String savedMinutesAgo(int count) {
+    return 'Vor $count Minuten gespeichert';
+  }
+
+  @override
+  String get clearRecents => 'Verlauf löschen';
+
+  @override
+  String get emptyStateTitle => 'Willkommen bei Multi-Zähler';
+
+  @override
+  String get emptyStateMessage =>
+      'Erstelle eine neue Zähler-Datei oder öffne eine vorhandene.';
+
+  @override
+  String fileNotFound(String name) {
+    return 'Datei nicht gefunden: $name. Sie wurde aus den zuletzt geöffneten Dateien entfernt.';
+  }
 }

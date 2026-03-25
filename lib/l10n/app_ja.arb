@@ -11,5 +11,19 @@
   "save": "保存",
   "decrement": "減らす",
   "increment": "増やす",
-  "tapToAddCounter": "タップして新しいカウンターを追加"
+  "tapToAddCounter": "タップして新しいカウンターを追加",
+  "untitled": "無題",
+  "createNewFile": "新規ファイル作成",
+  "saveAs": "名前を付けて保存",
+  "openFromFile": "ファイルから開く",
+  "recentFiles": "最近のファイル",
+  "noRecentFiles": "最近のファイルはありません",
+  "language": "言語",
+  "saving": "保存中...",
+  "savedLessThanMinute": "1分以内に保存済み",
+  "savedMinutesAgo": "{count}分前に保存",
+  "clearRecents": "履歴をクリア",
+  "emptyStateTitle": "マルチカウンターへようこそ",
+  "emptyStateMessage": "新しいカウンターファイルを作成するか、既存のファイルを開いて始めましょう。",
+  "fileNotFound": "ファイルが見つかりません：{name}。最近のファイルから削除されました。"
 }

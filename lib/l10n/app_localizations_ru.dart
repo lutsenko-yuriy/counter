@@ -43,4 +43,51 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tapToAddCounter => 'Нажмите, чтобы добавить новый счётчик';
+
+  @override
+  String get untitled => 'Без названия';
+
+  @override
+  String get createNewFile => 'Создать новый файл';
+
+  @override
+  String get saveAs => 'Сохранить как';
+
+  @override
+  String get openFromFile => 'Открыть из файла';
+
+  @override
+  String get recentFiles => 'Недавние файлы';
+
+  @override
+  String get noRecentFiles => 'Нет недавних файлов';
+
+  @override
+  String get language => 'Язык';
+
+  @override
+  String get saving => 'Сохранение...';
+
+  @override
+  String get savedLessThanMinute => 'Сохранено менее минуты назад';
+
+  @override
+  String savedMinutesAgo(int count) {
+    return 'Сохранено $count мин. назад';
+  }
+
+  @override
+  String get clearRecents => 'Очистить историю';
+
+  @override
+  String get emptyStateTitle => 'Добро пожаловать в Мульти-счётчик';
+
+  @override
+  String get emptyStateMessage =>
+      'Создайте новый файл счётчиков или откройте существующий.';
+
+  @override
+  String fileNotFound(String name) {
+    return 'Файл не найден: $name. Он удалён из списка недавних файлов.';
+  }
 }

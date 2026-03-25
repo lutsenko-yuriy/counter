@@ -7,6 +7,8 @@ class CounterList {
 
   CounterList(this._factory) : _counters = [_factory.create()];
 
+  CounterList.empty(this._factory) : _counters = [];
+
   CounterList.restore(this._factory, List<Counter> counters)
       : _counters = List.of(counters);
 

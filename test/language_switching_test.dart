@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,29 +13,45 @@ void main() {
     await tester.pumpWidget(const CountersApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('Counters'), findsOneWidget);
+    // Title shows app name when no file is open
+    expect(find.text('Multi Counter'), findsWidgets);
 
-    await tester.tap(find.byTooltip('Language'));
+    // Open the drawer to access language picker
+    final scaffoldState = tester.firstState<ScaffoldState>(
+      find.byType(Scaffold),
+    );
+    scaffoldState.openDrawer();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Deutsch'));
+    // Tap Language in drawer
+    await tester.tap(find.text('Language'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Zähler'), findsOneWidget);
-    expect(find.text('Zähler nach links wischen zum Löschen'), findsOneWidget);
+    await tester.tap(find.textContaining('Deutsch'));
+    await tester.pumpAndSettle();
+
+    // Title updates to German app name
+    expect(find.text('Multi-Zähler'), findsWidgets);
   });
 
   testWidgets('Switching to French updates UI text', (tester) async {
     await tester.pumpWidget(const CountersApp());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byTooltip('Language'));
+    // Open drawer
+    final scaffoldState = tester.firstState<ScaffoldState>(
+      find.byType(Scaffold),
+    );
+    scaffoldState.openDrawer();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Français'));
+    await tester.tap(find.text('Language'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Compteurs'), findsOneWidget);
+    await tester.tap(find.textContaining('Français'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Multi Compteur'), findsWidgets);
   });
 
   testWidgets('Switching back to English restores original text',
@@ -43,19 +60,29 @@ void main() {
     await tester.pumpAndSettle();
 
     // Switch to German
-    await tester.tap(find.byTooltip('Language'));
+    var scaffoldState = tester.firstState<ScaffoldState>(
+      find.byType(Scaffold),
+    );
+    scaffoldState.openDrawer();
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Deutsch'));
+    await tester.tap(find.text('Language'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.textContaining('Deutsch'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Zähler'), findsOneWidget);
+    expect(find.text('Multi-Zähler'), findsWidgets);
 
     // Switch back to English
-    await tester.tap(find.byTooltip('Language'));
+    scaffoldState = tester.firstState<ScaffoldState>(
+      find.byType(Scaffold),
+    );
+    scaffoldState.openDrawer();
     await tester.pumpAndSettle();
-    await tester.tap(find.text('English'));
+    await tester.tap(find.text('Sprache'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.textContaining('English'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Counters'), findsOneWidget);
+    expect(find.text('Multi Counter'), findsWidgets);
   });
 }

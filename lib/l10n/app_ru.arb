@@ -11,5 +11,19 @@
   "save": "Сохранить",
   "decrement": "Уменьшить",
   "increment": "Увеличить",
-  "tapToAddCounter": "Нажмите, чтобы добавить новый счётчик"
+  "tapToAddCounter": "Нажмите, чтобы добавить новый счётчик",
+  "untitled": "Без названия",
+  "createNewFile": "Создать новый файл",
+  "saveAs": "Сохранить как",
+  "openFromFile": "Открыть из файла",
+  "recentFiles": "Недавние файлы",
+  "noRecentFiles": "Нет недавних файлов",
+  "language": "Язык",
+  "saving": "Сохранение...",
+  "savedLessThanMinute": "Сохранено менее минуты назад",
+  "savedMinutesAgo": "Сохранено {count} мин. назад",
+  "clearRecents": "Очистить историю",
+  "emptyStateTitle": "Добро пожаловать в Мульти-счётчик",
+  "emptyStateMessage": "Создайте новый файл счётчиков или откройте существующий.",
+  "fileNotFound": "Файл не найден: {name}. Он удалён из списка недавних файлов."
 }

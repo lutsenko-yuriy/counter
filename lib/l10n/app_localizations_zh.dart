@@ -43,4 +43,50 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tapToAddCounter => '点击添加新计数器';
+
+  @override
+  String get untitled => '未命名';
+
+  @override
+  String get createNewFile => '新建文件';
+
+  @override
+  String get saveAs => '另存为';
+
+  @override
+  String get openFromFile => '从文件打开';
+
+  @override
+  String get recentFiles => '最近文件';
+
+  @override
+  String get noRecentFiles => '没有最近的文件';
+
+  @override
+  String get language => '语言';
+
+  @override
+  String get saving => '保存中...';
+
+  @override
+  String get savedLessThanMinute => '不到一分钟前已保存';
+
+  @override
+  String savedMinutesAgo(int count) {
+    return '$count分钟前已保存';
+  }
+
+  @override
+  String get clearRecents => '清除记录';
+
+  @override
+  String get emptyStateTitle => '欢迎使用多计数器';
+
+  @override
+  String get emptyStateMessage => '新建一个计数器文件或打开已有文件开始使用。';
+
+  @override
+  String fileNotFound(String name) {
+    return '文件未找到：$name。已从最近文件中移除。';
+  }
 }

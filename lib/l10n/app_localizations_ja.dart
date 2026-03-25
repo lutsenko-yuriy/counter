@@ -43,4 +43,50 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tapToAddCounter => 'タップして新しいカウンターを追加';
+
+  @override
+  String get untitled => '無題';
+
+  @override
+  String get createNewFile => '新規ファイル作成';
+
+  @override
+  String get saveAs => '名前を付けて保存';
+
+  @override
+  String get openFromFile => 'ファイルから開く';
+
+  @override
+  String get recentFiles => '最近のファイル';
+
+  @override
+  String get noRecentFiles => '最近のファイルはありません';
+
+  @override
+  String get language => '言語';
+
+  @override
+  String get saving => '保存中...';
+
+  @override
+  String get savedLessThanMinute => '1分以内に保存済み';
+
+  @override
+  String savedMinutesAgo(int count) {
+    return '$count分前に保存';
+  }
+
+  @override
+  String get clearRecents => '履歴をクリア';
+
+  @override
+  String get emptyStateTitle => 'マルチカウンターへようこそ';
+
+  @override
+  String get emptyStateMessage => '新しいカウンターファイルを作成するか、既存のファイルを開いて始めましょう。';
+
+  @override
+  String fileNotFound(String name) {
+    return 'ファイルが見つかりません：$name。最近のファイルから削除されました。';
+  }
 }

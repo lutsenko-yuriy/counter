@@ -11,5 +11,33 @@
   "save": "Save",
   "decrement": "Decrement",
   "increment": "Increment",
-  "tapToAddCounter": "Tap to add a new counter"
+  "tapToAddCounter": "Tap to add a new counter",
+  "untitled": "Untitled",
+  "createNewFile": "Create New File",
+  "saveAs": "Save As",
+  "openFromFile": "Open from File",
+  "recentFiles": "Recent Files",
+  "noRecentFiles": "No recent files",
+  "language": "Language",
+  "saving": "Saving...",
+  "savedLessThanMinute": "Saved less than a minute ago",
+  "savedMinutesAgo": "Saved {count} minutes ago",
+  "@savedMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "clearRecents": "Clear Recents",
+  "emptyStateTitle": "Welcome to Multi Counter",
+  "emptyStateMessage": "Create a new counters file or open an existing one to get started.",
+  "fileNotFound": "File not found: {name}. It has been removed from recent files.",
+  "@fileNotFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

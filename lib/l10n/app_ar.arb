@@ -11,5 +11,19 @@
   "save": "حفظ",
   "decrement": "تقليل",
   "increment": "زيادة",
-  "tapToAddCounter": "اضغط لإضافة عداد جديد"
+  "tapToAddCounter": "اضغط لإضافة عداد جديد",
+  "untitled": "بدون عنوان",
+  "createNewFile": "إنشاء ملف جديد",
+  "saveAs": "حفظ باسم",
+  "openFromFile": "فتح من ملف",
+  "recentFiles": "الملفات الأخيرة",
+  "noRecentFiles": "لا توجد ملفات حديثة",
+  "language": "اللغة",
+  "saving": "جارٍ الحفظ...",
+  "savedLessThanMinute": "تم الحفظ منذ أقل من دقيقة",
+  "savedMinutesAgo": "تم الحفظ منذ {count} دقائق",
+  "clearRecents": "مسح السجل",
+  "emptyStateTitle": "مرحباً في عداد متعدد",
+  "emptyStateMessage": "أنشئ ملف عدادات جديد أو افتح ملفاً موجوداً للبدء.",
+  "fileNotFound": "الملف غير موجود: {name}. تمت إزالته من الملفات الأخيرة."
 }

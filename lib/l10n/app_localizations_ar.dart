@@ -43,4 +43,51 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tapToAddCounter => 'اضغط لإضافة عداد جديد';
+
+  @override
+  String get untitled => 'بدون عنوان';
+
+  @override
+  String get createNewFile => 'إنشاء ملف جديد';
+
+  @override
+  String get saveAs => 'حفظ باسم';
+
+  @override
+  String get openFromFile => 'فتح من ملف';
+
+  @override
+  String get recentFiles => 'الملفات الأخيرة';
+
+  @override
+  String get noRecentFiles => 'لا توجد ملفات حديثة';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String get saving => 'جارٍ الحفظ...';
+
+  @override
+  String get savedLessThanMinute => 'تم الحفظ منذ أقل من دقيقة';
+
+  @override
+  String savedMinutesAgo(int count) {
+    return 'تم الحفظ منذ $count دقائق';
+  }
+
+  @override
+  String get clearRecents => 'مسح السجل';
+
+  @override
+  String get emptyStateTitle => 'مرحباً في عداد متعدد';
+
+  @override
+  String get emptyStateMessage =>
+      'أنشئ ملف عدادات جديد أو افتح ملفاً موجوداً للبدء.';
+
+  @override
+  String fileNotFound(String name) {
+    return 'الملف غير موجود: $name. تمت إزالته من الملفات الأخيرة.';
+  }
 }

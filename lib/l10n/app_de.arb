@@ -11,5 +11,19 @@
   "save": "Speichern",
   "decrement": "Verringern",
   "increment": "Erhöhen",
-  "tapToAddCounter": "Tippen, um einen neuen Zähler hinzuzufügen"
+  "tapToAddCounter": "Tippen, um einen neuen Zähler hinzuzufügen",
+  "untitled": "Unbenannt",
+  "createNewFile": "Neue Datei erstellen",
+  "saveAs": "Speichern unter",
+  "openFromFile": "Aus Datei öffnen",
+  "recentFiles": "Zuletzt geöffnet",
+  "noRecentFiles": "Keine zuletzt geöffneten Dateien",
+  "language": "Sprache",
+  "saving": "Speichern...",
+  "savedLessThanMinute": "Vor weniger als einer Minute gespeichert",
+  "savedMinutesAgo": "Vor {count} Minuten gespeichert",
+  "clearRecents": "Verlauf löschen",
+  "emptyStateTitle": "Willkommen bei Multi-Zähler",
+  "emptyStateMessage": "Erstelle eine neue Zähler-Datei oder öffne eine vorhandene.",
+  "fileNotFound": "Datei nicht gefunden: {name}. Sie wurde aus den zuletzt geöffneten Dateien entfernt."
 }
