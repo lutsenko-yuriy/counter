@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'app_colors.dart';
+
 class SplashScreen extends StatefulWidget {
   final Widget child;
 
@@ -51,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
       builder: (context, child) {
         final opacity = _fadeIn.value * _fadeOut.value;
         return ColoredBox(
-          color: const Color(0xFFF5F0E0),
+          color: AppColors.cream,
           child: Center(
             child: Opacity(
               opacity: opacity,

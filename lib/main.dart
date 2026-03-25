@@ -11,6 +11,7 @@ import 'state/locale_notifier.dart';
 import 'state/recent_files_notifier.dart';
 import 'storage/counter_file_storage.dart';
 import 'storage/recent_files_storage.dart';
+import 'ui/app_colors.dart';
 import 'ui/app_fonts.dart';
 import 'ui/counters_page.dart';
 import 'ui/splash_screen.dart';
@@ -130,23 +131,23 @@ class _MaterialRoot extends StatelessWidget {
       locale: locale,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF888888),
-          primary: const Color(0xFF666666),
-          surface: const Color(0xFFF5F0E0),
-          onSurface: const Color(0xFF222222),
+          seedColor: AppColors.steel,
+          primary: AppColors.darkSteel,
+          surface: AppColors.cream,
+          onSurface: AppColors.textPrimary,
         ),
         textTheme: AppFonts.materialTextTheme(ThemeData.light().textTheme),
-        scaffoldBackgroundColor: const Color(0xFFF5F0E0),
+        scaffoldBackgroundColor: AppColors.cream,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFF5F0E0),
-          foregroundColor: Color(0xFF333333),
+          backgroundColor: AppColors.cream,
+          foregroundColor: AppColors.textSecondary,
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFF888888),
-          foregroundColor: Color(0xFFF5F0E0),
+          backgroundColor: AppColors.steel,
+          foregroundColor: AppColors.cream,
         ),
         cardTheme: const CardThemeData(
-          color: Color(0xFFFAF6ED),
+          color: AppColors.cardCream,
           elevation: 2,
         ),
         useMaterial3: true,
@@ -172,16 +173,16 @@ class _CupertinoRoot extends StatelessWidget {
       supportedLocales: _supportedLocales,
       locale: locale,
       theme: CupertinoThemeData(
-        primaryColor: const Color(0xFF666666),
-        barBackgroundColor: const Color(0xFFB0B0B0),
-        scaffoldBackgroundColor: const Color(0xFFF5F0E0),
+        primaryColor: AppColors.darkSteel,
+        barBackgroundColor: AppColors.silver,
+        scaffoldBackgroundColor: AppColors.cream,
         textTheme: CupertinoTextThemeData(
-          primaryColor: const Color(0xFF444444),
+          primaryColor: AppColors.cupertinoAction,
           textStyle: AppFonts.logoStyle(fontSize: 17),
           navTitleTextStyle: AppFonts.logoStyle(
             fontSize: 17,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF333333),
+            color: AppColors.textSecondary,
           ),
           navLargeTitleTextStyle: AppFonts.logoStyle(
             fontSize: 34,
@@ -189,7 +190,7 @@ class _CupertinoRoot extends StatelessWidget {
           ),
           actionTextStyle: AppFonts.logoStyle(
             fontSize: 17,
-            color: const Color(0xFF666666),
+            color: AppColors.darkSteel,
           ),
         ),
       ),

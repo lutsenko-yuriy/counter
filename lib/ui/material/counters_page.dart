@@ -8,6 +8,7 @@ import '../../state/counter_list_notifier.dart';
 import '../../state/locale_notifier.dart';
 import '../../state/recent_files_notifier.dart';
 import '../../storage/counter_file_storage.dart';
+import '../app_colors.dart';
 import '../app_fonts.dart';
 import '../saved_ago_text.dart';
 
@@ -483,7 +484,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F0E0),
+        backgroundColor: AppColors.cream,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -494,7 +495,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                 isSaving: notifier.isSaving,
                 style: AppFonts.typewriterStyle(
                   fontSize: 12,
-                  color: const Color(0xFF222222),
+                  color: AppColors.textPrimary,
                 ),
               ),
           ],
