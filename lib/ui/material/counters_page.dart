@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:counter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -163,10 +162,9 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
 
   Future<void> _openRecentFile(String path, String name) async {
     try {
-      final json = await _loadFileFromPath(path);
-      if (json == null || !mounted) return;
+      final counters = await _fileStorage.loadFromPath(path);
+      if (!mounted) return;
 
-      final counters = _fileStorage.deserialize(json);
       final notifier = context.read<CounterListNotifier>();
       notifier.replaceCounters(counters);
       notifier.setCurrentFile(name, path);
@@ -177,16 +175,6 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
       if (mounted) {
         context.read<RecentFilesNotifier>().removeRecent(path);
       }
-    }
-  }
-
-  Future<String?> _loadFileFromPath(String path) async {
-    if (kIsWeb) return null;
-    try {
-      final result = await _fileStorage.pickAndLoad();
-      return result != null ? _fileStorage.serialize(result.counters) : null;
-    } catch (_) {
-      return null;
     }
   }
 
@@ -238,60 +226,62 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                 _pickLanguage();
               },
             ),
-            const Divider(),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      l10n.recentFiles,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ),
-                  if (recentNotifier.files.isNotEmpty)
-                    TextButton(
-                      onPressed: () {
-                        recentNotifier.clearRecent();
-                      },
-                      child: Text(l10n.clearRecents),
-                    ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: recentNotifier.files.isEmpty
-                  ? Center(
+            if (hasDirectFileAccess) ...[
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                child: Row(
+                  children: [
+                    Expanded(
                       child: Text(
-                        l10n.noRecentFiles,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
+                        l10n.recentFiles,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
-                    )
-                  : ListView.builder(
-                      itemCount: recentNotifier.files.length,
-                      itemBuilder: (context, index) {
-                        final file = recentNotifier.files[index];
-                        return ListTile(
-                          leading: const Icon(Icons.description),
-                          title: Text(
-                            file.name,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          subtitle: Text(
-                            file.path,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            _openRecentFile(file.path, file.name);
-                          },
-                        );
-                      },
                     ),
-            ),
+                    if (recentNotifier.files.isNotEmpty)
+                      TextButton(
+                        onPressed: () {
+                          recentNotifier.clearRecent();
+                        },
+                        child: Text(l10n.clearRecents),
+                      ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: recentNotifier.files.isEmpty
+                    ? Center(
+                        child: Text(
+                          l10n.noRecentFiles,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: recentNotifier.files.length,
+                        itemBuilder: (context, index) {
+                          final file = recentNotifier.files[index];
+                          return ListTile(
+                            leading: const Icon(Icons.description),
+                            title: Text(
+                              file.name,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            subtitle: Text(
+                              file.path,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              _openRecentFile(file.path, file.name);
+                            },
+                          );
+                        },
+                      ),
+              ),
+            ],
           ],
         ),
       ),

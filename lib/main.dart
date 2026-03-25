@@ -24,7 +24,9 @@ void main() async {
   String? restoredFilePath;
   final stalePaths = <String>[];
 
-  if (!kIsWeb) {
+  // Only restore from recent files on desktop where we have direct
+  // filesystem access. Mobile and web use sandboxed storage.
+  if (hasDirectFileAccess) {
     final recentFiles = await recentStorage.load();
     for (final file in recentFiles) {
       try {

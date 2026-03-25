@@ -9,10 +9,21 @@ import 'file_writer_stub.dart'
     if (dart.library.io) 'file_writer_native.dart'
     if (dart.library.html) 'file_writer_web.dart' as file_writer;
 
+/// Whether the current platform supports direct filesystem access via paths.
+///
+/// Only desktop platforms (macOS, Linux, Windows) have unrestricted file I/O.
+/// Mobile platforms use sandboxed storage (SAF on Android, app sandbox on iOS)
+/// and web has no filesystem access at all.
+bool get hasDirectFileAccess =>
+    !kIsWeb &&
+    defaultTargetPlatform != TargetPlatform.android &&
+    defaultTargetPlatform != TargetPlatform.iOS;
+
 /// Handles reading and writing counter data to/from JSON files.
 ///
-/// Uses [file_picker] for cross-platform file dialogs. On web, file paths
-/// are not available — files are read from bytes and saved via download.
+/// Uses [file_picker] for cross-platform file dialogs. On web and mobile,
+/// file_picker handles writing via its own mechanism (SAF / share sheet).
+/// On desktop, we write files directly via dart:io.
 class CounterFileStorage {
   /// Serializes a [CounterList] to a JSON string.
   String serialize(CounterList counters) {
@@ -43,7 +54,12 @@ class CounterFileStorage {
 
     final json = utf8.decode(bytes);
     final counters = deserialize(json);
-    return (counters: counters, name: file.name, path: file.path);
+    // Only return the path on desktop where we can reuse it for auto-save
+    return (
+      counters: counters,
+      name: file.name,
+      path: hasDirectFileAccess ? file.path : null,
+    );
   }
 
   /// Opens a save dialog and writes the counters to the chosen file.
@@ -63,27 +79,27 @@ class CounterFileStorage {
 
     if (result == null) return null;
 
-    // On native, file_picker returns a path but doesn't write the file.
-    // On web, the bytes parameter triggers a download automatically.
-    if (!kIsWeb) {
+    // On desktop, file_picker returns a path but doesn't write the file.
+    // On web and mobile, the bytes parameter / SAF handles writing.
+    if (hasDirectFileAccess) {
       await file_writer.writeFileBytes(result, bytes);
     }
 
     final name = result.split('/').last.split('\\').last;
-    return (name: name, path: kIsWeb ? null : result);
+    return (name: name, path: hasDirectFileAccess ? result : null);
   }
 
   /// Loads counters from a known file path.
-  /// Only works on native platforms; throws on web.
+  /// Only works on desktop platforms with direct filesystem access.
   Future<CounterList> loadFromPath(String path) async {
     final json = await file_writer.readFileString(path);
     return deserialize(json);
   }
 
   /// Saves counters to a known file path (for auto-save).
-  /// Only works on native platforms; returns false on web.
+  /// Only works on desktop platforms; returns false elsewhere.
   Future<bool> saveToPath(String path, CounterList counters) async {
-    if (kIsWeb) return false;
+    if (!hasDirectFileAccess) return false;
     final json = serialize(counters);
     final bytes = utf8.encode(json);
     try {

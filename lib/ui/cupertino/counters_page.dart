@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Tooltip;
 import 'package:counter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -165,7 +164,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
             },
             child: Text(l10n.language),
           ),
-          if (!kIsWeb && recentFiles.isNotEmpty) ...[
+          if (hasDirectFileAccess && recentFiles.isNotEmpty) ...[
             CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.of(context).pop();
@@ -264,19 +263,15 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
 
   Future<void> _openRecentFile(String path, String name) async {
     try {
-      final result = await _fileStorage.pickAndLoad();
-      if (result == null || !mounted) return;
+      final counters = await _fileStorage.loadFromPath(path);
+      if (!mounted) return;
 
       final notifier = context.read<CounterListNotifier>();
-      notifier.replaceCounters(result.counters);
-      notifier.setCurrentFile(result.name, result.path);
+      notifier.replaceCounters(counters);
+      notifier.setCurrentFile(name, path);
       notifier.markSaved();
 
-      if (result.path != null) {
-        context
-            .read<RecentFilesNotifier>()
-            .addRecent(result.path!, result.name);
-      }
+      context.read<RecentFilesNotifier>().addRecent(path, name);
     } catch (_) {
       if (mounted) {
         context.read<RecentFilesNotifier>().removeRecent(path);
