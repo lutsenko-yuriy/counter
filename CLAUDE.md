@@ -25,7 +25,7 @@ Flutter counter app targeting all platforms (iOS, Android, macOS, Linux, Windows
 - `models.dart` — barrel export.
 
 **State** (`lib/state/`):
-- `counter_list_notifier.dart` — `ChangeNotifier` owning all counter mutations (`add`, `remove`, `increment`, `decrement`, `rename`, `replaceCounters`). Receives initial state (counters + file info) at construction — no async loading or SharedPreferences dependency. Tracks the current open file (`currentFileName`, `currentFilePath`), `lastSavedAt` timestamp, and auto-saves to the current file with a 1-second debounce after each mutation.
+- `counter_list_notifier.dart` — `ChangeNotifier` owning all counter mutations (`add`, `remove`, `increment`, `decrement`, `rename`, `replaceCounters`). Receives initial state (counters + file info) at construction — no async loading or SharedPreferences dependency. Tracks the current open file (`currentFileName`, `currentFilePath`), `lastSavedAt` timestamp (initialized to `DateTime.now()` when restored from a file path), and auto-saves to the current file with a 1-second debounce after each mutation.
 - `locale_notifier.dart` — `ChangeNotifier` holding the active `Locale`; updated by the in-app language picker.
 - `recent_files_notifier.dart` — `ChangeNotifier` managing the recently opened files list; caps at 10 entries; persists via `RecentFilesStorage`.
 
@@ -41,7 +41,7 @@ Flutter counter app targeting all platforms (iOS, Android, macOS, Linux, Windows
 - `saved_ago_text.dart` — shared widget displaying "Saved X ago" with a `Timer.periodic` that auto-updates every second; shows nothing if no save has occurred.
 - `material/counters_page.dart` — Material UI with a `Drawer` (hamburger menu) containing Save to File, Open from File, Language picker, and Recent Files list with clear option. App bar title shows the current file name (or "Untitled" localized) with the saved-ago subtitle. Counters are deleted by swiping toward the trailing edge (`Dismissible` with `endToStart`).
 - `cupertino/counters_page.dart` — Cupertino UI with an ellipsis-circle button in the nav bar trailing position that opens a `CupertinoActionSheet` containing Save to File, Open from File, Language, and Recent Files. Nav bar middle shows the file name and saved-ago text. Same swipe-to-delete behaviour.
-- Both platforms: new counters are added via an "add counter" item at the bottom of the list (no FAB or nav bar button). The swipe-to-delete hint only appears when counters exist.
+- Both platforms: new counters are added via an "add counter" item at the bottom of the list (no FAB or nav bar button). The swipe-to-delete hint only appears when counters exist. The empty state (no file open) shows recent files on desktop platforms, allowing quick access without opening the drawer/menu.
 
 **Entry point** (`lib/main.dart`):
 - `main()` is async: on native, loads the recent files list and tries to restore counters from the most recent file. Iterates through recent files in order; removes stale entries (file not found) and passes their paths to the UI for error display. On web or when no recent files exist, starts with empty state.

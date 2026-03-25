@@ -288,7 +288,9 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
     );
   }
 
-  Widget _buildEmptyState(AppLocalizations l10n) {
+  Widget _buildEmptyState(
+      AppLocalizations l10n, RecentFilesNotifier recentNotifier) {
+    final recentFiles = recentNotifier.files;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -326,6 +328,25 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
               icon: const Icon(Icons.folder_open),
               label: Text(l10n.openFromFile),
             ),
+            if (hasDirectFileAccess && recentFiles.isNotEmpty) ...[
+              const SizedBox(height: 32),
+              Text(
+                l10n.recentFiles,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              const SizedBox(height: 8),
+              ...recentFiles.map((file) => SizedBox(
+                    width: double.infinity,
+                    child: TextButton.icon(
+                      onPressed: () => _openRecentFile(file.path, file.name),
+                      icon: const Icon(Icons.description, size: 18),
+                      label: Text(
+                        file.name,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )),
+            ],
           ],
         ),
       ),
@@ -480,7 +501,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
       drawer: _buildDrawer(l10n, recentNotifier, showCounters),
       body: showCounters
           ? _buildCountersList(l10n, notifier)
-          : _buildEmptyState(l10n),
+          : _buildEmptyState(l10n, recentNotifier),
     );
   }
 }
