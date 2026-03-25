@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../models/models.dart';
 import 'counter_json.dart';
@@ -18,6 +19,13 @@ bool get hasDirectFileAccess =>
     !kIsWeb &&
     defaultTargetPlatform != TargetPlatform.android &&
     defaultTargetPlatform != TargetPlatform.iOS;
+
+/// Returns a local file path in the app's documents directory.
+/// Used on mobile to store a working copy that dart:io can read/write.
+Future<String> _localFilePath(String fileName) async {
+  final dir = await getApplicationDocumentsDirectory();
+  return '${dir.path}/$fileName';
+}
 
 /// Handles reading and writing counter data to/from JSON files.
 ///
@@ -54,11 +62,25 @@ class CounterFileStorage {
 
     final json = utf8.decode(bytes);
     final counters = deserialize(json);
-    // Only return the path on desktop where we can reuse it for auto-save
+
+    // Determine a usable file path for auto-save:
+    // - Desktop: use the picker-returned path directly
+    // - Mobile: save a local copy to the app's documents directory
+    // - Web: no persistent path available
+    String? filePath;
+    if (!kIsWeb) {
+      if (hasDirectFileAccess) {
+        filePath = file.path;
+      } else {
+        filePath = await _localFilePath(file.name);
+        await file_writer.writeFileBytes(filePath, bytes);
+      }
+    }
+
     return (
       counters: counters,
       name: file.name,
-      path: hasDirectFileAccess ? file.path : null,
+      path: filePath,
     );
   }
 
@@ -79,14 +101,24 @@ class CounterFileStorage {
 
     if (result == null) return null;
 
-    // On desktop, file_picker returns a path but doesn't write the file.
-    // On web and mobile, the bytes parameter / SAF handles writing.
-    if (hasDirectFileAccess) {
-      await file_writer.writeFileBytes(result, bytes);
+    final name = result.split('/').last.split('\\').last;
+
+    // Determine a usable file path for auto-save:
+    // - Desktop: file_picker returns a path but doesn't write — we write it
+    // - Mobile: SAF handles the export; we also save a local copy for auto-save
+    // - Web: the bytes parameter handles the download
+    String? filePath;
+    if (!kIsWeb) {
+      if (hasDirectFileAccess) {
+        await file_writer.writeFileBytes(result, bytes);
+        filePath = result;
+      } else {
+        filePath = await _localFilePath(name);
+        await file_writer.writeFileBytes(filePath, bytes);
+      }
     }
 
-    final name = result.split('/').last.split('\\').last;
-    return (name: name, path: hasDirectFileAccess ? result : null);
+    return (name: name, path: filePath);
   }
 
   /// Loads counters from a known file path.
@@ -97,9 +129,9 @@ class CounterFileStorage {
   }
 
   /// Saves counters to a known file path (for auto-save).
-  /// Only works on desktop platforms; returns false elsewhere.
+  /// Works on all native platforms (desktop uses direct paths, mobile uses
+  /// local app documents directory paths).
   Future<bool> saveToPath(String path, CounterList counters) async {
-    if (!hasDirectFileAccess) return false;
     final json = serialize(counters);
     final bytes = utf8.encode(json);
     try {

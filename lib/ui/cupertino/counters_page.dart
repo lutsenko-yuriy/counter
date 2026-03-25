@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart' show Tooltip;
 import 'package:counter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -164,7 +165,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
             },
             child: Text(l10n.language),
           ),
-          if (hasDirectFileAccess && recentFiles.isNotEmpty) ...[
+          if (!kIsWeb && recentFiles.isNotEmpty) ...[
             CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.of(context).pop();
@@ -321,7 +322,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
               onPressed: _openFromFile,
               child: Text(l10n.openFromFile),
             ),
-            if (hasDirectFileAccess && recentFiles.isNotEmpty) ...[
+            if (!kIsWeb && recentFiles.isNotEmpty) ...[
               const SizedBox(height: 32),
               Text(
                 l10n.recentFiles,

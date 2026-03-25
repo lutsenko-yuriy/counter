@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:counter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -226,7 +227,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                 _pickLanguage();
               },
             ),
-            if (hasDirectFileAccess) ...[
+            if (!kIsWeb) ...[
               const Divider(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
@@ -328,7 +329,7 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
               icon: const Icon(Icons.folder_open),
               label: Text(l10n.openFromFile),
             ),
-            if (hasDirectFileAccess && recentFiles.isNotEmpty) ...[
+            if (!kIsWeb && recentFiles.isNotEmpty) ...[
               const SizedBox(height: 32),
               Text(
                 l10n.recentFiles,

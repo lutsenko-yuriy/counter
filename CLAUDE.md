@@ -32,16 +32,16 @@ Flutter counter app targeting all platforms (iOS, Android, macOS, Linux, Windows
 **Storage** (`lib/storage/`):
 - `counter_json.dart` — shared JSON serialization helpers (`counterListToJson`, `counterListFromJson`); used by `CounterFileStorage`.
 - `counter_storage.dart` — legacy; no longer used by the notifier. May be removed.
-- `counter_file_storage.dart` — handles reading/writing counter data to/from JSON files via `file_picker`; supports `pickAndLoad`, `pickAndSave`, `loadFromPath` (for startup restore), and `saveToPath` (for auto-save). Uses conditional imports (`file_writer_native.dart`/`file_writer_web.dart`) for cross-platform file I/O.
+- `counter_file_storage.dart` — handles reading/writing counter data to/from JSON files via `file_picker`; supports `pickAndLoad`, `pickAndSave`, `loadFromPath` (for startup restore), and `saveToPath` (for auto-save). Uses conditional imports (`file_writer_native.dart`/`file_writer_web.dart`) for cross-platform file I/O. On mobile, saves a local copy to the app's documents directory (via `path_provider`) for auto-save and recent files, since SAF/sandbox paths from the file picker aren't directly writable by `dart:io`. The `hasDirectFileAccess` helper distinguishes desktop (direct `dart:io`) from mobile (local copy needed).
 - `file_writer_native.dart` / `file_writer_web.dart` / `file_writer_stub.dart` — conditional-import triad for platform-specific file reading and writing (`dart:io` on native, no-op/unsupported on web).
 - `recent_files_storage.dart` — persists the recent files list as JSON in `SharedPreferences`.
 
 **UI** (`lib/ui/`):
 - `counters_page.dart` — platform dispatcher; selects `CountersPageCupertino` on iOS/macOS, `CountersPageMaterial` on all other platforms.
 - `saved_ago_text.dart` — shared widget displaying "Saved X ago" with a `Timer.periodic` that auto-updates every second; shows nothing if no save has occurred.
-- `material/counters_page.dart` — Material UI with a `Drawer` (hamburger menu) containing Save to File, Open from File, Language picker, and Recent Files list with clear option. App bar title shows the current file name (or "Untitled" localized) with the saved-ago subtitle. Counters are deleted by swiping toward the trailing edge (`Dismissible` with `endToStart`).
-- `cupertino/counters_page.dart` — Cupertino UI with an ellipsis-circle button in the nav bar trailing position that opens a `CupertinoActionSheet` containing Save to File, Open from File, Language, and Recent Files. Nav bar middle shows the file name and saved-ago text. Same swipe-to-delete behaviour.
-- Both platforms: new counters are added via an "add counter" item at the bottom of the list (no FAB or nav bar button). The swipe-to-delete hint only appears when counters exist. The empty state (no file open) shows recent files on desktop platforms, allowing quick access without opening the drawer/menu.
+- `material/counters_page.dart` — Material UI with a `Drawer` (hamburger menu) containing Save to File, Open from File, Language picker, and Recent Files list with clear option. App bar title shows the current file name (or "Untitled" localized) with the saved-ago subtitle. Counters are deleted by swiping toward the trailing edge (`Dismissible` with `endToStart`). Language picker shows flag emojis next to language names.
+- `cupertino/counters_page.dart` — Cupertino UI with an ellipsis-circle button in the nav bar trailing position that opens a `CupertinoActionSheet` containing Save to File, Open from File, Language, and Recent Files. Nav bar middle shows the file name and saved-ago text. Same swipe-to-delete behaviour. Language picker shows plain language names (no flag emojis — iOS Simulator strips the flag emoji font).
+- Both platforms: new counters are added via an "add counter" item at the bottom of the list (no FAB or nav bar button). The swipe-to-delete hint only appears when counters exist. The empty state (no file open) shows recent files on all native platforms, allowing quick access without opening the drawer/menu.
 
 **Entry point** (`lib/main.dart`):
 - `main()` is async: on native, loads the recent files list and tries to restore counters from the most recent file. Iterates through recent files in order; removes stale entries (file not found) and passes their paths to the UI for error display. On web or when no recent files exist, starts with empty state.
@@ -53,8 +53,8 @@ The app supports a document-style workflow:
 - **Startup restore**: on native platforms, the app tries to load the most recently opened file. If it no longer exists, it is removed from recents and the next file is tried. If all files are stale (or none exist), the app shows the empty welcome state. Stale file errors are shown to the user (SnackBar on Material, CupertinoAlertDialog on Cupertino).
 - **Save to File**: exports the current counter list as a formatted JSON file via the system file picker.
 - **Open from File**: imports counters from a previously saved JSON file, replacing the current list.
-- **Auto-save**: after any counter mutation, a 1-second debounce timer auto-saves to the currently open file (native platforms only).
-- **Recent Files**: tracks up to 10 recently opened/saved files; persisted in SharedPreferences. Disabled on web (no persistent file paths).
+- **Auto-save**: after any counter mutation, a 1-second debounce timer auto-saves to the currently open file (all native platforms). On desktop, writes directly to the original file path. On mobile, writes to a local copy in the app's documents directory.
+- **Recent Files**: tracks up to 10 recently opened/saved files; persisted in SharedPreferences. Available on all native platforms (desktop uses original paths, mobile uses local copies). Disabled on web (no persistent file paths).
 - **Dynamic title**: the app bar/nav bar shows the current file name instead of "Counters"; shows the localized app title when no file is open.
 - **Saved-ago indicator**: a subtitle beneath the title shows "Saved Xs ago" / "Saved Xm ago" / "just now", updating every second.
 
