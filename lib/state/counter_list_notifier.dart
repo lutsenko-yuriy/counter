@@ -31,7 +31,8 @@ class CounterListNotifier extends ChangeNotifier {
   })  : _fileStorage = fileStorage ?? CounterFileStorage(),
         _counters = initialCounters ?? CounterList.empty(CounterFactory()),
         _currentFileName = initialFileName,
-        _currentFilePath = initialFilePath;
+        _currentFilePath = initialFilePath,
+        _lastSavedAt = initialFilePath != null ? DateTime.now() : null;
 
   CounterList get counters => _counters;
 

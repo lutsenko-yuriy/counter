@@ -279,7 +279,9 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
     }
   }
 
-  Widget _buildEmptyState(AppLocalizations l10n) {
+  Widget _buildEmptyState(
+      AppLocalizations l10n, RecentFilesNotifier recentNotifier) {
+    final recentFiles = recentNotifier.files;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -319,6 +321,39 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
               onPressed: _openFromFile,
               child: Text(l10n.openFromFile),
             ),
+            if (hasDirectFileAccess && recentFiles.isNotEmpty) ...[
+              const SizedBox(height: 32),
+              Text(
+                l10n.recentFiles,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: CupertinoColors.secondaryLabel,
+                ),
+              ),
+              const SizedBox(height: 8),
+              ...recentFiles.map((file) => SizedBox(
+                    width: double.infinity,
+                    child: CupertinoButton(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      onPressed: () => _openRecentFile(file.path, file.name),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(CupertinoIcons.doc, size: 18),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              file.name,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+            ],
           ],
         ),
       ),
@@ -469,6 +504,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final notifier = context.watch<CounterListNotifier>();
+    final recentNotifier = context.watch<RecentFilesNotifier>();
 
     final hasFile = !notifier.hasNoFile;
     final hasCounters = !notifier.counters.isEmpty;
@@ -505,7 +541,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
         top: false,
         child: showCounters
             ? _buildCountersList(l10n, notifier)
-            : _buildEmptyState(l10n),
+            : _buildEmptyState(l10n, recentNotifier),
       ),
     );
   }

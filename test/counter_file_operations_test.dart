@@ -142,5 +142,29 @@ void main() {
       expect(notifier.hasNoFile, false);
       expect(notifier.displayFileName, 'test');
     });
+
+    test('lastSavedAt is set when restored from file with path', () {
+      final before = DateTime.now();
+      final notifier = CounterListNotifier(
+        initialFileName: 'test.json',
+        initialFilePath: '/tmp/test.json',
+      );
+      final after = DateTime.now();
+
+      expect(notifier.lastSavedAt, isNotNull);
+      expect(
+          notifier.lastSavedAt!
+              .isAfter(before.subtract(const Duration(milliseconds: 1))),
+          true);
+      expect(
+          notifier.lastSavedAt!
+              .isBefore(after.add(const Duration(milliseconds: 1))),
+          true);
+    });
+
+    test('lastSavedAt stays null when no file path provided', () {
+      final notifier = CounterListNotifier();
+      expect(notifier.lastSavedAt, isNull);
+    });
   });
 }
