@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="180" fill="#b0b0b0"/>
+  <!-- Inner bevel -->
+  <rect x="30" y="30" width="964" height="964" rx="160" fill="#c0c0c0"/>
+  <!-- Highlight -->
+  <rect x="50" y="50" width="400" height="900" rx="140" fill="#cccccc" opacity="0.4"/>
+
+  <!-- Counter body inset -->
+  <rect x="100" y="200" width="824" height="400" rx="40" fill="#a0a0a0" stroke="#888" stroke-width="4"/>
+
+  <!-- Display window -->
+  <rect x="140" y="240" width="744" height="280" rx="24" fill="#1a1a1a" stroke="#555" stroke-width="6"/>
+  <!-- Display inner cream -->
+  <rect x="160" y="260" width="704" height="240" rx="16" fill="#f5f0e0"/>
+
+  <!-- Digit separators -->
+  <line x1="336" y1="265" x2="336" y2="495" stroke="#d8d4c8" stroke-width="2"/>
+  <line x1="512" y1="265" x2="512" y2="495" stroke="#d8d4c8" stroke-width="2"/>
+  <line x1="688" y1="265" x2="688" y2="495" stroke="#d8d4c8" stroke-width="2"/>
+
+  <!-- Digits: roller-style numbers -->
+  <text x="248" y="435" font-family="'Courier New', 'Courier', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">0</text>
+  <text x="424" y="435" font-family="'Courier New', 'Courier', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">4</text>
+  <text x="600" y="435" font-family="'Courier New', 'Courier', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">5</text>
+  <text x="776" y="435" font-family="'Courier New', 'Courier', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">1</text>
+
+  <!-- "Counters" label -->
+  <text x="512" y="750" font-family="'Helvetica Neue', 'Arial', sans-serif" font-size="120" font-weight="600" text-anchor="middle" fill="#555" letter-spacing="8">Counters</text>
+
+  <!-- Decorative screws -->
+  <circle cx="160" cy="160" r="20" fill="#999" stroke="#777" stroke-width="3"/>
+  <line x1="148" y1="160" x2="172" y2="160" stroke="#777" stroke-width="3"/>
+  <circle cx="864" cy="160" r="20" fill="#999" stroke="#777" stroke-width="3"/>
+  <line x1="852" y1="160" x2="876" y2="160" stroke="#777" stroke-width="3"/>
+  <circle cx="160" cy="864" r="20" fill="#999" stroke="#777" stroke-width="3"/>
+  <line x1="148" y1="864" x2="172" y2="864" stroke="#777" stroke-width="3"/>
+  <circle cx="864" cy="864" r="20" fill="#999" stroke="#777" stroke-width="3"/>
+  <line x1="852" y1="864" x2="876" y2="864" stroke="#777" stroke-width="3"/>
+</svg>

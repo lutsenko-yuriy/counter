@@ -12,6 +12,7 @@ import 'state/recent_files_notifier.dart';
 import 'storage/counter_file_storage.dart';
 import 'storage/recent_files_storage.dart';
 import 'ui/counters_page.dart';
+import 'ui/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,10 +128,30 @@ class _MaterialRoot extends StatelessWidget {
       supportedLocales: _supportedLocales,
       locale: locale,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF888888),
+          primary: const Color(0xFF666666),
+          surface: const Color(0xFFF5F0E0),
+          onSurface: const Color(0xFF222222),
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF5F0E0),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFB0B0B0),
+          foregroundColor: Color(0xFF333333),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Color(0xFF888888),
+          foregroundColor: Color(0xFFF5F0E0),
+        ),
+        cardTheme: const CardThemeData(
+          color: Color(0xFFFAF6ED),
+          elevation: 2,
+        ),
         useMaterial3: true,
       ),
-      home: CountersPage(staleFilePaths: staleFilePaths),
+      home: SplashScreen(
+        child: CountersPage(staleFilePaths: staleFilePaths),
+      ),
     );
   }
 }
@@ -148,7 +169,17 @@ class _CupertinoRoot extends StatelessWidget {
       localizationsDelegates: _delegates,
       supportedLocales: _supportedLocales,
       locale: locale,
-      home: CountersPage(staleFilePaths: staleFilePaths),
+      theme: const CupertinoThemeData(
+        primaryColor: Color(0xFF666666),
+        barBackgroundColor: Color(0xFFB0B0B0),
+        scaffoldBackgroundColor: Color(0xFFF5F0E0),
+        textTheme: CupertinoTextThemeData(
+          primaryColor: Color(0xFF444444),
+        ),
+      ),
+      home: SplashScreen(
+        child: CountersPage(staleFilePaths: staleFilePaths),
+      ),
     );
   }
 }
