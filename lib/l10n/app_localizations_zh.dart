@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => '多计数器';
+  String get appTitle => '计数器';
 
   @override
   String get pageTitle => '计数器';
@@ -80,7 +80,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get clearRecents => '清除记录';
 
   @override
-  String get emptyStateTitle => '欢迎使用多计数器';
+  String get emptyStateTitle => '欢迎使用计数器';
 
   @override
   String get emptyStateMessage => '新建一个计数器文件或打开已有文件开始使用。';

@@ -11,7 +11,10 @@ import 'state/locale_notifier.dart';
 import 'state/recent_files_notifier.dart';
 import 'storage/counter_file_storage.dart';
 import 'storage/recent_files_storage.dart';
+import 'ui/app_colors.dart';
+import 'ui/app_fonts.dart';
 import 'ui/counters_page.dart';
+import 'ui/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,10 +130,31 @@ class _MaterialRoot extends StatelessWidget {
       supportedLocales: _supportedLocales,
       locale: locale,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.steel,
+          primary: AppColors.darkSteel,
+          surface: AppColors.cream,
+          onSurface: AppColors.textPrimary,
+        ),
+        textTheme: AppFonts.materialTextTheme(ThemeData.light().textTheme),
+        scaffoldBackgroundColor: AppColors.cream,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.cream,
+          foregroundColor: AppColors.textSecondary,
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: AppColors.steel,
+          foregroundColor: AppColors.cream,
+        ),
+        cardTheme: const CardThemeData(
+          color: AppColors.cardCream,
+          elevation: 2,
+        ),
         useMaterial3: true,
       ),
-      home: CountersPage(staleFilePaths: staleFilePaths),
+      home: SplashScreen(
+        child: CountersPage(staleFilePaths: staleFilePaths),
+      ),
     );
   }
 }
@@ -148,7 +172,31 @@ class _CupertinoRoot extends StatelessWidget {
       localizationsDelegates: _delegates,
       supportedLocales: _supportedLocales,
       locale: locale,
-      home: CountersPage(staleFilePaths: staleFilePaths),
+      theme: CupertinoThemeData(
+        primaryColor: AppColors.darkSteel,
+        barBackgroundColor: AppColors.silver,
+        scaffoldBackgroundColor: AppColors.cream,
+        textTheme: CupertinoTextThemeData(
+          primaryColor: AppColors.cupertinoAction,
+          textStyle: AppFonts.logoStyle(fontSize: 17),
+          navTitleTextStyle: AppFonts.logoStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textSecondary,
+          ),
+          navLargeTitleTextStyle: AppFonts.logoStyle(
+            fontSize: 34,
+            fontWeight: FontWeight.w700,
+          ),
+          actionTextStyle: AppFonts.logoStyle(
+            fontSize: 17,
+            color: AppColors.darkSteel,
+          ),
+        ),
+      ),
+      home: SplashScreen(
+        child: CountersPage(staleFilePaths: staleFilePaths),
+      ),
     );
   }
 }

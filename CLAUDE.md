@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Flutter counter app targeting all platforms (iOS, Android, macOS, Linux, Windows, Web). Dart SDK ^3.6.0.
+Flutter counter app ("Counters") targeting all platforms (iOS, Android, macOS, Linux, Windows, Web). Dart SDK ^3.6.0. Branded with a mechanical tally counter theme — metallic silver/cream color palette, Courier Prime typewriter font for numbers, and Raleway logo font for UI text.
 
 ## Common Commands
 
@@ -38,14 +38,37 @@ Flutter counter app targeting all platforms (iOS, Android, macOS, Linux, Windows
 
 **UI** (`lib/ui/`):
 - `counters_page.dart` — platform dispatcher; selects `CountersPageCupertino` on iOS/macOS, `CountersPageMaterial` on all other platforms.
+- `app_fonts.dart` — centralised font configuration using `google_fonts`. `AppFonts.typewriterStyle()` returns Courier Prime (for counter values, file titles, saved-ago text). `AppFonts.logoStyle()` returns Raleway with letter-spacing (for all other UI text). `AppFonts.materialTextTheme()` returns a Raleway-based `TextTheme` for the Material root.
+- `splash_screen.dart` — animated splash screen showing the full tally counter SVG (`assets/tally_counter.svg`) on a cream background. Fades in, holds, then fades out over 2.4 seconds before transitioning to the main app.
 - `saved_ago_text.dart` — shared widget displaying "Saved X ago" with a `Timer.periodic` that auto-updates every second; shows nothing if no save has occurred.
 - `material/counters_page.dart` — Material UI with a `Drawer` (hamburger menu) containing Save to File, Open from File, Language picker, and Recent Files list with clear option. App bar title shows the current file name (or "Untitled" localized) with the saved-ago subtitle. Counters are deleted by swiping toward the trailing edge (`Dismissible` with `endToStart`). Language picker shows flag emojis next to language names.
 - `cupertino/counters_page.dart` — Cupertino UI with an ellipsis-circle button in the nav bar trailing position that opens a `CupertinoActionSheet` containing Save to File, Open from File, Language, and Recent Files. Nav bar middle shows the file name and saved-ago text. Same swipe-to-delete behaviour. Language picker shows plain language names (no flag emojis — iOS Simulator strips the flag emoji font).
 - Both platforms: new counters are added via an "add counter" item at the bottom of the list (no FAB or nav bar button). The swipe-to-delete hint only appears when counters exist. The empty state (no file open) shows recent files on all native platforms, allowing quick access without opening the drawer/menu.
 
+**Assets** (`assets/`):
+- `tally_counter.svg` — full mechanical tally counter illustration used on the splash screen. Digits use Courier Prime, label uses Raleway.
+- `icon.svg` — square app icon showing the counter display with "0451" and "Counters" label. Source for all platform icon PNGs (generated via `rsvg-convert`).
+
 **Entry point** (`lib/main.dart`):
 - `main()` is async: on native, loads the recent files list and tries to restore counters from the most recent file. Iterates through recent files in order; removes stale entries (file not found) and passes their paths to the UI for error display. On web or when no recent files exist, starts with empty state.
 - `CountersApp` accepts optional `initialCounters`, `initialFileName`, `initialFilePath`, and `staleFilePaths`; provides `CounterListNotifier`, `LocaleNotifier`, and `RecentFilesNotifier` via `MultiProvider`; uses `CupertinoApp` on iOS/macOS and `MaterialApp` otherwise; wires localisation delegates and supported locales.
+
+## Branding & Color Palette
+
+The app uses a mechanical tally counter theme derived from `assets/tally_counter.svg`:
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| Cream | `#F5F0E0` | Scaffold background, app bar (Material), display inner |
+| Card cream | `#FAF6ED` | Card/counter row background |
+| Metallic silver | `#B0B0B0` | Cupertino nav bar background, tally counter body |
+| Steel | `#888888` | FAB, secondary icons, add-counter button |
+| Dark steel | `#666666` | Primary color, +/- buttons |
+| Near black | `#222222` | Primary text |
+
+**Fonts** (via `google_fonts`, SIL Open Font License):
+- **Courier Prime** — typewriter style for counter values, file titles, saved-ago text
+- **Raleway** — logo style with letter-spacing for all other UI text
 
 ## File Save/Restore
 
@@ -62,7 +85,7 @@ The JSON file format: `{"counters": [{"id": 1, "name": "...", "value": 0}, ...]}
 
 ## Localisation
 
-ARB files live in `lib/l10n/`. Supported locales: English (`en`), German (`de`), French (`fr`), Russian (`ru`), Arabic (`ar`), Chinese (`zh`), Japanese (`ja`). Arabic uses RTL layout automatically via `GlobalWidgetsLocalizations.delegate`. The language can be changed at runtime via the drawer (Material) or the ellipsis menu (Cupertino). Run `flutter gen-l10n` after editing any ARB file.
+ARB files live in `lib/l10n/`. Supported locales: English (`en`, "Counters"), German (`de`, "Zähler"), French (`fr`, "Compteurs"), Russian (`ru`, "Счётчики"), Arabic (`ar`, "العدادات"), Chinese (`zh`, "计数器"), Japanese (`ja`, "カウンター"). Arabic uses RTL layout automatically via `GlobalWidgetsLocalizations.delegate`. The language can be changed at runtime via the drawer (Material) or the ellipsis menu (Cupertino). Run `flutter gen-l10n` after editing any ARB file.
 
 ## Linting
 

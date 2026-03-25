@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appTitle => 'عداد متعدد';
+  String get appTitle => 'العدادات';
 
   @override
   String get pageTitle => 'العدادات';
@@ -80,7 +80,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clearRecents => 'مسح السجل';
 
   @override
-  String get emptyStateTitle => 'مرحباً في عداد متعدد';
+  String get emptyStateTitle => 'مرحباً في العدادات';
 
   @override
   String get emptyStateMessage =>

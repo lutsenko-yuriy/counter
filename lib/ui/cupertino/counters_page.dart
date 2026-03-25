@@ -9,6 +9,8 @@ import '../../state/counter_list_notifier.dart';
 import '../../state/locale_notifier.dart';
 import '../../state/recent_files_notifier.dart';
 import '../../storage/counter_file_storage.dart';
+import '../app_colors.dart';
+import '../app_fonts.dart';
 import '../saved_ago_text.dart';
 
 const _supportedLocales = [
@@ -292,44 +294,47 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
             const Icon(
               CupertinoIcons.doc_text,
               size: 64,
-              color: CupertinoColors.secondaryLabel,
+              color: AppColors.steel,
             ),
             const SizedBox(height: 16),
             Text(
               l10n.emptyStateTitle,
-              style: const TextStyle(
+              style: AppFonts.logoStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               l10n.emptyStateMessage,
-              style: const TextStyle(
+              style: AppFonts.logoStyle(
                 fontSize: 15,
-                color: CupertinoColors.secondaryLabel,
+                color: AppColors.textMuted,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
             CupertinoButton.filled(
               onPressed: _createNewFile,
-              child: Text(l10n.createNewFile),
+              child: Text(l10n.createNewFile,
+                  style: const TextStyle(color: AppColors.cream)),
             ),
             const SizedBox(height: 12),
             CupertinoButton(
               onPressed: _openFromFile,
-              child: Text(l10n.openFromFile),
+              child: Text(l10n.openFromFile,
+                  style: const TextStyle(color: AppColors.textMuted)),
             ),
             if (!kIsWeb && recentFiles.isNotEmpty) ...[
               const SizedBox(height: 32),
               Text(
                 l10n.recentFiles,
-                style: const TextStyle(
+                style: AppFonts.logoStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: CupertinoColors.secondaryLabel,
+                  color: AppColors.textMuted,
                 ),
               ),
               const SizedBox(height: 8),
@@ -342,12 +347,15 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(CupertinoIcons.doc, size: 18),
+                          const Icon(CupertinoIcons.doc,
+                              size: 18, color: AppColors.textMuted),
                           const SizedBox(width: 8),
                           Flexible(
                             child: Text(
                               file.name,
                               overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  color: AppColors.textMuted),
                             ),
                           ),
                         ],
@@ -378,22 +386,21 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                 return GestureDetector(
                   onTap: notifier.add,
                   child: ColoredBox(
-                    color: CupertinoColors.systemBackground
-                        .resolveFrom(context),
+                    color: AppColors.cream,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 20),
                       child: Column(
                         children: [
                           const Icon(CupertinoIcons.plus,
-                              color: CupertinoColors.activeBlue),
+                              color: AppColors.steel),
                           const SizedBox(height: 8),
                           Text(
                             l10n.tapToAddCounter,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 17,
-                              color: CupertinoColors.activeBlue,
+                              color: AppColors.steel,
                             ),
                           ),
                         ],
@@ -415,8 +422,7 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                 ),
                 onDismissed: (_) => notifier.remove(counter.id),
                 child: ColoredBox(
-                  color: CupertinoColors.systemBackground
-                      .resolveFrom(context),
+                  color: AppColors.cardCream,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
                     child: Row(
@@ -435,22 +441,26 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                                     Flexible(
                                       child: Text(
                                         counter.name,
-                                        style: const TextStyle(fontSize: 17),
+                                        style: AppFonts.logoStyle(
+                                          fontSize: 17,
+                                          color: AppColors.textPrimary,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 4),
                                     const Icon(
                                       CupertinoIcons.pencil,
                                       size: 14,
-                                      color: CupertinoColors.secondaryLabel,
+                                      color: AppColors.steel,
                                     ),
                                   ],
                                 ),
                                 Text(
                                   '${counter.value}',
-                                  style: const TextStyle(
+                                  style: AppFonts.typewriterStyle(
                                     fontSize: 28,
-                                    fontWeight: FontWeight.w300,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.textPrimary,
                                   ),
                                 ),
                               ],
@@ -465,7 +475,10 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                             onPressed: counter.value > 0
                                 ? () => notifier.decrement(counter.id)
                                 : null,
-                            child: const Icon(CupertinoIcons.minus),
+                            child: Icon(CupertinoIcons.minus,
+                                color: counter.value > 0
+                                    ? AppColors.darkSteel
+                                    : AppColors.steel.withAlpha(60)),
                           ),
                         ),
                         Tooltip(
@@ -475,7 +488,8 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                                 horizontal: 8),
                             onPressed: () =>
                                 notifier.increment(counter.id),
-                            child: const Icon(CupertinoIcons.plus),
+                            child: const Icon(CupertinoIcons.plus,
+                                color: AppColors.darkSteel),
                           ),
                         ),
                       ],
@@ -491,9 +505,9 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
             child: Text(
               l10n.swipeToDelete,
-              style: const TextStyle(
+              style: AppFonts.logoStyle(
                 fontSize: 13,
-                color: CupertinoColors.secondaryLabel,
+                color: AppColors.steel,
               ),
             ),
           ),
@@ -517,14 +531,14 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
         middle: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(titleText, style: const TextStyle(fontSize: 17)),
+            Text(titleText, style: AppFonts.typewriterStyle(fontSize: 17)),
             if (hasFile)
               SavedAgoText(
                 lastSavedAt: notifier.lastSavedAt,
                 isSaving: notifier.isSaving,
-                style: const TextStyle(
+                style: AppFonts.typewriterStyle(
                   fontSize: 11,
-                  color: CupertinoColors.secondaryLabel,
+                  color: AppColors.textPrimary,
                 ),
               ),
           ],

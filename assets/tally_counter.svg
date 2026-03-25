@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 320" width="200" height="320">
+  <!-- Body -->
+  <rect x="40" y="80" width="120" height="160" rx="16" ry="16" fill="#b0b0b0" stroke="#666" stroke-width="2"/>
+  <!-- Body highlight -->
+  <rect x="46" y="86" width="50" height="148" rx="12" ry="12" fill="#c8c8c8" opacity="0.5"/>
+
+  <!-- Top ring / hook -->
+  <ellipse cx="100" cy="52" rx="22" ry="22" fill="none" stroke="#888" stroke-width="6"/>
+  <rect x="94" y="68" width="12" height="18" rx="2" fill="#b0b0b0" stroke="#666" stroke-width="1.5"/>
+
+  <!-- Display window -->
+  <rect x="56" y="105" width="88" height="50" rx="6" ry="6" fill="#1a1a1a" stroke="#555" stroke-width="2"/>
+  <!-- Display inner bevel -->
+  <rect x="60" y="109" width="80" height="42" rx="4" ry="4" fill="#f5f0e0"/>
+
+  <!-- Counter digits -->
+  <!-- Digit separators -->
+  <line x1="80" y1="111" x2="80" y2="149" stroke="#ccc" stroke-width="0.5"/>
+  <line x1="100" y1="111" x2="100" y2="149" stroke="#ccc" stroke-width="0.5"/>
+  <line x1="120" y1="111" x2="120" y2="149" stroke="#ccc" stroke-width="0.5"/>
+
+  <!-- Digits: 0 4 5 1 -->
+  <text x="70" y="139" font-family="'Courier Prime', 'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">0</text>
+  <text x="90" y="139" font-family="'Courier Prime', 'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">4</text>
+  <text x="110" y="139" font-family="'Courier Prime', 'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">5</text>
+  <text x="130" y="139" font-family="'Courier Prime', 'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">1</text>
+
+  <!-- Reset knob on top-right -->
+  <circle cx="145" cy="90" r="8" fill="#999" stroke="#666" stroke-width="1.5"/>
+  <line x1="145" y1="84" x2="145" y2="96" stroke="#777" stroke-width="1.5"/>
+
+  <!-- Click button (lever) -->
+  <rect x="60" y="240" width="80" height="24" rx="12" ry="12" fill="#888" stroke="#555" stroke-width="2"/>
+  <!-- Button shaft -->
+  <rect x="90" y="260" width="20" height="40" rx="4" fill="#999" stroke="#666" stroke-width="1.5"/>
+  <!-- Button thumb piece -->
+  <ellipse cx="100" cy="305" rx="24" ry="14" fill="#777" stroke="#555" stroke-width="2"/>
+  <ellipse cx="100" cy="303" rx="20" ry="10" fill="#999"/>
+  <!-- Grip ridges on thumb piece -->
+  <line x1="88" y1="301" x2="112" y2="301" stroke="#888" stroke-width="1"/>
+  <line x1="88" y1="304" x2="112" y2="304" stroke="#888" stroke-width="1"/>
+  <line x1="88" y1="307" x2="112" y2="307" stroke="#888" stroke-width="1"/>
+
+  <!-- Side texture / grip lines on body -->
+  <line x1="48" y1="175" x2="48" y2="225" stroke="#a0a0a0" stroke-width="1"/>
+  <line x1="52" y1="175" x2="52" y2="225" stroke="#a0a0a0" stroke-width="1"/>
+  <line x1="56" y1="175" x2="56" y2="225" stroke="#a0a0a0" stroke-width="1"/>
+
+  <!-- Label -->
+  <text x="100" y="195" font-family="'Raleway', 'Helvetica Neue', sans-serif" font-size="9" font-weight="600" text-anchor="middle" fill="#666" letter-spacing="2">COUNTER</text>
+</svg>

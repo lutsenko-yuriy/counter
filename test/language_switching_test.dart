@@ -14,7 +14,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Title shows app name when no file is open
-    expect(find.text('Multi Counter'), findsWidgets);
+    expect(find.text('Counters'), findsWidgets);
 
     // Open the drawer to access language picker
     final scaffoldState = tester.firstState<ScaffoldState>(
@@ -31,7 +31,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Title updates to German app name
-    expect(find.text('Multi-Zähler'), findsWidgets);
+    expect(find.text('Zähler'), findsWidgets);
   });
 
   testWidgets('Switching to French updates UI text', (tester) async {
@@ -51,7 +51,7 @@ void main() {
     await tester.tap(find.textContaining('Français'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Multi Compteur'), findsWidgets);
+    expect(find.text('Compteurs'), findsWidgets);
   });
 
   testWidgets('Switching back to English restores original text',
@@ -70,7 +70,7 @@ void main() {
     await tester.tap(find.textContaining('Deutsch'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Multi-Zähler'), findsWidgets);
+    expect(find.text('Zähler'), findsWidgets);
 
     // Switch back to English
     scaffoldState = tester.firstState<ScaffoldState>(
@@ -83,6 +83,6 @@ void main() {
     await tester.tap(find.textContaining('English'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Multi Counter'), findsWidgets);
+    expect(find.text('Counters'), findsWidgets);
   });
 }

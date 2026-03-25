@@ -32,6 +32,15 @@ This app targets six platforms. Keep these in mind:
 - Material UI tests open the drawer via `ScaffoldState.openDrawer()` (not a tooltip or icon tap).
 - Language tests use `find.textContaining(...)` to match language names that may include flag emojis.
 
+## Branding
+
+The app uses a mechanical tally counter theme. When adding UI:
+
+- Use `AppFonts.typewriterStyle()` (Courier Prime) for numeric values, file names, and timestamps.
+- Use `AppFonts.logoStyle()` (Raleway) for labels, buttons, and general text.
+- Use the cream/metallic palette defined in `CLAUDE.md` — avoid default system colors like `CupertinoColors.secondaryLabel` or `colorScheme.inversePrimary` as they clash with the custom theme.
+- Platform icons are generated from `assets/icon.svg` via `rsvg-convert`. If updating the icon, regenerate all platform PNGs.
+
 ## Localisation
 
 - ARB files live in `lib/l10n/`. Run `flutter gen-l10n` after editing any ARB file.

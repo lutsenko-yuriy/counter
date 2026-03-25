@@ -8,6 +8,8 @@ import '../../state/counter_list_notifier.dart';
 import '../../state/locale_notifier.dart';
 import '../../state/recent_files_notifier.dart';
 import '../../storage/counter_file_storage.dart';
+import '../app_colors.dart';
+import '../app_fonts.dart';
 import '../saved_ago_text.dart';
 
 const _supportedLocales = [
@@ -426,14 +428,19 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                     ),
                     subtitle: Text(
                       '${counter.value}',
-                      style:
-                          Theme.of(context).textTheme.headlineMedium,
+                      style: AppFonts.typewriterStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.remove),
+                          icon: Icon(Icons.remove,
+                              color: counter.value > 0
+                                  ? null
+                                  : AppColors.steel.withAlpha(60)),
                           tooltip: l10n.decrement,
                           onPressed: counter.value > 0
                               ? () => notifier.decrement(counter.id)
@@ -480,21 +487,19 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: AppColors.cream,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(titleText, style: const TextStyle(fontSize: 18)),
+            Text(titleText, style: AppFonts.typewriterStyle(fontSize: 18)),
             if (hasFile)
               SavedAgoText(
                 lastSavedAt: notifier.lastSavedAt,
                 isSaving: notifier.isSaving,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onPrimaryContainer
-                          .withAlpha(178),
-                    ),
+                style: AppFonts.typewriterStyle(
+                  fontSize: 12,
+                  color: AppColors.textPrimary,
+                ),
               ),
           ],
         ),
