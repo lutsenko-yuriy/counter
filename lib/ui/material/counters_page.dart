@@ -437,7 +437,10 @@ class _CountersPageMaterialState extends State<CountersPageMaterial> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.remove),
+                          icon: Icon(Icons.remove,
+                              color: counter.value > 0
+                                  ? null
+                                  : AppColors.steel.withAlpha(60)),
                           tooltip: l10n.decrement,
                           onPressed: counter.value > 0
                               ? () => notifier.decrement(counter.id)

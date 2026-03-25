@@ -475,8 +475,10 @@ class _CountersPageCupertinoState extends State<CountersPageCupertino> {
                             onPressed: counter.value > 0
                                 ? () => notifier.decrement(counter.id)
                                 : null,
-                            child: const Icon(CupertinoIcons.minus,
-                                color: AppColors.darkSteel),
+                            child: Icon(CupertinoIcons.minus,
+                                color: counter.value > 0
+                                    ? AppColors.darkSteel
+                                    : AppColors.steel.withAlpha(60)),
                           ),
                         ),
                         Tooltip(
