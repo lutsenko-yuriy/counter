@@ -20,13 +20,13 @@
   <line x1="688" y1="265" x2="688" y2="495" stroke="#d8d4c8" stroke-width="2"/>
 
   <!-- Digits: roller-style numbers -->
-  <text x="248" y="435" font-family="'Courier New', 'Courier', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">0</text>
-  <text x="424" y="435" font-family="'Courier New', 'Courier', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">4</text>
-  <text x="600" y="435" font-family="'Courier New', 'Courier', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">5</text>
-  <text x="776" y="435" font-family="'Courier New', 'Courier', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">1</text>
+  <text x="248" y="435" font-family="'Courier Prime', 'Courier New', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">0</text>
+  <text x="424" y="435" font-family="'Courier Prime', 'Courier New', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">4</text>
+  <text x="600" y="435" font-family="'Courier Prime', 'Courier New', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">5</text>
+  <text x="776" y="435" font-family="'Courier Prime', 'Courier New', monospace" font-size="200" font-weight="bold" text-anchor="middle" fill="#222">1</text>
 
   <!-- "Counters" label -->
-  <text x="512" y="750" font-family="'Helvetica Neue', 'Arial', sans-serif" font-size="120" font-weight="600" text-anchor="middle" fill="#555" letter-spacing="8">Counters</text>
+  <text x="512" y="750" font-family="'Raleway', 'Helvetica Neue', sans-serif" font-size="120" font-weight="600" text-anchor="middle" fill="#555" letter-spacing="8">Counters</text>
 
   <!-- Decorative screws -->
   <circle cx="160" cy="160" r="20" fill="#999" stroke="#777" stroke-width="3"/>

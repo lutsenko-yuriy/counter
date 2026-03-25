@@ -14,7 +14,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Should show welcome/empty state
-    expect(find.text('Welcome to Multi Counter'), findsOneWidget);
+    expect(find.text('Welcome to Counters'), findsOneWidget);
     expect(find.text('Create New File'), findsOneWidget);
     expect(find.text('Open from File'), findsOneWidget);
   });

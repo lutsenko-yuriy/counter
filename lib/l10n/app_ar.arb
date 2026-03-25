@@ -1,6 +1,6 @@
 {
   "@@locale": "ar",
-  "appTitle": "عداد متعدد",
+  "appTitle": "العدادات",
   "pageTitle": "العدادات",
   "noCounters": "لا توجد عدادات. اضغط + لإضافة واحد.",
   "swipeToDelete": "اسحب العداد يميناً للحذف",
@@ -23,7 +23,7 @@
   "savedLessThanMinute": "تم الحفظ منذ أقل من دقيقة",
   "savedMinutesAgo": "تم الحفظ منذ {count} دقائق",
   "clearRecents": "مسح السجل",
-  "emptyStateTitle": "مرحباً في عداد متعدد",
+  "emptyStateTitle": "مرحباً في العدادات",
   "emptyStateMessage": "أنشئ ملف عدادات جديد أو افتح ملفاً موجوداً للبدء.",
   "fileNotFound": "الملف غير موجود: {name}. تمت إزالته من الملفات الأخيرة."
 }

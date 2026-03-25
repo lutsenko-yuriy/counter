@@ -9,7 +9,7 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get appTitle => 'マルチカウンター';
+  String get appTitle => 'カウンター';
 
   @override
   String get pageTitle => 'カウンター';
@@ -80,7 +80,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get clearRecents => '履歴をクリア';
 
   @override
-  String get emptyStateTitle => 'マルチカウンターへようこそ';
+  String get emptyStateTitle => 'カウンターへようこそ';
 
   @override
   String get emptyStateMessage => '新しいカウンターファイルを作成するか、既存のファイルを開いて始めましょう。';

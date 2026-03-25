@@ -1,6 +1,6 @@
 {
   "@@locale": "de",
-  "appTitle": "Multi-Zähler",
+  "appTitle": "Zähler",
   "pageTitle": "Zähler",
   "noCounters": "Noch keine Zähler. Tippe auf + um einen hinzuzufügen.",
   "swipeToDelete": "Zähler nach links wischen zum Löschen",
@@ -23,7 +23,7 @@
   "savedLessThanMinute": "Vor weniger als einer Minute gespeichert",
   "savedMinutesAgo": "Vor {count} Minuten gespeichert",
   "clearRecents": "Verlauf löschen",
-  "emptyStateTitle": "Willkommen bei Multi-Zähler",
+  "emptyStateTitle": "Willkommen bei Zähler",
   "emptyStateMessage": "Erstelle eine neue Zähler-Datei oder öffne eine vorhandene.",
   "fileNotFound": "Datei nicht gefunden: {name}. Sie wurde aus den zuletzt geöffneten Dateien entfernt."
 }

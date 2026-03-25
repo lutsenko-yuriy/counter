@@ -9,7 +9,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appTitle => 'Мульти-счётчик';
+  String get appTitle => 'Счётчики';
 
   @override
   String get pageTitle => 'Счётчики';
@@ -80,7 +80,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clearRecents => 'Очистить историю';
 
   @override
-  String get emptyStateTitle => 'Добро пожаловать в Мульти-счётчик';
+  String get emptyStateTitle => 'Добро пожаловать в Счётчики';
 
   @override
   String get emptyStateMessage =>

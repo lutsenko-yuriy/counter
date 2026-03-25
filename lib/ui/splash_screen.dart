@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen>
       builder: (context, child) {
         final opacity = _fadeIn.value * _fadeOut.value;
         return ColoredBox(
-          color: const Color(0xFFB0B0B0),
+          color: const Color(0xFFF5F0E0),
           child: Center(
             child: Opacity(
               opacity: opacity,

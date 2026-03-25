@@ -9,7 +9,7 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get appTitle => 'Multi Compteur';
+  String get appTitle => 'Compteurs';
 
   @override
   String get pageTitle => 'Compteurs';
@@ -80,7 +80,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clearRecents => 'Effacer les récents';
 
   @override
-  String get emptyStateTitle => 'Bienvenue dans Multi Compteur';
+  String get emptyStateTitle => 'Bienvenue dans Compteurs';
 
   @override
   String get emptyStateMessage =>

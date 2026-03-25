@@ -11,6 +11,7 @@ import 'state/locale_notifier.dart';
 import 'state/recent_files_notifier.dart';
 import 'storage/counter_file_storage.dart';
 import 'storage/recent_files_storage.dart';
+import 'ui/app_fonts.dart';
 import 'ui/counters_page.dart';
 import 'ui/splash_screen.dart';
 
@@ -134,9 +135,10 @@ class _MaterialRoot extends StatelessWidget {
           surface: const Color(0xFFF5F0E0),
           onSurface: const Color(0xFF222222),
         ),
+        textTheme: AppFonts.materialTextTheme(ThemeData.light().textTheme),
         scaffoldBackgroundColor: const Color(0xFFF5F0E0),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFB0B0B0),
+          backgroundColor: Color(0xFFF5F0E0),
           foregroundColor: Color(0xFF333333),
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -169,12 +171,26 @@ class _CupertinoRoot extends StatelessWidget {
       localizationsDelegates: _delegates,
       supportedLocales: _supportedLocales,
       locale: locale,
-      theme: const CupertinoThemeData(
-        primaryColor: Color(0xFF666666),
-        barBackgroundColor: Color(0xFFB0B0B0),
-        scaffoldBackgroundColor: Color(0xFFF5F0E0),
+      theme: CupertinoThemeData(
+        primaryColor: const Color(0xFF666666),
+        barBackgroundColor: const Color(0xFFB0B0B0),
+        scaffoldBackgroundColor: const Color(0xFFF5F0E0),
         textTheme: CupertinoTextThemeData(
-          primaryColor: Color(0xFF444444),
+          primaryColor: const Color(0xFF444444),
+          textStyle: AppFonts.logoStyle(fontSize: 17),
+          navTitleTextStyle: AppFonts.logoStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            color: const Color(0xFF333333),
+          ),
+          navLargeTitleTextStyle: AppFonts.logoStyle(
+            fontSize: 34,
+            fontWeight: FontWeight.w700,
+          ),
+          actionTextStyle: AppFonts.logoStyle(
+            fontSize: 17,
+            color: const Color(0xFF666666),
+          ),
         ),
       ),
       home: SplashScreen(

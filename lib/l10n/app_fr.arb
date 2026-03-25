@@ -1,6 +1,6 @@
 {
   "@@locale": "fr",
-  "appTitle": "Multi Compteur",
+  "appTitle": "Compteurs",
   "pageTitle": "Compteurs",
   "noCounters": "Aucun compteur. Appuyez sur + pour en ajouter un.",
   "swipeToDelete": "Glisser un compteur à gauche pour le supprimer",
@@ -23,7 +23,7 @@
   "savedLessThanMinute": "Enregistré il y a moins d'une minute",
   "savedMinutesAgo": "Enregistré il y a {count} minutes",
   "clearRecents": "Effacer les récents",
-  "emptyStateTitle": "Bienvenue dans Multi Compteur",
+  "emptyStateTitle": "Bienvenue dans Compteurs",
   "emptyStateMessage": "Créez un nouveau fichier de compteurs ou ouvrez-en un existant.",
   "fileNotFound": "Fichier introuvable : {name}. Il a été supprimé des fichiers récents."
 }

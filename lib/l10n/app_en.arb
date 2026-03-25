@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Multi Counter",
+  "appTitle": "Counters",
   "pageTitle": "Counters",
   "noCounters": "No counters yet. Tap + to add one.",
   "swipeToDelete": "Swipe a counter left to delete it",
@@ -30,7 +30,7 @@
     }
   },
   "clearRecents": "Clear Recents",
-  "emptyStateTitle": "Welcome to Multi Counter",
+  "emptyStateTitle": "Welcome to Counters",
   "emptyStateMessage": "Create a new counters file or open an existing one to get started.",
   "fileNotFound": "File not found: {name}. It has been removed from recent files.",
   "@fileNotFound": {

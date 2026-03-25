@@ -20,10 +20,10 @@
   <line x1="120" y1="111" x2="120" y2="149" stroke="#ccc" stroke-width="0.5"/>
 
   <!-- Digits: 0 4 5 1 -->
-  <text x="70" y="139" font-family="'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">0</text>
-  <text x="90" y="139" font-family="'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">4</text>
-  <text x="110" y="139" font-family="'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">5</text>
-  <text x="130" y="139" font-family="'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">1</text>
+  <text x="70" y="139" font-family="'Courier Prime', 'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">0</text>
+  <text x="90" y="139" font-family="'Courier Prime', 'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">4</text>
+  <text x="110" y="139" font-family="'Courier Prime', 'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">5</text>
+  <text x="130" y="139" font-family="'Courier Prime', 'Courier New', monospace" font-size="28" font-weight="bold" text-anchor="middle" fill="#222">1</text>
 
   <!-- Reset knob on top-right -->
   <circle cx="145" cy="90" r="8" fill="#999" stroke="#666" stroke-width="1.5"/>
@@ -47,5 +47,5 @@
   <line x1="56" y1="175" x2="56" y2="225" stroke="#a0a0a0" stroke-width="1"/>
 
   <!-- Label -->
-  <text x="100" y="195" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#666" letter-spacing="2">COUNTER</text>
+  <text x="100" y="195" font-family="'Raleway', 'Helvetica Neue', sans-serif" font-size="9" font-weight="600" text-anchor="middle" fill="#666" letter-spacing="2">COUNTER</text>
 </svg>

@@ -1,6 +1,6 @@
 {
   "@@locale": "ja",
-  "appTitle": "マルチカウンター",
+  "appTitle": "カウンター",
   "pageTitle": "カウンター",
   "noCounters": "カウンターがありません。＋ で追加してください。",
   "swipeToDelete": "カウンターを左にスワイプして削除",
@@ -23,7 +23,7 @@
   "savedLessThanMinute": "1分以内に保存済み",
   "savedMinutesAgo": "{count}分前に保存",
   "clearRecents": "履歴をクリア",
-  "emptyStateTitle": "マルチカウンターへようこそ",
+  "emptyStateTitle": "カウンターへようこそ",
   "emptyStateMessage": "新しいカウンターファイルを作成するか、既存のファイルを開いて始めましょう。",
   "fileNotFound": "ファイルが見つかりません：{name}。最近のファイルから削除されました。"
 }

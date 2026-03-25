@@ -111,7 +111,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Multi Counter'**
+  /// **'Counters'**
   String get appTitle;
 
   /// No description provided for @pageTitle.
@@ -249,7 +249,7 @@ abstract class AppLocalizations {
   /// No description provided for @emptyStateTitle.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Multi Counter'**
+  /// **'Welcome to Counters'**
   String get emptyStateTitle;
 
   /// No description provided for @emptyStateMessage.

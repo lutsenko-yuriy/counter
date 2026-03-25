@@ -9,7 +9,7 @@ class AppLocalizationsDe extends AppLocalizations {
   AppLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
-  String get appTitle => 'Multi-Zähler';
+  String get appTitle => 'Zähler';
 
   @override
   String get pageTitle => 'Zähler';
@@ -81,7 +81,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get clearRecents => 'Verlauf löschen';
 
   @override
-  String get emptyStateTitle => 'Willkommen bei Multi-Zähler';
+  String get emptyStateTitle => 'Willkommen bei Zähler';
 
   @override
   String get emptyStateMessage =>
