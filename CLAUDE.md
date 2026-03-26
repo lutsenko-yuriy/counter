@@ -39,14 +39,12 @@ Flutter counter app ("Counters") targeting all platforms (iOS, Android, macOS, L
 **UI** (`lib/ui/`):
 - `counters_page.dart` — platform dispatcher; selects `CountersPageCupertino` on iOS/macOS, `CountersPageMaterial` on all other platforms.
 - `app_fonts.dart` — centralised font configuration using `google_fonts`. `AppFonts.typewriterStyle()` returns Courier Prime (for counter values, file titles, saved-ago text). `AppFonts.logoStyle()` returns Raleway with letter-spacing (for all other UI text). `AppFonts.materialTextTheme()` returns a Raleway-based `TextTheme` for the Material root.
-- `splash_screen.dart` — animated splash screen showing the full tally counter SVG (`assets/tally_counter.svg`) on a cream background. Fades in, holds, then fades out over 2.4 seconds before transitioning to the main app.
 - `saved_ago_text.dart` — shared widget displaying "Saved X ago" with a `Timer.periodic` that auto-updates every second; shows nothing if no save has occurred.
 - `material/counters_page.dart` — Material UI with a `Drawer` (hamburger menu) containing Save to File, Open from File, Language picker, and Recent Files list with clear option. App bar title shows the current file name (or "Untitled" localized) with the saved-ago subtitle. Counters are deleted by swiping toward the trailing edge (`Dismissible` with `endToStart`). Language picker shows flag emojis next to language names.
 - `cupertino/counters_page.dart` — Cupertino UI with an ellipsis-circle button in the nav bar trailing position that opens a `CupertinoActionSheet` containing Save to File, Open from File, Language, and Recent Files. Nav bar middle shows the file name and saved-ago text. Same swipe-to-delete behaviour. Language picker shows plain language names (no flag emojis — iOS Simulator strips the flag emoji font).
 - Both platforms: new counters are added via an "add counter" item at the bottom of the list (no FAB or nav bar button). The swipe-to-delete hint only appears when counters exist. The empty state (no file open) shows recent files on all native platforms, allowing quick access without opening the drawer/menu.
 
 **Assets** (`assets/`):
-- `tally_counter.svg` — full mechanical tally counter illustration used on the splash screen. Digits use Courier Prime, label uses Raleway.
 - `icon.svg` — square app icon showing the counter display with "0451" and "Counters" label. Source for all platform icon PNGs (generated via `rsvg-convert`).
 
 **Entry point** (`lib/main.dart`):
@@ -55,7 +53,7 @@ Flutter counter app ("Counters") targeting all platforms (iOS, Android, macOS, L
 
 ## Branding & Color Palette
 
-The app uses a mechanical tally counter theme derived from `assets/tally_counter.svg`:
+The app uses a mechanical tally counter theme:
 
 | Token | Hex | Usage |
 |-------|-----|-------|
@@ -100,6 +98,7 @@ Tests live in `test/` and are split by concern:
 - `counter_file_operations_test.dart` — replaceCounters, current file tracking, saved-at timestamp
 - `recent_files_test.dart` — RecentFile model, add/remove/clear, cap at 10, persistence, notifications
 - `language_switching_test.dart` — locale switching via drawer and UI text updates
+- `no_splash_screen_test.dart` — verifies the app renders immediately without a splash screen
 
 ## Workflow
 
