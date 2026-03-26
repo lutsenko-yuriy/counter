@@ -14,7 +14,6 @@ import 'storage/recent_files_storage.dart';
 import 'ui/app_colors.dart';
 import 'ui/app_fonts.dart';
 import 'ui/counters_page.dart';
-import 'ui/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -152,9 +151,7 @@ class _MaterialRoot extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: SplashScreen(
-        child: CountersPage(staleFilePaths: staleFilePaths),
-      ),
+      home: CountersPage(staleFilePaths: staleFilePaths),
     );
   }
 }
@@ -194,9 +191,7 @@ class _CupertinoRoot extends StatelessWidget {
           ),
         ),
       ),
-      home: SplashScreen(
-        child: CountersPage(staleFilePaths: staleFilePaths),
-      ),
+      home: CountersPage(staleFilePaths: staleFilePaths),
     );
   }
 }
