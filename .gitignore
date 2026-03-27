@@ -51,8 +51,3 @@ app.*.map.json
 android/key.properties
 *.jks
 *.keystore
-
-# Firebase
-lib/firebase_options.dart
-android/app/google-services.json
-ios/Runner/GoogleService-Info.plist
