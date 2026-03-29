@@ -189,6 +189,7 @@ jobs:
     needs: [build-android, build-ios]
     if: |
       always() &&
+      github.ref_name == 'main' &&
       (needs.build-android.result == 'success' || needs.build-ios.result == 'success')
     runs-on: ubuntu-latest
     permissions:
@@ -241,5 +242,5 @@ jobs:
 
       - name: Push commit and tag
         run: |
-          git push origin main
+          git push origin HEAD:main
           git push origin --tags
