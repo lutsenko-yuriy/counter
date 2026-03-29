@@ -15,8 +15,24 @@ on:
         default: true
 
 jobs:
+  check-skip:
+    name: Check CI Skip
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.check.outputs.should_skip }}
+    steps:
+      - id: check
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" == *"[skip ci]"* ]]; then
+            echo "should_skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
   test:
     name: Analyze & Test
+    needs: check-skip
+    if: needs.check-skip.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,9 +50,49 @@ jobs:
       - name: Test
         run: flutter test
 
+  resolve-version:
+    name: Resolve Build Number
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+      version_name: ${{ steps.resolve.outputs.version_name }}
+      build_number: ${{ steps.resolve.outputs.build_number }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Resolve build number from pubspec and git tags
+        id: resolve
+        run: |
+          # Read version from pubspec.yaml
+          version_line=$(grep '^version:' pubspec.yaml)
+          full_version=$(echo "$version_line" | sed 's/version: //')
+          version_name=$(echo "$full_version" | cut -d'+' -f1)
+          pubspec_build=$(echo "$full_version" | cut -d'+' -f2)
+
+          # Find the highest build number from existing version tags
+          tag_build=$(git tag -l 'version-*' | sed 's/version-[^-]*-\([0-9]*\)-.*/\1/' | sort -n | tail -1)
+          tag_build=${tag_build:-0}
+
+          echo "pubspec build: $pubspec_build, latest tag build: $tag_build"
+
+          # Use the higher of pubspec or (tag + 1)
+          if [ "$tag_build" -ge "$pubspec_build" ]; then
+            build_number=$((tag_build + 1))
+            echo "Tag build ($tag_build) >= pubspec build ($pubspec_build), using $build_number"
+          else
+            build_number=$pubspec_build
+            echo "Pubspec build ($pubspec_build) is ahead, using $build_number"
+          fi
+
+          echo "version_name=$version_name" >> "$GITHUB_OUTPUT"
+          echo "build_number=$build_number" >> "$GITHUB_OUTPUT"
+
   build-android:
     name: Build Android
-    needs: test
+    needs: resolve-version
     if: github.event_name == 'push' || inputs.android
     runs-on: ubuntu-latest
     steps:
@@ -68,7 +124,7 @@ jobs:
           EOF
 
       - name: Build release APK
-        run: flutter build apk --release
+        run: flutter build apk --release --build-number=${{ needs.resolve-version.outputs.build_number }}
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -79,6 +135,7 @@ jobs:
   distribute-android:
     name: Distribute Android to Firebase
     needs: build-android
+    if: github.ref_name == 'main'
     runs-on: ubuntu-latest
     steps:
       - name: Download APK artifact
@@ -95,7 +152,7 @@ jobs:
 
   build-ios:
     name: Build iOS
-    needs: test
+    needs: resolve-version
     if: github.event_name == 'push' || inputs.ios
     runs-on: macos-latest
     steps:
@@ -139,7 +196,7 @@ jobs:
           cp "$PROFILE_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/
 
       - name: Build release IPA
-        run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
+        run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist --build-number=${{ needs.resolve-version.outputs.build_number }}
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
@@ -154,6 +211,7 @@ jobs:
   distribute-ios:
     name: Distribute iOS to Firebase
     needs: build-ios
+    if: github.ref_name == 'main'
     runs-on: macos-latest
     steps:
       - name: Download IPA artifact
@@ -167,3 +225,56 @@ jobs:
           appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           file: counter.ipa
+
+  version-tag:
+    name: Bump Version & Tag
+    needs: [resolve-version, build-android, build-ios]
+    if: |
+      always() &&
+      github.ref_name == 'main' &&
+      (needs.build-android.result == 'success' || needs.build-ios.result == 'success')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine platform suffix
+        id: suffix
+        run: |
+          android="${{ needs.build-android.result }}"
+          ios="${{ needs.build-ios.result }}"
+          if [[ "$android" == "success" && "$ios" == "success" ]]; then
+            echo "platform=both" >> "$GITHUB_OUTPUT"
+          elif [[ "$android" == "success" ]]; then
+            echo "platform=android" >> "$GITHUB_OUTPUT"
+          else
+            echo "platform=ios" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump build number in pubspec.yaml
+        run: |
+          build_number=${{ needs.resolve-version.outputs.build_number }}
+          version_name=${{ needs.resolve-version.outputs.version_name }}
+          next=$((build_number + 1))
+          sed -i "s/^version: .*/version: ${version_name}+${next}/" pubspec.yaml
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pubspec.yaml
+          git commit -m "chore(version): bump build number to $((${{ needs.resolve-version.outputs.build_number }} + 1)) [skip ci]"
+
+      - name: Create tag
+        run: |
+          tag="version-${{ needs.resolve-version.outputs.version_name }}-${{ needs.resolve-version.outputs.build_number }}-${{ steps.suffix.outputs.platform }}"
+          git tag "$tag"
+
+      - name: Push commit and tag
+        run: |
+          git push origin HEAD:main
+          git push origin --tags
