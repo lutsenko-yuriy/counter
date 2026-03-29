@@ -101,9 +101,10 @@ The app follows [Semantic Versioning](https://semver.org/) with the Flutter vers
 Version name changes are manual and require reasoning presented to the user before bumping.
 
 **Build number (`+N`):**
-- Auto-incremented by CI after each pipeline run where at least one platform build succeeds.
+- Auto-incremented by CI only on the `main` branch, after each pipeline run where at least one platform build succeeds.
 - Synchronized across Android and iOS — both platforms always use the same build number.
 - The CI commit message includes `[skip ci]` to prevent infinite loops.
+- Feature branch builds do not bump the version or create tags.
 
 **Git tags:** Created automatically by CI in the format `version-{X.Y.Z}-{buildNumber}-{suffix}` where suffix is:
 - `both` — both Android and iOS builds succeeded
