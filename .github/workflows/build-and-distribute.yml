@@ -15,8 +15,24 @@ on:
         default: true
 
 jobs:
+  check-skip:
+    name: Check CI Skip
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.check.outputs.should_skip }}
+    steps:
+      - id: check
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" == *"[skip ci]"* ]]; then
+            echo "should_skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
   test:
     name: Analyze & Test
+    needs: check-skip
+    if: needs.check-skip.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -167,3 +183,63 @@ jobs:
           appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           file: counter.ipa
+
+  version-tag:
+    name: Bump Version & Tag
+    needs: [build-android, build-ios]
+    if: |
+      always() &&
+      (needs.build-android.result == 'success' || needs.build-ios.result == 'success')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine platform suffix
+        id: suffix
+        run: |
+          android="${{ needs.build-android.result }}"
+          ios="${{ needs.build-ios.result }}"
+          if [[ "$android" == "success" && "$ios" == "success" ]]; then
+            echo "platform=both" >> "$GITHUB_OUTPUT"
+          elif [[ "$android" == "success" ]]; then
+            echo "platform=android" >> "$GITHUB_OUTPUT"
+          else
+            echo "platform=ios" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Read current version
+        id: version
+        run: |
+          version_line=$(grep '^version:' pubspec.yaml)
+          full_version=$(echo "$version_line" | sed 's/version: //')
+          version_name=$(echo "$full_version" | cut -d'+' -f1)
+          build_number=$(echo "$full_version" | cut -d'+' -f2)
+          echo "version_name=$version_name" >> "$GITHUB_OUTPUT"
+          echo "build_number=$build_number" >> "$GITHUB_OUTPUT"
+
+      - name: Bump build number
+        run: |
+          current=${{ steps.version.outputs.build_number }}
+          next=$((current + 1))
+          sed -i "s/^version: .*/version: ${{ steps.version.outputs.version_name }}+${next}/" pubspec.yaml
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pubspec.yaml
+          git commit -m "chore(version): bump build number to $((${{ steps.version.outputs.build_number }} + 1)) [skip ci]"
+
+      - name: Create tag
+        run: |
+          tag="version-${{ steps.version.outputs.version_name }}-${{ steps.version.outputs.build_number }}-${{ steps.suffix.outputs.platform }}"
+          git tag "$tag"
+
+      - name: Push commit and tag
+        run: |
+          git push origin main
+          git push origin --tags

@@ -89,6 +89,34 @@ ARB files live in `lib/l10n/`. Supported locales: English (`en`, "Counters"), Ge
 
 Uses `package:flutter_lints` (configured in `analysis_options.yaml`).
 
+## Versioning
+
+The app follows [Semantic Versioning](https://semver.org/) with the Flutter version format `X.Y.Z+buildNumber` in `pubspec.yaml`.
+
+**Version name (`X.Y.Z`):**
+- **Major (X)** — breaking changes (incompatible file format, dropped platform support)
+- **Minor (Y)** — new features (new counter operations, new platform support, new UI capabilities)
+- **Patch (Z)** — bug fixes and small improvements
+
+Version name changes are manual and require reasoning presented to the user before bumping.
+
+**Build number (`+N`):**
+- Auto-incremented by CI after each pipeline run where at least one platform build succeeds.
+- Synchronized across Android and iOS — both platforms always use the same build number.
+- The CI commit message includes `[skip ci]` to prevent infinite loops.
+
+**Git tags:** Created automatically by CI in the format `version-{X.Y.Z}-{buildNumber}-{suffix}` where suffix is:
+- `both` — both Android and iOS builds succeeded
+- `android` — only Android succeeded
+- `ios` — only iOS succeeded
+
+**CI/CD pipeline structure:**
+```
+check-skip → test → build-android → distribute-android ─┐
+                   → build-ios     → distribute-ios     ──┤
+                                                          └→ version-tag (if ≥1 build succeeded)
+```
+
 ## Tests
 
 Tests live in `test/` and are split by concern:

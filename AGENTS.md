@@ -41,6 +41,16 @@ The app uses a mechanical tally counter theme. When adding UI:
 - Use the cream/metallic palette defined in `CLAUDE.md` — avoid default system colors like `CupertinoColors.secondaryLabel` or `colorScheme.inversePrimary` as they clash with the custom theme.
 - Platform icons are generated from `assets/icon.svg` via `rsvg-convert`. If updating the icon, regenerate all platform PNGs.
 
+## Versioning
+
+The app uses Semantic Versioning (`X.Y.Z+buildNumber`) in `pubspec.yaml`. See `CLAUDE.md` for full details.
+
+Key rules:
+- **Build number** is auto-incremented by CI — never bump it manually.
+- **Version name** (`X.Y.Z`) changes are manual. Before bumping, present your reasoning to the user (what changed and why it warrants major/minor/patch).
+- CI creates git tags in the format `version-{X.Y.Z}-{buildNumber}-{android|ios|both}`.
+- CI version bump commits contain `[skip ci]` to prevent re-triggering the pipeline.
+
 ## Localisation
 
 - ARB files live in `lib/l10n/`. Run `flutter gen-l10n` after editing any ARB file.
