@@ -46,7 +46,8 @@ The app uses a mechanical tally counter theme. When adding UI:
 The app uses Semantic Versioning (`X.Y.Z+buildNumber`) in `pubspec.yaml`. See `CLAUDE.md` for full details.
 
 Key rules:
-- **Build number** is auto-incremented by CI on the `main` branch only — never bump it manually. Feature branch builds do not bump versions or create tags.
+- **Build number** is auto-incremented by CI on the `main` branch only — never bump it manually. Feature branch builds do not bump versions, create tags, or distribute to Firebase.
+- A `resolve-version` job prevents build number conflicts by comparing `pubspec.yaml` against existing git tags. Both platforms receive the resolved number via `--build-number`.
 - **Version name** (`X.Y.Z`) changes are manual. Before bumping, present your reasoning to the user (what changed and why it warrants major/minor/patch).
 - CI creates git tags in the format `version-{X.Y.Z}-{buildNumber}-{android|ios|both}`.
 - CI version bump commits contain `[skip ci]` to prevent re-triggering the pipeline.
