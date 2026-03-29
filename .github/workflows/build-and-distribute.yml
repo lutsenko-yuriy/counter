@@ -35,7 +35,7 @@ jobs:
         run: flutter test
 
   build-android:
-    name: Build & Distribute Android
+    name: Build Android
     needs: test
     if: github.event_name == 'push' || inputs.android
     runs-on: ubuntu-latest
@@ -76,15 +76,25 @@ jobs:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
+  distribute-android:
+    name: Distribute Android to Firebase
+    needs: build-android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-apk
+
       - name: Distribute to Firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          file: build/app/outputs/flutter-apk/app-release.apk
+          file: app-release.apk
 
   build-ios:
-    name: Build & Distribute iOS
+    name: Build iOS
     needs: test
     if: github.event_name == 'push' || inputs.ios
     runs-on: macos-latest
@@ -137,13 +147,23 @@ jobs:
           name: release-ipa
           path: build/ios/ipa/*.ipa
 
+      - name: Clean up keychain
+        if: always()
+        run: security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+
+  distribute-ios:
+    name: Distribute iOS to Firebase
+    needs: build-ios
+    runs-on: macos-latest
+    steps:
+      - name: Download IPA artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-ipa
+
       - name: Distribute to Firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          file: build/ios/ipa/counter.ipa
-
-      - name: Clean up keychain
-        if: always()
-        run: security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+          file: counter.ipa
