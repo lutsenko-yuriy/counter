@@ -218,7 +218,7 @@ jobs:
     name: Distribute iOS to Firebase
     needs: build-ios
     if: github.ref_name == 'main'
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Download IPA artifact
         uses: actions/download-artifact@v4
