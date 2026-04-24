@@ -35,7 +35,7 @@ jobs:
     if: needs.check-skip.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: subosito/flutter-action@v2
         with:
@@ -58,7 +58,7 @@ jobs:
       version_name: ${{ steps.resolve.outputs.version_name }}
       build_number: ${{ steps.resolve.outputs.build_number }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -96,14 +96,14 @@ jobs:
     if: github.event_name == 'push' || inputs.android
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 17
@@ -127,7 +127,7 @@ jobs:
         run: flutter build apk --release --build-number=${{ needs.resolve-version.outputs.build_number }}
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
@@ -139,7 +139,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download APK artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: release-apk
 
@@ -156,7 +156,7 @@ jobs:
     if: github.event_name == 'push' || inputs.ios
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: subosito/flutter-action@v2
         with:
@@ -205,7 +205,7 @@ jobs:
         run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist --build-number=${{ needs.resolve-version.outputs.build_number }}
 
       - name: Upload IPA artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-ipa
           path: build/ios/ipa/*.ipa
@@ -221,7 +221,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download IPA artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: release-ipa
 
@@ -243,7 +243,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
