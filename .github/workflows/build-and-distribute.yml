@@ -195,6 +195,12 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp "$PROFILE_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/
 
+      - name: Substitute ExportOptions variables
+        env:
+          TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
+          PROVISIONING_PROFILE_NAME: ${{ secrets.IOS_PROVISIONING_PROFILE_NAME }}
+        run: envsubst < ios/ExportOptions.plist > ios/ExportOptions.tmp.plist && mv ios/ExportOptions.tmp.plist ios/ExportOptions.plist
+
       - name: Build release IPA
         run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist --build-number=${{ needs.resolve-version.outputs.build_number }}
 
